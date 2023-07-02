@@ -1,0 +1,149 @@
+{{> header}}
+
+<div class="container">
+    <div class="input-group mb-4 md-1"  style="margin-top : 8%;">
+        <label class="input-group-text" for="inputGroupSelect01">Vous etes ?  :</label>
+        <select class="form-select" id="inputGroupSelect01" onchange="toggleFormFields()">
+          <option selected>Choisissez qui vous etes .</option>
+          <option value="Demandeur">Demandeur</option>
+          <option value="Entreprise">Entreprise</option>
+         
+        </select>
+      </div>
+  <form class="row g-3">
+    <div class="col-md-4">
+      <label for="validationServer01" class="form-label">Nom</label>
+      <input type="text" class="form-control is-valid" id="validationServer01" value="Mark" required>
+      <div class="valid-feedback">
+        Looks good!
+      </div>
+    </div>
+    <div id="prenom" class="col-md-4">
+      <label for="validationServer02" class="form-label">Prénom</label>
+      <input type="text" class="form-control is-valid" id="validationServer02" value="prenom" required>
+      <div class="valid-feedback">
+        Looks good!
+      </div>
+    </div>
+    <div id="dateOfBirth" class="col-md-4">
+      <label for="validationServer03" class="form-label">Date de naissance</label>
+      <input type="text" class="form-control is-valid" id="validationServer03" value="date de naissance" required>
+      <div class="valid-feedback">
+        Looks good!
+      </div>
+    </div>
+    <div  id="placeOfBirth" class="col-md-4">
+      <label for="validationServer04" class="form-label">Lieu de naissance</label>
+      <input type="text" class="form-control is-valid" id="validationServer04" value="prenom" required>
+      <div class="valid-feedback">
+        Looks good!
+      </div>
+    </div>
+    <div class="col-md-4">
+      <label for="validationServer05" class="form-label">Email</label>
+      <input type="text" class="form-control is-valid" id="validationServer05" value="prenom" required>
+      <div class="valid-feedback">
+        Looks good!
+      </div>
+    </div>
+    <div class="col-md-4">
+      <label for="validationServer06" class="form-label">Numéro de téléphone</label>
+      <input type="text" class="form-control is-valid" id="validationServer06" value="prenom" required>
+      <div class="valid-feedback">
+        Looks good!
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="validationServer07" class="form-label">Adresse</label>
+      <input type="text" class="form-control is-invalid" id="validationServer07" aria-describedby="validationServer07Feedback" required>
+      <div id="validationServer07Feedback" class="invalid-feedback">
+        Please provide a valid address.
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="validationServer08" class="form-label">Arrondissement</label>
+      <input type="text" class="form-control is-invalid" id="validationServer08" aria-describedby="validationServer08Feedback" required>
+      <div id="validationServer08Feedback" class="invalid-feedback">
+        Please provide a valid arrondissement.
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="validationServer09" class="form-label">Commune</label>
+      <input type="text" class="form-control is-invalid" id="validationServer09" aria-describedby="validationServer09Feedback" required>
+      <div id="validationServer09Feedback" class="invalid-feedback">
+        Please provide a valid commune.
+      </div>
+    </div>
+    <div class="col-md-3">
+      <label for="validationServer10" class="form-label">Ville</label>
+      <select class="form-select is-invalid" id="validationServer10" aria-describedby="validationServer10Feedback" required>
+        <option selected disabled value="">Choose...</option>
+        <option>...</option>
+      </select>
+      <div id="validationServer10Feedback" class="invalid-feedback">
+        Please select a valid city.
+      </div>
+    </div>
+    <div class="col-md-3">
+      <label for="validationServer11" class="form-label">Région</label>
+      <select class="form-select is-invalid" id="validationServer11" aria-describedby="validationServer11Feedback" required>
+        <option selected disabled value="">Choose...</option>
+        <option>...</option>
+      </select>
+      <div id="validationServer11Feedback" class="invalid-feedback">
+        Please select a valid region.
+      </div>
+    </div>
+    <div class="col-md-3">
+      <label for="validationServer12" class="form-label">Mot de passe</label>
+      <input type="text" class="form-control is-invalid" id="validationServer12" aria-describedby="validationServer12Feedback" required>
+      <div id="validationServer12Feedback" class="invalid-feedback">
+        Please provide a valid password.
+      </div>
+    </div>
+    <div class="col-md-3">
+      <label for="validationServer13" class="form-label">Confirmer mot de passe</label>
+      <input type="text" class="form-control is-invalid" id="validationServer13" aria-describedby="validationServer13Feedback" required>
+      <div id="validationServer13Feedback" class="invalid-feedback">
+        Passwords do not match!
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="form-check">
+        <input class="form-check-input is-invalid" type="checkbox" value="" id="invalidCheck3" aria-describedby="invalidCheck3Feedback" required>
+        <label class="form-check-label" for="invalidCheck3">
+          Agree to terms and conditions
+        </label>
+        <div id="invalidCheck3Feedback" class="invalid-feedback">
+          You must agree before submitting.
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary" type="submit">Submit form</button>
+    </div>
+  </form>
+</div>
+<script>
+function toggleFormFields() {
+    var selectElement = document.getElementById("inputGroupSelect01");
+    var dateOfBirthField = document.getElementById("dateOfBirth");
+    var placeOfBirthField = document.getElementById("placeOfBirth");
+  
+    if (selectElement.value === "Entreprise") {
+      prenom.style.display ="none" ;
+      dateOfBirthField.style.display = "none";
+      placeOfBirthField.style.display = "none";
+    } else {
+      dateOfBirthField.style.display = "block";
+      placeOfBirthField.style.display = "block";
+      prenom.style.display ="block" ;
+
+    }
+  }
+
+</script>
+
+
+  
+{{> footer}}

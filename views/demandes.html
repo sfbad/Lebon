@@ -1,0 +1,38 @@
+{{> header}}
+<div class="container" style=" top : 18% ;">
+
+  <h1>Demandes liées à l'annonce "{{titre}}"</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Statut</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#demandes}}
+      <tr>
+        <td>{{nom}}</td>
+        <td>{{prenom}}</td>
+        <td>{{statut}}</td>
+        <td>
+          <form action="/demandes/{{demandeId}}/miseajour" method="POST">
+            <select name="statut">
+              <option value="accepte">Acceptée</option>
+              <option value="refuse">Refusée</option>
+            </select>
+            <input type="submit" value="Mettre à jour">
+          </form>
+        </td>
+      </tr>
+      {{/demandes}}
+    </tbody>
+  </table>
+
+
+</div>
+
+
+{{>footer}}
