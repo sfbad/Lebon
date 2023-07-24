@@ -1,18 +1,60 @@
-{{>header }}
-<div class="container justify-content-center">
-    <div style="margin: 15%;">
-        <h2 >Se connecter </h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>authentification</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+
+</head>
+<body>
+  
+
+<div class="container justify-content-center" id="back">
+  <div id="connexion" >
+      <h2 style="margin-left : 20%">SN </h2>
+     <div style="margin: 7%;">
+        <h2 class="center" style="color: rgb(41, 38, 38);">Se connecter </h2>
+        <div class="msg">{{msg}}</div>
+        <form action="/login" method="post">
         <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+            <input type="email" name="email" class="form-control" id="floatingInput" placeholder="name@example.com">
             <label for="floatingInput">Email address</label>
           </div>
-          <div class="form-floating mb-3 " style="max-width : 180px;">
-            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+          <div class="form-floating mb-3 " style="max-width : 450px;">
+            <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
             <label for="floatingPassword">Password</label>
+
           </div>
+          <button type="submit" class="btn btn-primary">Connexion </button>
+        </form>
     </div>
+    <p>Mot de passe oublié ?  <strong><a href="#">cliquez ici </a></strong>.
+      Si vous n'etes pas encore inscrit , <strong><a href="#">inscrivez vous ici </a></strong>
+    </p>
+   
+  </div>
    
 </div>
+</body>
+</html>
 
 
-  {{>footer}}
+
+<style>
+  body{
+    background-color: rgba(250, 235, 215, 0.584);
+  }
+
+  #connexion {
+    margin: auto;
+    margin-top : 10%;
+    margin-left : 20%;
+  }
+  #floatingInput {
+    max-width : 450px;
+  }
+</style>
+
+

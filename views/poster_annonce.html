@@ -1,0 +1,30 @@
+{{>header}}
+  <div class="container">
+    <h1>Poster  une annonce</h1>
+    <form action="/annonce/poster" method="POST">
+      <div class="form-group">
+        <label for="titre">Titre de l'annonce :</label>
+        <input type="text" class="form-control" id="titre" name="titre" required>
+      </div>
+      <div class="form-group">
+        <label for="description">Description :</label>
+        <textarea class="form-control" id="description" name="description" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="adresse">Adresse :</label>
+        <input type="text" class="form-control" id="adresse" name="adresse" required>
+      </div>
+      <div class="form-group">
+        <label for="photo">Photo :</label>
+        <input type="file" class="form-control-file" id="photo" name="photo" required>
+      </div>
+    
+      <input type="hidden" id="date_creation" name="date_creation" value="{{currentDate}}">
+      <input type="hidden" id="id_entreprise" name="id_entreprise" value="{{idEntreprise}}">
+      <button type="submit" class="btn btn-primary">Poster</button>
+    </form>
+  </div>
+
+  <!-- Importer les fichiers JavaScript de Bootstrap -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+

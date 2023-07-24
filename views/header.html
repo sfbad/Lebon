@@ -12,34 +12,96 @@
 </head>
 <body>
   <!-- Barre de menu de navigation pouvant se reduire en menu Hamburger lorsque la taille de l'ecran est reduite à celle des telephones-->
-  <nav  class="navbar navbar-dark bg-primary">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">SN</a>
-    
+      <a class="navbar-brand" href="#">LeRezoSN</a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">Accueil</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="/sign_in">Se connecter</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="/signup">S'inscrire</a>
-            </li>
-          </ul>
-          </div>
-        </div>
-      </nav>
+ 
+
+  
+      <!-- Barre de recherche, toujours visible -->
+      <div id="search" class="d-flex">
+        <form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Rechercher" aria-label="Search">
+          <button class="btn btn-outline-light" type="submit">Rechercher</button>
+        </form>
+      </div>  
+  
+      <!-- Éléments de connexion -->
+      <div class="collapse navbar-collapse" id="connexionDetails">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item" style="margin-right : 0;">
+            <a class="nav-link" href="#">Se déconnecter</a>
+          </li>
+          <li class="nav-item" style="margin-right : 0;">
+            <a class="nav-link" href="#">Se connecter</a>
+          </li>
+          <li class="nav-item" style="margin-right : 10%;">
+            <a class="nav-link" href="#">S'inscrire</a>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <!-- Bouton hamburger pour les petits écrans -->
+      <button type="button" class="btn btn-danger" id="depodansMenu">
+        <a class="nav-link" href="#">Deposer une annonce </a>
+      </button>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          {{#categories}}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{category}}" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              {{category}}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown{{category}}">
+              {{#subcategories}}
+              <li><a class="dropdown-item" href="/categories/{{../category}}/{{.}}">{{.}}</a></li>
+              {{/subcategories}}
+            </ul>
+          </li>
+          {{/categories}}
+        </ul>
+      </div>
+
+    </nav>
+ 
+
+
+
       
+      <style>
+        @media (max-width : 598px) {
+          #connexionDetails{
+            display: none;
+          }
+
+          #depodansMenu {
+            display: block;
+          }
+          
+        
+        }
+
+    #search {
+     
+      margin-left : 5%;
+    }
+      </style>
       
   <!-- Les script js et jquery de Bootstrap-->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 
-    
+    <!-- Inclure Handlebars.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>

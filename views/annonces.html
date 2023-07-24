@@ -1,18 +1,118 @@
 
 
 
-{{>header}}
-    <div class="container">
-        <h1>Toutes les annonces</h1>
-        {{#annonces}}
-        <div>
-        <h2>{{titre}}</h2>
-        <p>Description : {{description}}</p>
-        <p>Date : {{date_creation}}</p>
-        <p>Entreprise : {{entreprise}}</p>
-        </div>
-        {{/annonces}}
+<!-- Modal pour les détails de l'annonce -->
+<div class="modal" id="annonceModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Détails de l'annonce</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Contenu des détails de l'annonce -->
+        <h2 id="modalTitre"></h2>
+        <p id="modalDescription"></p>
+        <p id="modalDate"></p>
+        <p id="modalEntreprise"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
     </div>
-   
+  </div>
+</div>
 
-{{>footer}}
+
+
+
+
+
+
+
+
+
+<div class="container">
+    <div id="center">
+      <div class="jumbotron">
+        <div className="row">
+          <div className="col-lg-3 bg-danger">
+            <span className="d-block w-100 h-100"></span>
+          </div>
+          <div className="col-lg-9">
+            <h1>Toutes les annonces</h1>
+            {{#annonces}}
+              <div class="annonce-link" onclick="ouvrirModal('{{titre}}', '{{description}}', '{{date_creation}}', '{{entreprise}}')">
+                <div class="annonce-item">
+                  <h2>{{titre}}</h2>
+                  <h6>{{adresse}}</h6>
+                  <p>Description : {{description}}</p>
+                  <p>Date de publication : {{date_creation}}</p>
+                  <p>Entreprise : {{entreprise}}</p>
+                </div>
+                
+              </div>
+            </a>
+              
+            {{/annonces}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  
+  <style>
+    ul {
+      text-decoration: none;
+    }
+    .annonce-item {
+      border: 1px solid #ccc;
+      margin-bottom : 20px;
+      padding: 10px;
+      border-radius: 1%;
+    }
+    
+    a {
+      text-decoration: none;
+    }
+    .container-fluid {
+      display: flex;
+      justify-content: space-between;
+    }
+    /* Animation du modal qui s'ouvre de la droite vers la gauche */
+    .modal-dialog-slideRight {
+      animation: slideRight 0.3s;
+    }
+
+    @keyframes slideRight {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+      
+}
+
+  
+.annonce-link {
+  cursor: pointer;
+}
+
+    
+  </style>
+  
+  <script>
+      // Fonction pour ouvrir le modal avec les détails de l'annonce
+      function ouvrirModal(titre, description, date, entreprise) {
+        document.getElementById('modalTitre').textContent = titre;
+        document.getElementById('modalDescription').textContent = description;
+        document.getElementById('modalDate').textContent = 'Date de publication : ' + date;
+        document.getElementById('modalEntreprise').textContent = 'Entreprise : ' + entreprise;
+        const modal = new bootstrap.Modal(document.getElementById('annonceModal'));
+        modal.show();
+      }
+    
+  </script>
+  

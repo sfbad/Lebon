@@ -1,82 +1,66 @@
 {{> header}}
 
 <div class="container">
-    <div class="input-group mb-4 md-1"  style="margin-top : 8%;">
-        <label class="input-group-text" for="inputGroupSelect01">Vous etes ?  :</label>
-        <select class="form-select" id="inputGroupSelect01" onchange="toggleFormFields()">
-          <option selected>Choisissez qui vous etes .</option>
-          <option value="Demandeur">Demandeur</option>
-          <option value="Entreprise">Entreprise</option>
-         
-        </select>
-      </div>
+    
   <form class="row g-3">
+    <div class="input-group mb-4 md-1"  style="margin-top : 8%;">
+      <label class="input-group-text" for="inputGroupSelect01">Vous etes ?  :</label>
+      <select class="form-select" name="type" id="inputGroupSelect01" onchange="toggleFormFields()">
+        <option selected>Choisissez qui vous etes .</option>
+        <option value="Demandeur">Demandeur</option>
+        <option value="Entreprise">Entreprise</option>
+       
+      </select>
+    </div>
+
     <div class="col-md-4">
       <label for="validationServer01" class="form-label">Nom</label>
-      <input type="text" class="form-control is-valid" id="validationServer01" value="Mark" required>
+      <input type="text" class="form-control is-valid" name="nom" id="validationServer01" value="Mark" required>
       <div class="valid-feedback">
         Looks good!
       </div>
     </div>
     <div id="prenom" class="col-md-4">
       <label for="validationServer02" class="form-label">Prénom</label>
-      <input type="text" class="form-control is-valid" id="validationServer02" value="prenom" required>
+      <input type="text" class="form-control is-valid" id="validationServer02" name="prenom" required>
       <div class="valid-feedback">
         Looks good!
       </div>
     </div>
     <div id="dateOfBirth" class="col-md-4">
       <label for="validationServer03" class="form-label">Date de naissance</label>
-      <input type="text" class="form-control is-valid" id="validationServer03" value="date de naissance" required>
+      <input type="text" class="form-control is-valid" id="validationServer03" name="Date_Naissance" required>
       <div class="valid-feedback">
         Looks good!
       </div>
     </div>
-    <div  id="placeOfBirth" class="col-md-4">
-      <label for="validationServer04" class="form-label">Lieu de naissance</label>
-      <input type="text" class="form-control is-valid" id="validationServer04" value="prenom" required>
-      <div class="valid-feedback">
-        Looks good!
-      </div>
-    </div>
+  
     <div class="col-md-4">
       <label for="validationServer05" class="form-label">Email</label>
-      <input type="text" class="form-control is-valid" id="validationServer05" value="prenom" required>
+      <input type="text" class="form-control is-valid" id="validationServer05" name="mail" required>
       <div class="valid-feedback">
         Looks good!
       </div>
     </div>
     <div class="col-md-4">
       <label for="validationServer06" class="form-label">Numéro de téléphone</label>
-      <input type="text" class="form-control is-valid" id="validationServer06" value="prenom" required>
+      <input type="text" class="form-control is-valid" id="validationServer06" value="Numéro_de_telephone" required>
       <div class="valid-feedback">
         Looks good!
       </div>
     </div>
     <div class="col-md-6">
       <label for="validationServer07" class="form-label">Adresse</label>
-      <input type="text" class="form-control is-invalid" id="validationServer07" aria-describedby="validationServer07Feedback" required>
+      <input type="text" class="form-control is-invalid" name="Adresse" id="validationServer07" aria-describedby="validationServer07Feedback" required>
       <div id="validationServer07Feedback" class="invalid-feedback">
         Please provide a valid address.
       </div>
     </div>
-    <div class="col-md-6">
-      <label for="validationServer08" class="form-label">Arrondissement</label>
-      <input type="text" class="form-control is-invalid" id="validationServer08" aria-describedby="validationServer08Feedback" required>
-      <div id="validationServer08Feedback" class="invalid-feedback">
-        Please provide a valid arrondissement.
-      </div>
-    </div>
-    <div class="col-md-6">
-      <label for="validationServer09" class="form-label">Commune</label>
-      <input type="text" class="form-control is-invalid" id="validationServer09" aria-describedby="validationServer09Feedback" required>
-      <div id="validationServer09Feedback" class="invalid-feedback">
-        Please provide a valid commune.
-      </div>
-    </div>
+    
+    
     <div class="col-md-3">
       <label for="validationServer10" class="form-label">Ville</label>
-      <select class="form-select is-invalid" id="validationServer10" aria-describedby="validationServer10Feedback" required>
+      <select class="form-select is-invalid" name="Ville" id="validationServer10" aria-describedby="validationServer10Feedback" required>
         <option selected disabled value="">Choose...</option>
         <option>...</option>
       </select>
@@ -86,7 +70,7 @@
     </div>
     <div class="col-md-3">
       <label for="validationServer11" class="form-label">Région</label>
-      <select class="form-select is-invalid" id="validationServer11" aria-describedby="validationServer11Feedback" required>
+      <select class="form-select is-invalid" name="Region" id="validationServer11" aria-describedby="validationServer11Feedback" required>
         <option selected disabled value="">Choose...</option>
         <option>...</option>
       </select>
@@ -128,15 +112,12 @@
 function toggleFormFields() {
     var selectElement = document.getElementById("inputGroupSelect01");
     var dateOfBirthField = document.getElementById("dateOfBirth");
-    var placeOfBirthField = document.getElementById("placeOfBirth");
   
     if (selectElement.value === "Entreprise") {
       prenom.style.display ="none" ;
       dateOfBirthField.style.display = "none";
-      placeOfBirthField.style.display = "none";
     } else {
       dateOfBirthField.style.display = "block";
-      placeOfBirthField.style.display = "block";
       prenom.style.display ="block" ;
 
     }

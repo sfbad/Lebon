@@ -1,0 +1,19 @@
+{{>header}}
+
+<h1>Liste des demandes</h1>
+<ul>
+  {{#demandes}}
+  <li>
+    <h2>Demande</h2>
+    <p>ID demande : {{ID_demande}}</p>
+    <p>Date postulation : {{date_postulation}}</p>
+    <h3>Annonce associée</h3>
+    <p>Titre : {{annonce.titre}}</p>
+    <p>Date création : {{annonce.date_creation}}</p>
+    <p>Description : {{annonce.description}}</p>
+    <button> pour avoir des details sur l'annonce cliquez ici => <strong><a href="/read_annonce/{{ID_annonce}}"></a></strong></button>
+  </li>
+  {{/demandes}}
+</ul>
+
+{{>footer}}

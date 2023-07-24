@@ -1,0 +1,51 @@
+{
+    "regions": [
+      {
+        "nom": "Dakar",
+        "arrondissements": [
+          {
+            "nom": "Dakar",
+            "villes": [
+              {
+                "nom": "Dakar",
+                "communes": [
+                  "Dakar Plateau",
+                  "Medina",
+                  "Gorée",
+                  "Hann-Bel-Air",
+                  "Parcelles Assainies"
+               
+                ]
+              },
+              {
+                "nom": "Guediawaye",
+                "communes": [
+                  "Guediawaye",
+                  "Wakhinane-Nimzatt",
+                  "Djeddah Thiaroye Kao",
+                  "Sacre Coeur"
+                 
+                ]
+              }
+            
+            ]
+          },
+          {
+            "nom": "Pikine",
+            "villes": [
+         
+            ]
+          }
+         
+        ]
+      },
+      {
+        "nom": "Thies",
+        "arrondissements": [
+         
+        ]
+      }
+      
+    ]
+  }
+  

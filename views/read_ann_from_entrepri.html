@@ -1,0 +1,30 @@
+{{>header}}
+<div class="container">
+    <div class="di">
+
+   
+    <div class="jumbotron">
+        {{#myann}}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{titre}}</h5>
+                    <p class="card-text">{{description}}</p>
+                    <p class="card-text">{{adresse}}</p>
+                    <a href="/annonces/annonce/{{ID_annonce}}" class="btn btn-primary">Voir les détails</a>
+                </div>
+                <div class="card-footer text-body-secondary">
+                    Depuis le {{date_creation}}
+                </div>
+           </div>
+
+    {{/myann}}
+    </div>
+
+ </div>
+    
+</div>
+<style>
+    .di{
+        margin: 5% ;
+    }
+</style>
