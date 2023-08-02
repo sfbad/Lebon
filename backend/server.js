@@ -192,7 +192,113 @@ app.get('/categories/:category/:subcategory', (req, res) => {
   // Passez les données à votre template
   res.render('category', { category, subcategory, annonces });
 });
+
+app.get('/deposer-annonce',(req,res)=>{
+  res.render('poster_annonce') ;
+}) ;
   
+app.get('/search', (req, res) => {
+  const searchTerm = req.query.term.toLowerCase();
+  const annonces = model.Annonce.getAll(); // Récupérer toutes les annonces
+  const categories = model.Categorie.getAll(); // Récupérer toutes les catégories
+  const subcategories = model.Categorie.getAllSub(); // Récupérer toutes les sous-catégories
+
+  const autocompleteResults = [];
+
+  // Filtrer les annonces par le terme de recherche
+  annonces.forEach((annonce) => {
+    if (
+      annonce.titre.toLowerCase().includes(searchTerm) ||
+      annonce.description.toLowerCase().includes(searchTerm)
+    ) {
+      autocompleteResults.push(annonce.titre);
+    }
+  });
+
+  // Filtrer les catégories par le terme de recherche
+  categories.forEach((categorie) => {
+    if (categorie.nom.toLowerCase().includes(searchTerm)) {
+      autocompleteResults.push(categorie.nom);
+    }
+  });
+
+  // Filtrer les sous-catégories par le terme de recherche
+  subcategories.forEach((subcategory) => {
+    if (subcategory.name.toLowerCase().includes(searchTerm)) {
+      autocompleteResults.push(subcategory.name);
+    }
+  });
+
+  res.render('search',autocompleteResults);
+});
+
+// Afficher la page des demandes liées à l'annonce
+app.get('/annonces/:annonceId/demandes', (req, res) => {
+  const annonce = model.Annonce.get(req.params.annonceId);
+  const demandes = model.Demande.getAnnDemande(req.params.annonceId) ;
+  console.log(demandes);
+  res.render('demandes', { titre: annonce.titre,id : annonce.ID_annonce, demandes: demandes });
+});
+
+// Route pour afficher toutes les demandes d'un client
+app.get('/voir_mes_demandes/:demandeurId', (req, res) => {
+  const demandes = model.Demande.get(1);
+  console.log(demandes)
+  res.render('dm_client', { demandes: demandes });
+});
+//route pour voir la  reponse
+app.get('/ma_reponse/:id_dm', (req, res) => {
+  const idDm = req.params.id_dm;
+  const demandeur = model.Demandeur.get(idDm);
+  const reponse = model.Reponse.get(idDm);
+  console.log(reponse)
+
+  if (!reponse) {
+    const msg = "Pas de données";
+    res.send(msg);
+  } else {
+    res.render('show_answer_candidature',{reponse : reponse.reponse});
+  }
+});
+;
+
+app.get('/answering_candidature/entreprise/:id_enterprise/demande_number/:id', (req, res) => {
+  const idEntreprise = req.params.id_enterprise; // Utiliser "idEntreprise" au lieu de "Id_entreprise"
+  const titre = model.Demande.getDmTitle(req.params.id);
+  const entreprise = model.Entreprise.get(idEntreprise); // Utiliser "idEntreprise" ici aussi
+  console.log(titre, idEntreprise ,entreprise);
+  res.render('justifyAnswer', { titre });
+});
+ 
+app.post('/jystifyanswer/:id',(req,res)=>{
+  const answer = req.body.answer ;
+  const inserted = model.Reponse.answer(req.params.id,answer);
+  if(inserted){
+    res.setTimeout(3000, () => {
+      res.json({
+        message: 'Votre réponse a été soumise.',
+        redirect: '/'
+      });
+    });    
+}else{
+  res.status(500).json('Une erreur s\'est produite lors de la soumission de votre réponse.');
+}
+
+})
+
+
+// Mettre à jour le statut d'une demande
+app.post('/annonce/:annonceId/demandes/:demandeId/miseajour', (req, res) => {
+  const idann = req.params.annonceId ;
+  const demandeId = req.params.demandeId;
+  const nouveauStatut = req.body.statut;
+  const setstate = model.Demande.setState(demandeId,nouveauStatut);
+  res.redirect(`/annonces/${idann}/demandes`);
+});
+
+
+
+
 
   app.post('/addCategory', async (req, res) => {
     const categorieName = req.body.name;
@@ -205,8 +311,54 @@ app.get('/categories/:category/:subcategory', (req, res) => {
     }
   });
 
+  app.post('/deposer_annonce/offreD_emploie',(req,res)=>{
+
+  })
+
+// Fonction qui facilite la création d'un objet
+function post_data_to_offer(req) {
+    return {
+        id_user: req.session.user,
+        titre: req.body.type,
+        salaire: req.body.salaire,
+        level: req.body.level,
+        description: req.body.description,
+        experience : req.body.experience ,
+        travailA :req.body.travailA ,
+        adresse : req.body.adresse
+    };
+}
+
+function post_data_to_Vehicule(req) {
+  return {
+      id_user: req.session.user,
+      titre: req.body.titre,
+      type: req.body.type,
+      marque: req.body.marque,
+      description: req.body.description,
+      model : req.body.model ,
+      model_year :req.body.model_year,
+      circulation : req.body.circulation,
+      kilometrage : req.body.kilometrage ,
+      carburant  : req.body.carburant ,
+      cylindree :req.body.cylindree 
+  };
+}
 
 
+// Route pour la soumission du formulaire de dépôt d'annonce
+app.post('/deposer-annonce', (req, res) => {
+  // Récupérez les informations du formulaire
+  const titre = req.body.titre;
+  const description = req.body.description;
+  // Obtenez l'ID de l'entreprise à partir de la session ou de l'utilisateur connecté
+  const entrepriseId = 123; // Remplacez 123 par l'ID de l'entreprise réelle
+  // Enregistrez l'annonce dans la base de données avec l'ID de l'entreprise
+  // ...
+
+  // Redirigez l'utilisateur vers sa page personnelle après avoir déposé l'annonce
+  res.redirect(`/entreprise/${entrepriseId}`);
+});
 
 
 

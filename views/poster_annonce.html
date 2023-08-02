@@ -1,30 +1,270 @@
 {{>header}}
   <div class="container">
-    <h1>Poster  une annonce</h1>
-    <form action="/annonce/poster" method="POST">
+    <form action="/deposer-annonce" method="POST">
+      <h2 class="mt-4">Déposer une annonce</h2>
+      
+      <!-- Sélecteur pour choisir la catégorie -->
       <div class="form-group">
-        <label for="titre">Titre de l'annonce :</label>
-        <input type="text" class="form-control" id="titre" name="titre" required>
+        <label for="categorie">Catégorie :</label>
+        <select id="categorie" name="categorie" class="form-control" onchange="toggleFormFields()">
+          <option selected default >Selectionner une categorie</option>
+          <option value="immobilier" >Immobilier</option>
+          <option value="emploi">Emploi</option>
+          <option value="vehicule">Véhicule</option>
+        </select>
       </div>
+      
+      <!-- Champs communs pour toutes les catégories -->
+      <div class="form-group">
+        <label for="titre">Titre :</label>
+        <input type="text" id="titre" name="titre" class="form-control" required>
+      </div>
+      
+      <!-- Champs spécifiques pour la catégorie Immobilier -->
+      <fieldset id="immobilierFields" style="display: none;">
+        <legend>Informations Immobilier</legend>
+        <!-- Choix du type d'annonce parmi les trois grandes sous-catégories -->
+        <div class="form-group">
+          <label for="typeAnnonce">Type d'annonce :</label>
+          <select name="typeAnnonce" id="typeAnnonce" class="form-control" required>
+            <option value="vente" selected>Vente Immobilier</option>
+            <option value="location">Location</option>
+            <option value="colocation">Colocation</option>
+          </select>
+        </div>
+            
+        <!-- Photos (facultatif, peut être multiple avec "multiple" attribut) -->
+        <div class="form-group">
+          <label for="photos">Photos :</label>
+          <input type="file" name="photos" id="photos" class="form-control-file">
+        </div>
+
+        <!-- Surface habitable (en m²) -->
+        <div class="form-group">
+          <label for="surfaceHabitable">Surface habitable (m²) :</label>
+          <input type="number" name="surfaceHabitable" id="surfaceHabitable" class="form-control" required>
+        </div>
+
+        <!-- Surface de terrain (en m²) (visible uniquement si Vente Immobilier est sélectionné) -->
+        <div id="surfaceTerrainDiv" style="display: none;">
+          <div class="form-group">
+            <label for="surfaceTerrain">Surface de terrain (m²) :</label>
+            <input type="number" name="surfaceTerrain" id="surfaceTerrain" class="form-control">
+          </div>
+        </div>
+
+        <!-- Prix -->
+        <div class="form-group">
+          <label for="prix">Prix :</label>
+          <input type="number" name="prix" id="prix" class="form-control" required>
+        </div>
+
+        <!-- Nombre de pièces -->
+        <div class="form-group">
+          <label for="nbPieces">Nombre de pièces :</label>
+          <input type="number" name="nbPieces" id="nbPieces" class="form-control" required>
+        </div>
+      </fieldset>
+
+      <!-- Champs spécifiques pour la catégorie Emploi -->
+      <fieldset id="emploiFields" style="display: none;">
+        <legend>Informations Emploi</legend>
+        <!-- Sélecteur pour choisir le type d'emploi (offre ou demande) -->
+        <div class="form-group">
+          <label for="typeEmploi">Type d'emploi :</label>
+          <select id="typeEmploi" name="typeEmploi" class="form-control" onchange="toggleFormFieldsEmploi()" required>
+            <option value="offre">Offre d'emploi</option>
+            <option value="demande">Demande d'emploi</option>
+          </select>
+        </div>
+
+        <!-- Champs spécifiques pour l'offre d'emploi -->
+        <div id="offreFields" style="display: none;">
+          <div class="form-group">
+            <label for="salaire">Salaire :</label>
+            <input type="text" id="salaire" name="salaire" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="niveauEtude">Niveau d'étude :</label>
+            <input type="text" id="niveauEtude" name="level" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="experience">Expérience :</label>
+            <input type="text" id="experience" name="experience" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="travailA">Travail à :</label>
+              <select id="travailA" name="travailA" class="form-control" required>
+                <option value="TempsPlein">Temps plein</option>
+                <option value="TempsPartiel">Temps partiel</option>
+              </select>
+            </div>
+            <input type="text" id="travailA" name="travailA" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="adresse">Adresse :</label>
+            <input type="text" id="adresse" name="adresse" class="form-control">
+          </div>
+      
+        <!-- Champs spécifiques pour la demande d'emploi -->
+        <div id="demandeFields" style="display: none;">
+          <!-- Ajoutez ici les champs spécifiques pour la demande d'emploi -->
+          <!-- Par exemple : domaineRecherche, typeContratRecherche, etc. -->
+        </div>
+      </fieldset>
+
+      <!-- Champs spécifiques pour la catégorie Véhicule -->
+      <fieldset id="vehiculeFields" style="display: none;">
+        <legend>Informations Véhicule</legend>
+        <div class="form-group">
+          <label for="typeVehicule">Type de véhicule :</label>
+          <select id="typeVehicule" name="typeVehicule" class="form-control" onchange="toggleFormFieldsVehicule()" required>
+            <option value="vente">Vente</option>
+            <option value="location">Location</option>
+          </select>
+        </div>
+
+        <!-- Champs spécifiques pour la vente de voitures -->
+        <div id="venteVoitureFields" style="display: none;">
+          <div class="form-group">
+            <label for="typeVehiculeVoiture">Type de véhicule :</label>
+            <select id="typeVehiculeVoiture" name="typeVehiculeVoiture" class="form-control">
+              <option value="moto">Moto</option>
+              <option value="voiture">Voiture</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="marque">Marque :</label>
+            <input type="text" id="marque" name="marque" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="modele">Modèle :</label>
+            <input type="text" id="modele" name="modele" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="anneeModel">Année modèle :</label>
+            <input type="text" id="anneeModel" name="model_year" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="dateMiseEnCirculation">Date de première mise en circulation :</label>
+            <input type="date" id="dateMiseEnCirculation" name="circulation" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="kilometrage">Kilométrage :</label>
+            <input type="text" id="kilometrage" name="kilometrage" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="carburant">Carburant :</label>
+            <select id="carburant" name="carburant" class="form-control">
+              <option value="diesel">Diesel</option>
+              <option value="essence">Essence</option>
+              <option value="electrique">Électrique</option>
+              <option value="hybride">Hybride</option>
+            </select>
+          </div>
+
+          <!-- Champs spécifiques pour la vente de motos -->
+          <div id="venteMotoFields" style="display: none;">
+            <div class="form-group">
+              <label for="cylindre">Cylindrée :</label>
+              <input type="text" id="cylindre" name="cylindree" class="form-control">
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
       <div class="form-group">
         <label for="description">Description :</label>
-        <textarea class="form-control" id="description" name="description" required></textarea>
+        <textarea id="description" name="description" class="form-control" rows="4" required></textarea>
       </div>
-      <div class="form-group">
-        <label for="adresse">Adresse :</label>
-        <input type="text" class="form-control" id="adresse" name="adresse" required>
+
+      <!-- Bouton de réinitialisation -->
+      <div style="display: block">
+        <button type="reset" class="btn btn-secondary mb-3">Réinitialiser</button>
+       <button type="submit" class="btn btn-primary mb-3">Soumettre l'annonce</button>
       </div>
-      <div class="form-group">
-        <label for="photo">Photo :</label>
-        <input type="file" class="form-control-file" id="photo" name="photo" required>
-      </div>
-    
-      <input type="hidden" id="date_creation" name="date_creation" value="{{currentDate}}">
-      <input type="hidden" id="id_entreprise" name="id_entreprise" value="{{idEntreprise}}">
-      <button type="submit" class="btn btn-primary">Poster</button>
+      
     </form>
+
   </div>
 
   <!-- Importer les fichiers JavaScript de Bootstrap -->
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    function toggleFormFieldsVehicule() {
+      const typeVehicule = document.getElementById("typeVehicule").value;
+      const venteVoitureFields = document.getElementById("venteVoitureFields");
+      const venteMotoFields = document.getElementById("venteMotoFields");
+
+      if (typeVehicule === "vente") {
+        venteVoitureFields.style.display = "block";
+        venteMotoFields.style.display = "none";
+      } else if (typeVehicule === "location") {
+        venteVoitureFields.style.display = "none";
+        venteMotoFields.style.display = "none";
+      } else if (typeVehicule === "moto") {
+        venteVoitureFields.style.display = "none";
+        venteMotoFields.style.display = "block";
+      }
+    
+    }
+
+    function toggleFormFieldsEmploi() {
+      const typeEmploi = document.getElementById("typeEmploi").value;
+      const offreFields = document.getElementById("offreFields");
+      const demandeFields = document.getElementById("demandeFields");
+
+      if (typeEmploi === "offre") {
+        offreFields.style.display = "block";
+        demandeFields.style.display = "none";
+      } else if (typeEmploi === "demande") {
+        offreFields.style.display = "none";
+        demandeFields.style.display = "block";
+      }
+    }
+
+    // Afficher/masquer la saisie de la surface de terrain selon le type d'annonce sélectionné
+    const typeAnnonceSelect = document.getElementById('typeAnnonce');
+    const surfaceTerrainDiv = document.getElementById('surfaceTerrainDiv');
+
+    typeAnnonceSelect.addEventListener('change', function() {
+      if (typeAnnonceSelect.value === 'vente') {
+        surfaceTerrainDiv.style.display = 'block';
+      } else {
+        surfaceTerrainDiv.style.display = 'none';
+      }
+    });
+
+    // Fonction pour afficher ou masquer les champs spécifiques selon la catégorie choisie
+    function toggleFormFields() {
+      const categorie = document.getElementById("categorie").value;
+      const immobilierFields = document.getElementById("immobilierFields");
+      const emploiFields = document.getElementById("emploiFields");
+      const vehiculeFields = document.getElementById("vehiculeFields");
+
+      if (categorie === "immobilier") {
+        immobilierFields.style.display = "block";
+        emploiFields.style.display = "none";
+        vehiculeFields.style.display = "none";
+      } else if (categorie === "emploi") {
+        immobilierFields.style.display = "none";
+        emploiFields.style.display = "block";
+        vehiculeFields.style.display = "none";
+      } else if (categorie === "vehicule") {
+        immobilierFields.style.display = "none";
+        emploiFields.style.display = "none";
+        vehiculeFields.style.display = "block";
+      }
+    }
+  </script>
 

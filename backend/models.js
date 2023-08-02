@@ -362,12 +362,13 @@ const Entreprise = {
   },
 
   get: (idEntreprise) => {
-    const query = `SELECT * FROM entreprise WHERE ID = ?`;
+    const query = `SELECT ID, Nom, Mail, ID_adresse FROM entreprise WHERE ID = ?`;
     const statement = db.prepare(query);
     const result = statement.get(idEntreprise);
-
-    return result || -1;
+  
+    return result;
   },
+  
 
   update: (idEntreprise, nom, mail, password, idAdresse) => {
     const query = `UPDATE entreprise SET Nom = ?, Mail = ?, Password = ?, ID_adresse = ? WHERE ID = ?`;
@@ -468,12 +469,56 @@ const Demande = {
     return result.lastInsertRowid;
   },
 
-  get: (idDemande) => {
-    const query = `SELECT * FROM demande WHERE id_dm = ?`;
-    const statement = db.prepare(query);
-    const result = statement.get(idDemande);
+  get : (idDemandeur) => {
+  
+    const query = `
+    SELECT annonce.titre, annonce.date_creation, annonce.description, annonce.adresse , demande.state,
+    demande.id_dm
+    FROM demande
+    INNER JOIN annonce ON demande.id_annonce = annonce.ID_annonce
+    WHERE demande.id_demandeur = ?;
+  `;
 
-    return result || -1;
+  const annonces = db.prepare(query).all(idDemandeur);
+  return annonces;
+    
+} ,
+getDmTitle  : (id)=>{
+  const query = `
+    SELECT annonce.titre,
+    demande.id_dm
+    FROM demande
+    INNER JOIN annonce ON demande.id_annonce = annonce.ID_annonce
+    WHERE demande.id_dm = ?;
+  `;
+  const annonces = db.prepare(query).get(id);
+  return annonces;
+ 
+}
+  ,
+  getAll :()=>{
+    const stm ='select * from demande ' ;
+    return db.prepare(stm).all() ;
+  } ,
+  getAnnDemande :(idann)=>{
+    const stmt = 'SELECT * FROM demande WHERE id_annonce = ?';
+    const demandeurs = db.prepare(stmt).all(idann);
+    
+    const stm_id_dm = 'SELECT chemin_fichier FROM CV WHERE demandeur_id = ?';
+    const demandeursAvecCV = demandeurs.map((demandeur) => {
+      const cheminFichierCV = db.prepare(stm_id_dm).get(demandeur.id_demandeur);
+    
+      // Ajoutez ici la requête pour récupérer le nom, prénom et email du demandeur
+      const stm_info_demandeur = 'SELECT Nom, Prénom, Mail FROM demandeur WHERE id = ?';
+      const infoDemandeur = db.prepare(stm_info_demandeur).get(demandeur.id_demandeur);
+    
+      return {
+        ...demandeur,
+        ...infoDemandeur,
+        cheminCV: cheminFichierCV ? cheminFichierCV.chemin_fichier : null,
+      };
+    });
+     return demandeursAvecCV ;
   },
 
   update: (idDemande, idDemandeur, idAnnonce, state) => {
@@ -485,6 +530,12 @@ const Demande = {
 
     return result.changes > 0;
   },
+  setState :(id_dem,state) =>{
+    const stm ='Update demande set state = ? where id_dm = ?'
+    const prep = db.prepare(stm).run(state,id_dem);
+    return prep ? prep.changes >1 : -1 ;
+
+  } ,
 
   delete: (idDemande) => {
     const query = `DELETE FROM demande WHERE id_dm = ?`;
@@ -583,6 +634,16 @@ const Categorie ={
     });
 
   },
+  getAll: () => {
+    const query = `SELECT * FROM categorie`;
+    return db.prepare(query).all();
+  },
+  
+  getAllSub: () => {
+    const query = `SELECT * FROM subcategories`;
+    return db.prepare(query).all();
+  } ,
+
   getCategoriesWithSubcategories: () => {
     const query = `
       SELECT c.nom AS category, s.name AS subcategory
@@ -631,5 +692,33 @@ function getAnnonceURL(idAnnonce) {
 
   return `http://example.com/annonces/${idAnnonce}`; // Exemple d'URL de la page de l'annonce
 }
+const Reponse = {
+  get : (id_dm)=>{
+    const stmt = 'select reponse from response where id_dm = ?'
+    const  reponse = db.prepare(stmt).get(id_dm);
+    return reponse ? reponse : null ;
+  },
 
-module.exports = { Demandeur, Entreprise, Annonce, Demande, CV, Photo, login ,Categorie };
+  answer: (id_dm, rep) => {
+    const query = 'INSERT INTO response (id_dm, reponse) VALUES (?, ?)';
+    const reponseId = db.prepare(query).run(id_dm, rep);
+    return reponseId.changes > 0;
+  }
+  ,
+  updateAnswer: (id_dm, newResponse) => {
+    const query = 'UPDATE response SET reponse = ? WHERE id_dm = ?';
+    const result = db.prepare(query).run(newResponse, id_dm);
+    return result.changes > 0;
+  }
+  
+,
+deleteAnswer: (id_dm) => {
+  const query = 'DELETE FROM response WHERE id_dm = ?';
+  const result = db.prepare(query).run(id_dm);
+  return result.changes > 0;
+}
+
+
+}
+
+module.exports = { Demandeur, Entreprise, Annonce, Demande, CV, Photo, login ,Categorie ,Reponse};

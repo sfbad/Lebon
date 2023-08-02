@@ -1,0 +1,31 @@
+{{>header}}
+<h1>Résultats de recherche pour "{{searchTerm}}"</h1>
+
+<h2>Annonces</h2>
+<ul>
+  {{#annonces}}
+  <li>{{titre}} - {{description}}</li>
+  {{/annonces}}
+</ul>
+
+<h2>Catégories</h2>
+<ul>
+  {{#categories}}
+  <li>{{nom}}</li>
+  {{/categories}}
+</ul>
+
+<h2>Sous-catégories</h2>
+<ul>
+  {{#subcategories}}
+  <li>{{name}}</li>
+  {{/subcategories}}
+</ul>
+
+<!-- Barre de recherche avec autocomplétion -->
+<div>
+  <input type="text" id="searchInput" placeholder="Rechercher">
+  <ul id="autocompleteResults"></ul>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

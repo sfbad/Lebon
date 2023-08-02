@@ -1,19 +1,116 @@
 {{>header}}
 
-<h1>Liste des demandes</h1>
-<ul>
-  {{#demandes}}
-  <li>
-    <h2>Demande</h2>
-    <p>ID demande : {{ID_demande}}</p>
-    <p>Date postulation : {{date_postulation}}</p>
-    <h3>Annonce associée</h3>
-    <p>Titre : {{annonce.titre}}</p>
-    <p>Date création : {{annonce.date_creation}}</p>
-    <p>Description : {{annonce.description}}</p>
-    <button> pour avoir des details sur l'annonce cliquez ici => <strong><a href="/read_annonce/{{ID_annonce}}"></a></strong></button>
-  </li>
-  {{/demandes}}
-</ul>
+
+<div class="container">
+  <div class="jumbotron">
+    <h1>Liste de vos demandes</h1>
+    {{#demandes}}
+    <div class="row">
+      <div class="col-md-9">
+        <!-- Contenu de la colonne de gauche -->
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Mes demandes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <h2>{{titre}}</h2>
+                <h6>{{adresse}}</h6>
+                <div class="col-4 text-truncate">
+                  {{description}}
+                </div>
+                <!-- Description complète (masquée par défaut) -->
+                <div class="description-complete">
+                  <h2>{{description}}</h2>
+                </div>
+                <p>
+                  publié le {{date_creation}}
+                </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-3">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Réponses</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center">
+                {{state}}
+                <a href="/ma_reponse/{{id_dm}}">show answer</a>
+                
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {{/demandes}}
+  </div>
+</div>
+
+<!-- Modal -->
+
+
+<script>
+  // Fonction pour afficher le contenu de la réponse dans le modal
+  function afficherReponse(idDm) {
+    const url = `/ma_reponse/${idDm}`;
+
+    fetch(url)
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('response-content').innerHTML = data;
+      })
+      .catch(error => {
+        console.error('Erreur lors de la récupération de la réponse:', error);
+      });
+  }
+
+  // Attacher l'événement de clic sur tous les boutons "Voir réponse"
+  const voirReponseButtons = document.querySelectorAll('.btn-lire-suite');
+  voirReponseButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const idDm = this.getAttribute('data-id-dm');
+      afficherReponse(idDm);
+    });
+  });
+</script>
+
+<style>
+  .btn {
+    text-emphasis-color: white;
+  }
+  .modal-scrollable {
+    max-height : 400px; /* Vous pouvez ajuster la hauteur selon vos besoins */
+    overflow-y: auto;
+  }
+   /* Définir une hauteur fixe pour les cellules des tables dans chaque colonne */
+   .col-md-9 table td {
+    height : 150px; /* Vous pouvez ajuster la hauteur selon vos besoins */
+  }
+
+  .col-md-3 table td {
+    height : 150px; /* Vous pouvez ajuster la hauteur selon vos besoins */
+  }
+
+  /* Style pour le bouton "Lire la suite" */
+  .btn-lire-suite {
+    display: none;
+  }
+
+  /* Style pour la description complète */
+  .description-complete {
+    display: none;
+  }
+</style>
 
 {{>footer}}

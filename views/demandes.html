@@ -1,38 +1,87 @@
 {{> header}}
 <div class="container" style=" top : 18% ;">
+  
 
   <h1>Demandes liées à l'annonce "{{titre}}"</h1>
-  <table>
+  <div class="">
+
+  
+  <table class="table">
+
     <thead>
       <tr>
         <th>Nom</th>
         <th>Prénom</th>
         <th>Statut</th>
         <th>Action</th>
+        <th>motif</th>
       </tr>
     </thead>
     <tbody>
       {{#demandes}}
       <tr>
-        <td>{{nom}}</td>
-        <td>{{prenom}}</td>
-        <td>{{statut}}</td>
+        <td>{{Nom}}</td>
+        <td>{{Prénom}}</td>
+        <td>{{state}}</td>
         <td>
-          <form action="/demandes/{{demandeId}}/miseajour" method="POST">
+          <div class="input-group input-group-sm mb-3">
+
+          <form action="/annonce/{{id}}/demandes/{{id_dm}}/miseajour" method="post">
             <select name="statut">
               <option value="accepte">Acceptée</option>
               <option value="refuse">Refusée</option>
             </select>
-            <input type="submit" value="Mettre à jour">
+            <input type="submit" value="changer le statut">
           </form>
+        </div>
+
+        </td>
+        <td>
+        <a href="/answering_candidature/{{id_dm}}">Justifiez </a>
+
         </td>
       </tr>
       {{/demandes}}
     </tbody>
   </table>
-
-
 </div>
 
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Gestionnaire d'événements pour la soumission du formulaire via AJAX
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+      form.addEventListener('submit', function(event) {
+        event.preventDefault(); // Empêcher la soumission normale du formulaire
+
+        const idDm = this.id.split('-')[1]; // Récupérer l'ID de la demande à partir de l'ID du formulaire
+        const statut = this.querySelector('select[name="statut"]').value;
+
+        // Envoyer la requête POST via AJAX
+        fetch(`/annonce/{{id}}/demandes/${idDm}/miseajour`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ statut })
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Mettre à jour le statut dans le tableau sans recharger la page
+            const tdStatut = this.parentNode.querySelector('.statut');
+            tdStatut.textContent = statut.charAt(0).toUpperCase() + statut.slice(1); // Mettre la première lettre en majuscule
+          })
+          .catch(error => {
+            console.error('Erreur lors de la mise à jour du statut:', error);
+          });
+      });
+    });
+  });
+</script>
+
+<style>
+
+</style>
 
 {{>footer}}
