@@ -323,7 +323,7 @@ const Demandeur = {
   },
 
   get: (idDemandeur) => {
-    const query = `SELECT * FROM demandeur WHERE ID = ?`;
+    const query = `SELECT ID ,Nom ,Prénom ,Mail ,Date_naissance ,Lieu_de_naissance FROM demandeur WHERE ID = ?`;
     const statement = db.prepare(query);
     const result = statement.get(idDemandeur);
 
@@ -351,7 +351,7 @@ const Demandeur = {
 
 // Modèle "Entreprise"
 const Entreprise = {
-  create: (nom, mail, password, idAdresse, type) => {
+  create : (nom, mail, password, idAdresse, type) => {
     const query = `INSERT INTO entreprise (Nom, Mail, Password, ID_adresse, Type) VALUES (?, ?, ?, ?, ?)`;
     const values = [nom, mail, password, idAdresse, type];
 
@@ -361,16 +361,25 @@ const Entreprise = {
     return result.lastInsertRowid;
   },
 
-  get: (idEntreprise) => {
+  get : (idEntreprise) => {
     const query = `SELECT ID, Nom, Mail, ID_adresse FROM entreprise WHERE ID = ?`;
     const statement = db.prepare(query);
+    
     const result = statement.get(idEntreprise);
-  
+    
     return result;
   },
-  
+  getFromIdAnnonce :(id_ann)=>{
+    const query = `SELECT ID, Nom, Mail, ID_adresse FROM entreprise WHERE ID_annonce = ?`;
+    const statement = db.prepare(query);
+    
+    const result = statement.get(id_ann);
+    console.log(id_ann)
+    return result;
 
-  update: (idEntreprise, nom, mail, password, idAdresse) => {
+  },
+
+  update : (idEntreprise, nom, mail, password, idAdresse) => {
     const query = `UPDATE entreprise SET Nom = ?, Mail = ?, Password = ?, ID_adresse = ? WHERE ID = ?`;
     const values = [nom, mail, password, idAdresse, idEntreprise];
 
@@ -483,10 +492,17 @@ const Demande = {
   return annonces;
     
 } ,
+
+getState  : (id)=>{
+  const query = 'select state from demande where id_dm = ? ' ;
+  const stmt = db.prepare(query).get(id);
+  return stmt.state;
+
+},
 getDmTitle  : (id)=>{
   const query = `
-    SELECT annonce.titre,
-    demande.id_dm
+    SELECT annonce.titre,annonce.ID_annonce,
+    demande.id_dm ,demande.id_demandeur
     FROM demande
     INNER JOIN annonce ON demande.id_annonce = annonce.ID_annonce
     WHERE demande.id_dm = ?;
@@ -675,14 +691,13 @@ const Categorie ={
 
 // Fonction de connexion
 const login = (email, password) => {
-  const statement = db.prepare('select Mail ,Password from entreprise where Mail = ? and Password  = ?  ');
+  const statement = db.prepare('select ID,Nom from entreprise where Mail = ? and Password  = ?  ');
   const results = statement.get(email,password);
 
   if (!results) {
     return -1; // Utilisateur non trouvé // info non correct 
-  } else {
-    return results ;
-  }
+  } 
+  return results
 };
 
 // Fonction utilitaire pour récupérer l'URL de la page de l'annonce
@@ -693,15 +708,22 @@ function getAnnonceURL(idAnnonce) {
   return `http://example.com/annonces/${idAnnonce}`; // Exemple d'URL de la page de l'annonce
 }
 const Reponse = {
+  Entreprise_details :(id_rep)=>{
+    const query =' select id_entreprise from response where id = ?'
+    const id = db.prepare(query).get(id_rep);
+    console.log(id)
+    const entreprise = Entreprise.get(id.id_entreprise);
+  },
   get : (id_dm)=>{
     const stmt = 'select reponse from response where id_dm = ?'
     const  reponse = db.prepare(stmt).get(id_dm);
+    console.log(reponse)
     return reponse ? reponse : null ;
   },
 
-  answer: (id_dm, rep) => {
-    const query = 'INSERT INTO response (id_dm, reponse) VALUES (?, ?)';
-    const reponseId = db.prepare(query).run(id_dm, rep);
+  answer: (id_dm,id_ent, rep) => {
+    const query = 'INSERT INTO response (id_dm, reponse,id_entreprise) VALUES (?, ? ,?)';
+    const reponseId = db.prepare(query).run(id_dm, rep,id_ent);
     return reponseId.changes > 0;
   }
   ,

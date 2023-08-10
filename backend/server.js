@@ -26,16 +26,22 @@ app.use(cookieSession({
       res.locals.authenticated = true;
       res.locals.name = req.session.name;
       res.locals.user = req.session.user;
+    } else {
+      res.locals.authenticated = false;
     }
     return next();
   });
+  
+  
   // Middleware pour vérifier l'authentification
   function is_authenticated(req, res, next) {
     if (req.session.user !== undefined) {
       return next();
-    }
-    res.status(401).send('Authentication required');
+    } 
+    res.redirect('/auth/log'); // Rediriger vers la page de connexion
   }
+
+  //route pour un nouvel user 
   app.post('/new_user', (req, res) => {
     const { username, email, password } = req.body;
     
@@ -81,22 +87,30 @@ app.use(cookieSession({
         res.status(500).json({ success: false, message: 'Une erreur s\'est produite lors de la vérification de l\'utilisateur.' });
       });
   });
+  //route pour se connecter
   app.post('/login', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-    console.log(email ,password);
-    const user = model.login(email,password);
-    if(user != -1){
-      req.session.user = user.user_id;
-      req.session.name = user.username;
-      req.session.type = user.role_name;
+    console.log(email, password);
+    const user = model.login(email, password);
+    
+    if (user != -1) {
+      req.session.user = user.ID;
+      req.session.name = user.Nom;
+      console.log(req.session.user, req.session.name)
       res.redirect('/');
     } else {
-      
       res.render('sign_in');
     }
   });
+
+  //route pour se deconnecter
+  app.get("/logout",(req,res)=>{
+    req.session =null ;
+    res.redirect('/')
+  })
   
+  //route de la page d'acceuil 
   app.get('/', (req, res) => {
     let annonces = model.Annonce.getAll();
     let categoriesWithSubcategories = model.Categorie.getCategoriesWithSubcategories();
@@ -111,16 +125,39 @@ app.use(cookieSession({
         categories.push({ category: item.category, subcategories: [item.subcategory] });
       }
     });
-  
     res.render('home', { annonces, categories });
-  });; 
+  });
+//route qui mene vers / apres s'etre identifier 
+  app.get('/home',is_authenticated,(req,res)=>{
+    res.render('home', { name: req.session.name });
 
+  });
+  
+  //route pour voir les parametres du compte
+  app.get('/compte/user',(req,res)=>{
+    let annonces = model.Annonce.getAll();
+    let categoriesWithSubcategories = model.Categorie.getCategoriesWithSubcategories();
+    let categories = [];
+    categoriesWithSubcategories.forEach((item) => {
+      let existingCategory = categories.find((cat) => cat.category === item.category);
+      if (existingCategory) {
+        existingCategory.subcategories.push(item.subcategory);
+      } else {
+        categories.push({ category: item.category, subcategories: [item.subcategory] });
+      }
+    });
+  
+   res.render('compte',{ annonces, categories });
+  });
+//route pour avoir le formulaire de connexion
   app.get('/auth/log',(req,res)=>{
     res.render('sign_in');
-  })
+  });
+  //route pour avoir le formulaire d'inscription
   app.get('/nouvel_utilsateur/inscription',(req,res)=>{
     res.render('signup');
   })
+  //route pour avoir l'annonce d'identifiant id 
   app.get('/annonces/annonce/:id',(req, res)=>{
     const annonce = model.Annonce.get(req.params.id);
     if(annonce){
@@ -197,6 +234,8 @@ app.get('/deposer-annonce',(req,res)=>{
   res.render('poster_annonce') ;
 }) ;
   
+
+
 app.get('/search', (req, res) => {
   const searchTerm = req.query.term.toLowerCase();
   const annonces = model.Annonce.getAll(); // Récupérer toutes les annonces
@@ -229,10 +268,38 @@ app.get('/search', (req, res) => {
     }
   });
 
-  res.render('search',autocompleteResults);
+  // Utiliser Mustache pour rendre la vue search avec les résultats de l'autocomplétion
+  const viewData = {
+    autocompleteResults: autocompleteResults
+  };
+  const template = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <!-- Autres balises meta et liens CSS -->
+
+        <!-- Bootstrap Icons CSS link -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+        <title>Résultats de recherche</title>
+    </head>
+    <body>
+      <!-- Votre code pour afficher les résultats de la recherche ici -->
+      <h1>Résultats de recherche</h1>
+      <ul>
+        {{#autocompleteResults}}
+          <li>{{.}}</li>
+        {{/autocompleteResults}}
+      </ul>
+    </body>
+    </html>
+  `;
+  const renderedView = mustache.render(template, viewData);
+  res.send(renderedView);
 });
 
-// Afficher la page des demandes liées à l'annonce
+
+// Afficher la page des demandes liées à l'annonce pour une entreprise 
 app.get('/annonces/:annonceId/demandes', (req, res) => {
   const annonce = model.Annonce.get(req.params.annonceId);
   const demandes = model.Demande.getAnnDemande(req.params.annonceId) ;
@@ -243,36 +310,52 @@ app.get('/annonces/:annonceId/demandes', (req, res) => {
 // Route pour afficher toutes les demandes d'un client
 app.get('/voir_mes_demandes/:demandeurId', (req, res) => {
   const demandes = model.Demande.get(1);
+
   console.log(demandes)
+  demandes.forEach(demande => {
+    demande.stateRefused = demande.state === 'refuse' ? true : false;
+    demande.stateAccepted = demande.state === 'accepte' ? true : false;
+  });
+  
   res.render('dm_client', { demandes: demandes });
 });
 //route pour voir la  reponse
 app.get('/ma_reponse/:id_dm', (req, res) => {
   const idDm = req.params.id_dm;
-  const demandeur = model.Demandeur.get(idDm);
+  const titre = model.Demande.getDmTitle(idDm);
+  const  id_ann = titre.ID_annonce ;
+  const entreprise = model.Entreprise.getFromIdAnnonce(id_ann)
+  // const adresse = model.Reponse.adresseEnt(idDm);
   const reponse = model.Reponse.get(idDm);
-  console.log(reponse)
+  const state = model.Demande.getState(idDm);
+  const candidat = model.Demandeur.get(idDm)
+  console.log(titre,entreprise  ,reponse ,state,candidat)
 
   if (!reponse) {
     const msg = "Pas de données";
     res.send(msg);
   } else {
-    res.render('show_answer_candidature',{reponse : reponse.reponse});
+    res.render('show_answer_candidature',{ titre : titre.titre ,entreprise , reponse ,state,candidat });
   }
 });
-;
 
-app.get('/answering_candidature/entreprise/:id_enterprise/demande_number/:id', (req, res) => {
-  const idEntreprise = req.params.id_enterprise; // Utiliser "idEntreprise" au lieu de "Id_entreprise"
+
+app.get('/answering_candidature/demande_number/:id', (req, res) => {
   const titre = model.Demande.getDmTitle(req.params.id);
-  const entreprise = model.Entreprise.get(idEntreprise); // Utiliser "idEntreprise" ici aussi
-  console.log(titre, idEntreprise ,entreprise);
-  res.render('justifyAnswer', { titre });
+  const  id_ann = titre.ID_annonce ;
+  const entreprise = model.Entreprise.getFromIdAnnonce(id_ann)
+  // const adresse = model.Reponse.adresseEnt(req.params.id);
+  const state = model.Demande.getState(req.params.id);
+  const candidat = model.Demandeur.get(titre.id_demandeur)
+  console.log(titre,id_ann,entreprise  ,state,candidat)
+  res.render('justifyAnswer', { titre : titre.titre ,ID : entreprise.ID,id_dm :titre.id_dm ,entreprise  ,state,candidat });
 });
  
-app.post('/jystifyanswer/:id',(req,res)=>{
+app.get('/jystify_answer_number/:id/entreprise/:id_ent',(req,res)=>{
   const answer = req.body.answer ;
-  const inserted = model.Reponse.answer(req.params.id,answer);
+  const entrepriseid =req.params.id_ent ;
+  console.log(answer)
+  const inserted = model.Reponse.answer(req.params.id,entrepriseid,answer);
   if(inserted){
     res.setTimeout(3000, () => {
       res.json({
@@ -284,7 +367,8 @@ app.post('/jystifyanswer/:id',(req,res)=>{
   res.status(500).json('Une erreur s\'est produite lors de la soumission de votre réponse.');
 }
 
-})
+});
+
 
 
 // Mettre à jour le statut d'une demande

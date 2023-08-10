@@ -43,9 +43,13 @@
           </thead>
           <tbody>
             <tr>
-              <td class="text-center">
-                {{state}}
-                <a href="/ma_reponse/{{id_dm}}">show answer</a>
+              <td class="text-center {{#stateRefused}}text-danger{{/stateRefused}}{{#stateAccepted}}text-success{{/stateAccepted}}">
+                <div class="row">
+                  <p style="text-transform: uppercase;">{{state}}</p>
+                </div>
+                <div class="row">
+                  <a href="/ma_reponse/{{id_dm}}">show answer</a>
+                </div>
                 
               </td>
             </tr>
@@ -86,6 +90,9 @@
 </script>
 
 <style>
+  .container {
+    margin: 20px;
+  }
   .btn {
     text-emphasis-color: white;
   }

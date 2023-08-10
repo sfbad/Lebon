@@ -1,25 +1,106 @@
-{{>header}}
-<!-- Ajoutez ce formulaire en dessous de votre contenu principal -->
-<div class="modal fade" id="repondreModal" tabindex="-1" aria-labelledby="repondreModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="repondreModalLabel">Répondre à la candidature "{{titre}}"</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form action="/answering_candidature/{{id_dm}}" method="post">
-            <div class="form-group">
-              <label for="reponseTextarea">Votre réponse :</label>
-              <textarea class="form-control" id="reponseTextarea" name="reponse" rows="5" required></textarea>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-          <button type="submit" form="repondreForm" class="btn btn-primary">Envoyer</button>
-        </div>
-      </div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  
+  
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width : 800px;
+      margin: 0 auto;
+    }
+    h1 {
+      margin-bottom : 10px;
+    }
+    hr {
+      margin: 20px 0;
+      border: 0;
+      border-top : 2px solid #ccc;
+    }
+    .details {
+      margin-top : 20px;
+    }
+    .contact {
+      margin-top : 40px;
+    }
+    .contact p {
+      margin: 5px 0;
+    }
+    .contact a {
+      color: blue;
+    }
+  </style>
+</head>
+<body>
+  <h1> Justifiez la reponse </h1>
+
+  
+      <h4>Candidat : </h4>
+  
+{{#candidat}}
+  <p>
+    <strong>Nom :</strong> {{Nom}}
+  </p>
+
+  <p>
+    <strong>Prénom :</strong> {{Prénom}}
+  </p>
+
+  
+  <p>
+    <strong>Adresse email :</strong> {{Mail}}
+  </p>
+  <p>
+    <strong>Date de postulation :</strong> 21/10/2021
+  </p>
+  {{/candidat}}
+
+  <hr>
+  {{#entreprise}}
+
+  <p>
+    <strong>Entreprise :</strong> {{Nom}}
+  </p>
+  <p>
+    <strong>Mail :</strong> {{Mail}}
+  </p>
+  {{/entreprise}}
+
+  {{#adresse}}
+  <p>
+
+    <strong>Telephone :</strong> {{Numéro_de_téléphone}}
+  </p>
+  {{/adresse}}
+  <p>
+    <strong>Date de publication de l'offre :</strong> 1er août 2023
+  </p>
+
+  <p>
+    <strong>Date de décision émise :</strong> 10 août 2023
+  </p>
+  {{#state}}
+  <p>
+    <strong>Statut :</strong> {{state}}
+  </p>
+  {{/state}}
+  <div class="details">
+    <h3>Détails :</h3>
+    <p>Ecrivez  les détails de votre décision .</p>
+    <div class="form-floating">
+      <form action="/jystify_answer_number/{{id_dm}}/entreprise/{{ID}}" method="post">
+         <textarea class="form-control" rows="10" cols="150" style="width : 100%;" name="answer" id="floatingTextarea"></textarea>
+      <label for="floatingTextarea"></label>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+     
     </div>
+   
   </div>
-{{>footer}}
+  <div class="contact">
+    <h3>Pour plus d'informations, contactez-nous :</h3>
+    <p>Email : <a href="mailto:contact@example.com">contact@example.com</a></p>
+    <p>Téléphone : <a href="tel:+1234567890">+1 (234) 567-890</a></p>
+  </div>
+
+</body>
+</html>

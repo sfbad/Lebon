@@ -1,41 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Lien CSS de Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-    <!-- Titre de la page -->
-    <title>SN</title>
-</head>
-<body>
-  <!-- Barre de menu de navigation pouvant se reduire en menu Hamburger lorsque la taille de l'ecran est reduite à celle des telephones-->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">LeRezoSN</a>
+   
 
+      
+  
+   
  
 
-  
-      <!-- Barre de recherche, toujours visible -->
-      <div id="search" class="d-flex">
-        <form action="/search" method="get" class="d-flex">
-          <input class="form-control me-2" type="search" id="searchInput" name="term" placeholder="Rechercher" aria-label="Search">
-          <button class="btn btn-outline-light" type="submit">Rechercher</button>
-        </form>
-      </div>  
-      <div>
-        <ul id="autocompleteResults">
-          
-
-
-        </ul>
-      </div>
-  
-      <!-- Éléments de connexion -->
-      <div class="collapse navbar-collapse" id="connexionDetails">
+<!-- 
+        <div class="collapse navbar-collapse" id="connexionDetails">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item" style="margin-right : 0;">
             <a class="nav-link" href="#">Se déconnecter</a>
@@ -49,88 +21,284 @@
           
         </ul>
       </div>
-    </div>
-  </nav>
-  
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <!-- Bouton hamburger pour les petits écrans -->
-      <button type="button" class="btn btn-danger" id="depodansMenu">
-        <a class="nav-link" href="/deposer-annonce">Deposer une annonce </a>
-      </button>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+ -->
 
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          {{#categories}}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{category}}" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              {{category}}
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown{{category}}">
-              {{#subcategories}}
-              <li><a class="dropdown-item" href="/categories/{{../category}}/{{.}}">{{.}}</a></li>
-              {{/subcategories}}
-            </ul>
-          </li>
-          {{/categories}}
-        </ul>
-      </div>
-
-    </nav>
+      
+      
+  <!-- Les script js et jquery de Bootstrap-->
  
 
 
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - codingnepalweb.com -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SN</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Unicons CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css" />
+  </head>
+  <body>
 
-      
-      <style>
-        @media (max-width : 598px) {
-          #connexionDetails{
-            display: none;
-          }
+    <nav class="nav">
+      <i class="uil uil-bars navOpenBtn"></i>
+      <a href="/" class="logo">LeRezoSN</a>
+      <div class="vr"></div>
+      <ul class="nav-links">
+        <i class="uil uil-times navCloseBtn"></i>
 
-          #depodansMenu {
-            display: block;
-          }
-          
+         <button type="button" class="btn btn-danger btn-sm" id="depo">
+            <a class="nav-link" href="/deposer-annonce" style="color: #f4f7fa;">Deposer une annonce </a>
+          </button>
+          <hr class="d-lg-none" id="h">
+        {{#categories}}
+        <li class="nav-item dropdown" id="category">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown{{category}}" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            {{category}}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown{{category}}">
+            {{#subcategories}}
+            <li><a class="dropdown-item" href="/categories/{{../category}}/{{.}}">{{.}}</a></li>
+            {{/subcategories}}
+          </ul>
+        </li>
+        {{/categories}}
+
         
-        }
+        {{ ^ authenticated}}
+        <button class="btnCon"><a href="/auth/log">s'identifier</a></button>
+        <div class="vr"></div>
+        {{/authenticated}}
 
-    #search {
-     
-      margin-left : 5%;
-    }
-      </style>
-      
-  <!-- Les script js et jquery de Bootstrap-->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+        {{#authenticated}}
+        <div>
+          <div class="row mt-2">
+            <i class="bi bi-person-circle"></i>
+          </div>
+            <a href="/compte/user">{{name}}</a>
+        </div>
+        {{/authenticated}}
+      </ul>
+     <div class="vr"></div>
+      <i class="uil uil-search search-icon" id="searchIcon"></i>
+        <form action="/search" method="get" class="search-box">
+          <i class="uil uil-search search-icon"></i>
+          <input type="text" placeholder="Search here..." name="term" />
+        </form>
+    </nav>
 
-    <!-- Inclure Handlebars.js -->
+  </body>
+</html>
+<style>
+  /* Google Fonts - Poppins */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+body {
+  background: #fcfcfc;
+}
+.nav {
+  top : 0;
+  left : 0;
+  width : 100%;
+  padding: 10px 100px;
+  background: #f4f7fa;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.btnCon{
+  width : 100px;
+  height : auto;
+  border-radius: 10px;
+  text-transform: capitalize;
+  text-overflow: clip;
+}
+.nav,
+.nav .nav-links {
+  display: flex;
+  align-items: center;
+}
+.nav {
+  justify-content: space-between;
+}
+a {
+  color: #900b0b;
+  text-decoration: none;
+}
+.nav .logo {
+  font-size: 22px;
+  font-weight: 500;
+}
+.nav .nav-links {
+  column-gap: 20px;
+  list-style: none;
+}
+.nav .nav-links a {
+  transition: all 0.2s linear;
+}
+.nav.openSearch .nav-links a {
+  opacity: 0;
+  pointer-events: none;
+}
+.nav .search-icon {
+  color: #3003c5;
+  font-size: 20px;
+  cursor: pointer;
+  top : 0px;
+}
+.nav .search-box {
+  position: absolute;
+  right : 250px;
+  height : 45px;
+  max-width : 500px;
+  width : 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s linear;
+}
+.nav.openSearch .search-box {
+  opacity: 1;
+  pointer-events: auto;
+}
+.search-box .search-icon {
+  position: absolute;
+  left : 15px;
+  top : 50%;
+  left : 15px;
+  color: #4a98f7;
+  transform: translateY(-50%);
+}
+.search-box input {
+  height : 100%;
+  width : 100%;
+  border: none;
+  outline: none;
+  border-radius: 6px;
+  background-color: #fff;
+  padding: 0 15px 0 45px;
+}
+
+.nav .navOpenBtn,
+.nav .navCloseBtn {
+  display: none;
+}
+#h {
+  color: black;
+  margin: 4px 0;
+  border: 0;
+
+}
+#category {
+  color: hsl(0, 67%, 31%);
+}
+
+/* responsive */
+@media screen and (max-width : 1160px) {
+  .nav {
+    padding: 15px 100px;
+  }
+  .nav .search-box {
+    right : 150px;
+  }
+  
+}
+@media screen and (max-width : 950px) {
+  .nav {
+    padding: 15px 50px;
+  }
+  .nav .search-box {
+    right : 100px;
+    max-width : 400px;
+  }
+}
+@media screen and (max-width : 768px) {
+  .nav .navOpenBtn,
+  .nav .navCloseBtn {
+    display: block;
+    color: #de0a0a;
+  }
+  .nav {
+    padding: 15px 20px;
+  }
+  .nav .nav-links {
+    position: fixed;
+    top : 0;
+    left : -100%;
+    height : 100%;
+    max-width : 280px;
+    width : 100%;
+    padding-top : 100px;
+    row-gap: 30px;
+    flex-direction: column;
+    background-color: #fafafc;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+    z-index: 100;
+  }
+  .nav.openNav .nav-links {
+    left : 0;
+  }
+  .nav .navOpenBtn {
+    color: #da1414;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  .nav .navCloseBtn {
+    position: absolute;
+    top : 20px;
+    right : 20px;
+    color: #de0a0a;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  .nav .search-box {
+    top : calc(100% + 10px);
+    max-width : calc(100% - 20px);
+    right : 50%;
+    transform: translateX(50%);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+}
+</style>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+
+
 <script>
-    // Fonction pour gérer l'autocomplétion
-    $(document).ready(function() {
-      $('#searchInput').on('input', function() {
-        const searchTerm = $(this).val().toLowerCase();
-        $.ajax({
-          url: '/search', // Votre route pour l'autocomplétion
-          method: 'GET',
-          data: { term: searchTerm },
-          success: function(response) {
-            const autocompleteResults = $('#autocompleteResults');
-            autocompleteResults.empty();
-            response.forEach(function(result) {
-              autocompleteResults.append('<li>' + result + '</li>');
-            });
-          },
-          error: function() {
-            console.log('Erreur lors de la récupération des résultats de l\'autocomplétion');
-          }
-        });
-      });
-    });
+  const nav = document.querySelector(".nav"),
+  searchIcon = document.querySelector("#searchIcon"),
+  navOpenBtn = document.querySelector(".navOpenBtn"),
+  navCloseBtn = document.querySelector(".navCloseBtn");
+
+searchIcon.addEventListener("click", () => {
+  nav.classList.toggle("openSearch");
+  nav.classList.remove("openNav");
+  if (nav.classList.contains("openSearch")) {
+    return searchIcon.classList.replace("uil-search", "uil-times");
+  }
+  searchIcon.classList.replace("uil-times", "uil-search");
+});
+
+navOpenBtn.addEventListener("click", () => {
+  nav.classList.add("openNav");
+  nav.classList.remove("openSearch");
+  searchIcon.classList.replace("uil-times", "uil-search");
+});
+navCloseBtn.addEventListener("click", () => {
+  nav.classList.remove("openNav");
+});
 </script>
