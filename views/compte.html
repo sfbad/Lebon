@@ -1,74 +1,75 @@
+
+
+
 {{>header}}
 
-
 <div class="container">
-    <div class="wrapper">
-
-    
+  <div class="wrapper">
     <div class="row">
+      {{#roleIsEntreprise}}
       <div class="col-md-4 mb-2">
         <div class="param">
-            <a href="#">
-                <i class="bi bi-ticket-detailed"></i>
-                <h6>Mes annonces</h6>
-            </a>
-            
+          <a href="/entreprise/read_my_annonces">
+            <i class="bi bi-ticket-detailed"></i>
+            <h6>Mes annonces</h6>
+          </a>
         </div>
-        
+      </div>
+      {{/roleIsEntreprise}}
 
-    </div>
+      {{#roleIsDemandeur}}
       <div class="col-md-4 mb-2">
-        <a href="/voir_mes_demandes/1">
-            <div class="param">
-                <i class="bi bi-person-square"></i>
-                <h6>Espace candidat</h6>
-            </div>
+        <a href="/voir_mes_demandes">
+          <div class="param">
+            <i class="bi bi-person-square"></i>
+            <h6>Espace candidat</h6>
+          </div>
+        </a>
+      </div>
+      {{/roleIsDemandeur}}
+
+      <div class="col-md-4 mb-2">
+        <a href="#">
+          <div class="param">
+            <i class="bi bi-wallet2"></i>
+            <h6>Transactions</h6>
+          </div>
         </a>
       </div>
       <div class="col-md-4 mb-2">
         <a href="#">
-            <div class="param">
-                <i class="bi bi-wallet2"></i>
-                <h6>Transactions</h6>
-            </div>
+          <div class="param">
+            <i class="bi bi-person-fill-x"></i>
+            <h6>Supprimer mon compte</h6>
+          </div>
         </a>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-4 mb-2">
-        <a href="#">
-            <div class="param">
-                <i class="bi bi-person-fill-x"></i>
-                <h6>Supprimer mon compte</h6>
-            </div>
-        </a> 
       </div>
       <div class="col-md-4 mb-2">
         <div class="param">
-            <a href="#">
-                <i class="bi bi-person-fill-up"></i>
-                <h6>Modifier mes infos  </h6>
-            </a>
+          <a href="#">
+            <i class="bi bi-person-fill-up"></i>
+            <h6>Modifier mes infos</h6>
+          </a>
         </div>
       </div>
       <div class="col-md-4 mb-2">
         <div class="param">
-            <a href="#">
-                <i class="bi bi-keyboard"></i>
-                <h6>Changer de mot de passe </h6>
-            </a>
+          <a href="#">
+            <i class="bi bi-keyboard"></i>
+            <h6>Changer de mot de passe</h6>
+          </a>
         </div>
       </div>
     </div>
     <button class="btnDecon">
-        <a  href="/logout">se deconnecter</a>
+      <a href="/logout">se deconnecter</a>
     </button>
-       
-    
-    
-
-    </div>  
   </div>
+</div>
+
+
+{{>footer}}
+
   
   <style>
     .container {
@@ -76,7 +77,7 @@
         margin-top : 19px;
     }
     .btnDecon{
-        width : 120px;
+        width : 130px;
         height : auto;
         border-radius: 10px;
         text-transform: capitalize;

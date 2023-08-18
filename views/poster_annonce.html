@@ -1,4 +1,97 @@
 {{>header}}
+<script>
+
+  function toggleFormFieldsVehicule() {
+    const saleOrlocation = document.getElementById("saleOrlocation").value;
+    const typeVehicule = document.getElementById("typeVehicule");
+    
+    const venteVoitureFields = document.getElementById("venteVoitureFields");
+    const venteMotoFields = document.getElementById("venteMotoFields");
+    const locationMotoFields = document.getElementById("locationMotoFields");
+    const locationVoitureFields = document.getElementById("locationVoitureFields");
+  
+    // Masquer tous les champs spécifiques
+    venteVoitureFields.style.display = "none";
+    venteMotoFields.style.display = "none";
+    locationMotoFields.style.display = "none";
+    locationVoitureFields.style.display = "none";
+  
+    if (saleOrlocation === "vente") {
+      typeVehicule.style.display = "block";
+  
+      if (typeVehicule.value === "voiture") {
+        venteVoitureFields.style.display = "block";
+      } else if (typeVehicule.value === "moto") {
+
+        venteMotoFields.style.display = "block";
+      }
+  
+    } else if (saleOrlocation === "location") {
+
+      typeVehicule.style.display = "block";
+      if (typeVehicule.value === "voiture") {
+        locationVoitureFields.style.display = "block";
+
+      } else if (typeVehicule.value === "moto") {
+        locationMotoFields.style.display = "block";
+
+      }
+    }
+  }
+  
+
+
+
+
+
+function toggleFormFieldsEmploi() {
+  const typeEmploi = document.getElementById("typeEmploi").value;
+  const offreFields = document.getElementById("offreFields");
+  const demandeFields = document.getElementById("demandeFields");
+
+  if (typeEmploi === "offre") {
+    offreFields.style.display = "block";
+    demandeFields.style.display = "none";
+  } else if (typeEmploi === "demande") {
+    offreFields.style.display = "none";
+    demandeFields.style.display = "block";
+  }
+}
+
+// Afficher/masquer la saisie de la surface de terrain selon le type d'annonce sélectionné
+const typeAnnonceSelect = document.getElementById('typeAnnonce');
+const surfaceTerrainDiv = document.getElementById('surfaceTerrainDiv');
+
+typeAnnonceSelect.addEventListener('change', function() {
+  if (typeAnnonceSelect.value === 'vente') {
+    surfaceTerrainDiv.style.display = 'block';
+  } else {
+    surfaceTerrainDiv.style.display = 'none';
+  }
+});
+
+// Fonction pour afficher ou masquer les champs spécifiques selon la catégorie choisie
+function toggleFormFields() {
+  const categorie = document.getElementById("categorie").value;
+  const immobilierFields = document.getElementById("immobilierFields");
+  const emploiFields = document.getElementById("emploiFields");
+  const vehiculeFields = document.getElementById("vehiculeFields");
+
+  if (categorie === "immobilier") {
+    immobilierFields.style.display = "block";
+    emploiFields.style.display = "none";
+    vehiculeFields.style.display = "none";
+  } else if (categorie === "emploi") {
+    immobilierFields.style.display = "none";
+    emploiFields.style.display = "block";
+    vehiculeFields.style.display = "none";
+  } else if (categorie === "vehicule") {
+    immobilierFields.style.display = "none";
+    emploiFields.style.display = "none";
+    vehiculeFields.style.display = "block";
+  }
+}
+</script>
   <div class="container">
     <form action="/deposer-annonce" method="POST">
       <h2 class="mt-4">Déposer une annonce</h2>
@@ -11,6 +104,7 @@
           <option value="immobilier" >Immobilier</option>
           <option value="emploi">Emploi</option>
           <option value="vehicule">Véhicule</option>
+          <option value="vehicule">Maison</option>
         </select>
       </div>
       
@@ -23,21 +117,7 @@
       <!-- Champs spécifiques pour la catégorie Immobilier -->
       <fieldset id="immobilierFields" style="display: none;">
         <legend>Informations Immobilier</legend>
-        <!-- Choix du type d'annonce parmi les trois grandes sous-catégories -->
-        <div class="form-group">
-          <label for="typeAnnonce">Type d'annonce :</label>
-          <select name="typeAnnonce" id="typeAnnonce" class="form-control" required>
-            <option value="vente" selected>Vente Immobilier</option>
-            <option value="location">Location</option>
-            <option value="colocation">Colocation</option>
-          </select>
-        </div>
-            
-        <!-- Photos (facultatif, peut être multiple avec "multiple" attribut) -->
-        <div class="form-group">
-          <label for="photos">Photos :</label>
-          <input type="file" name="photos" id="photos" class="form-control-file">
-        </div>
+        <!-- ... Autres champs spécifiques à l'immobilier déjà présents ... -->
 
         <!-- Surface habitable (en m²) -->
         <div class="form-group">
@@ -45,12 +125,10 @@
           <input type="number" name="surfaceHabitable" id="surfaceHabitable" class="form-control" required>
         </div>
 
-        <!-- Surface de terrain (en m²) (visible uniquement si Vente Immobilier est sélectionné) -->
-        <div id="surfaceTerrainDiv" style="display: none;">
-          <div class="form-group">
-            <label for="surfaceTerrain">Surface de terrain (m²) :</label>
-            <input type="number" name="surfaceTerrain" id="surfaceTerrain" class="form-control">
-          </div>
+        <!-- Surface de terrain (en m²) -->
+        <div class="form-group">
+          <label for="surfaceTerrain">Surface de terrain (m²) :</label>
+          <input type="number" name="surfaceTerrain" id="surfaceTerrain" class="form-control">
         </div>
 
         <!-- Prix -->
@@ -63,6 +141,93 @@
         <div class="form-group">
           <label for="nbPieces">Nombre de pièces :</label>
           <input type="number" name="nbPieces" id="nbPieces" class="form-control" required>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label for="description">Description :</label>
+          <textarea id="description" name="description" class="form-control" rows="4" required></textarea>
+        </div>
+
+        <!-- Adresse -->
+        <div class="form-group">
+          <label for="adresse">Adresse :</label>
+          <input type="text" name="adresse" id="adresse" class="form-control" required>
+        </div>
+
+        <!-- Année de construction -->
+        <div class="form-group">
+          <label for="anneeConstruction">Année de construction :</label>
+          <input type="number" name="anneeConstruction" id="anneeConstruction" class="form-control">
+        </div>
+
+        <!-- Étage -->
+        <div class="form-group">
+          <label for="etage">Étage :</label>
+          <input type="number" name="etage" id="etage" class="form-control">
+        </div>
+
+        <!-- Ascenseur -->
+        <div class="form-group">
+          <label for="ascenseur">Ascenseur :</label>
+          <select name="ascenseur" id="ascenseur" class="form-control">
+            <option value="oui">Oui</option>
+            <option value="non">Non</option>
+          </select>
+        </div>
+
+        <!-- Balcon/Terrasse -->
+        <div class="form-group">
+          <label for="balconTerrasse">Balcon/Terrasse :</label>
+          <select name="balconTerrasse" id="balconTerrasse" class="form-control">
+            <option value="oui">Oui</option>
+            <option value="non">Non</option>
+          </select>
+        </div>
+
+        <!-- Nombre de salles de bains -->
+        <div class="form-group">
+          <label for="nbSallesDeBains">Nombre de salles de bains :</label>
+          <input type="number" name="nbSallesDeBains" id="nbSallesDeBains" class="form-control">
+        </div>
+
+        <!-- Nombre de chambres -->
+        <div class="form-group">
+          <label for="nbChambres">Nombre de chambres :</label>
+          <input type="number" name="nbChambres" id="nbChambres" class="form-control">
+        </div>
+
+        <!-- Type de chauffage -->
+        <div class="form-group">
+          <label for="typeChauffage">Type de chauffage :</label>
+          <input type="text" name="typeChauffage" id="typeChauffage" class="form-control">
+        </div>
+
+        <!-- Type de climatisation -->
+        <div class="form-group">
+          <label for="typeClimatisation">Type de climatisation :</label>
+          <input type="text" name="typeClimatisation" id="typeClimatisation" class="form-control">
+        </div>
+
+        <!-- Parking/Garage -->
+        <div class="form-group">
+          <label for="parkingGarage">Parking/Garage :</label>
+          <select name="parkingGarage" id="parkingGarage" class="form-control">
+            <option value="oui">Oui</option>
+            <option value="non">Non</option>
+          </select>
+        </div>
+
+        <!-- État du bien -->
+        <div class="form-group">
+          <label for="etatBien">État du bien :</label>
+          <input type="text" name="etatBien" id="etatBien" class="form-control">
+        </div>
+
+        <!-- Disponibilité -->
+        <div class="form-group">
+          <label for="disponibilite">Disponibilité :</label>
+          <input type="date" name="disponibilite" id="disponibilite" class="form-control">
         </div>
       </fieldset>
 
@@ -84,36 +249,114 @@
             <label for="salaire">Salaire :</label>
             <input type="text" id="salaire" name="salaire" class="form-control" required>
           </div>
-
+        
           <div class="form-group">
-            <label for="niveauEtude">Niveau d'étude :</label>
-            <input type="text" id="niveauEtude" name="level" class="form-control">
+            <label for="niveauEtude">Niveau d'étude requis :</label>
+            <input type="text" id="niveauEtude" name="niveauEtude" class="form-control">
           </div>
-
+        
           <div class="form-group">
-            <label for="experience">Expérience :</label>
+            <label for="experience">Niveau d'expérience requis :</label>
             <input type="text" id="experience" name="experience" class="form-control">
           </div>
-
           <div class="form-group">
-            <label for="travailA">Travail à :</label>
-              <select id="travailA" name="travailA" class="form-control" required>
-                <option value="TempsPlein">Temps plein</option>
-                <option value="TempsPartiel">Temps partiel</option>
-              </select>
-            </div>
-            <input type="text" id="travailA" name="travailA" class="form-control">
+            <label for="typeContratSouhaite">Type de contrat  :</label>
+            <select id="typeContratSouhaite" name="typeContratSouhaite[]" class="form-control" multiple>
+              <option value="cdi">CDI</option>
+              <option value="cdd">CDD</option>
+              <option value="stage">Stage</option>
+              <option value="alternance">Alternance</option>
+            </select>
           </div>
-
+        
           <div class="form-group">
-            <label for="adresse">Adresse :</label>
-            <input type="text" id="adresse" name="adresse" class="form-control">
+            <label for="competences">Compétences requises :</label>
+            <input type="text" id="competences" name="competences" class="form-control">
           </div>
+        
+          <div class="form-group">
+            <label for="salaire">Salaire :</label>
+            <input type="text" id="salaire" name="salaire" class="form-control" required>
+          </div>
+        
+          <div class="form-group">
+            <label for="avantages">Avantages :</label>
+            <textarea id="avantages" name="avantages" class="form-control" rows="3"></textarea>
+          </div>
+        
+          <div class="form-group">
+            <label for="dateDebut">Date de début :</label>
+            <input type="date" id="dateDebut" name="dateDebut" class="form-control" required>
+          </div>
+        
+          <div class="form-group">
+            <label for="modalitesCandidature">Modalités de candidature :</label>
+            <textarea id="modalitesCandidature" name="modalitesCandidature" class="form-control" rows="3" required></textarea>
+          </div>
+        </div>
+        
       
         <!-- Champs spécifiques pour la demande d'emploi -->
         <div id="demandeFields" style="display: none;">
-          <!-- Ajoutez ici les champs spécifiques pour la demande d'emploi -->
-          <!-- Par exemple : domaineRecherche, typeContratRecherche, etc. -->
+            <div class="form-group">
+              <label for="typePosteRecherche">Type de poste recherché :</label>
+              <input type="text" id="typePosteRecherche" name="typePosteRecherche" class="form-control">
+            </div>
+          
+            <div class="form-group">
+              <label for="domaineActivite">Domaine d'activité :</label>
+              <input type="text" id="domaineActivite" name="domaineActivite" class="form-control">
+            </div>
+          
+            <div class="form-group">
+              <label for="niveauExperience">Niveau d'expérience :</label>
+              <input type="text" id="niveauExperience" name="niveauExperience" class="form-control">
+            </div>
+          
+            <div class="form-group">
+              <label for="niveauEtudes">Niveau d'études :</label>
+              <input type="text" id="niveauEtudes" name="niveauEtudes" class="form-control">
+            </div>
+          
+            <div class="form-group">
+              <label for="competencesQualifications">Compétences et qualifications :</label>
+              <input type="text" id="competencesQualifications" name="competencesQualifications" class="form-control">
+            </div>
+          
+            <div class="form-group">
+              <label for="disponibilite">Disponibilité :</label>
+              <input type="text" id="disponibilite" name="disponibilite" class="form-control">
+            </div>
+          
+            <div class="form-group">
+              <label for="lieuTravailSouhaite">Lieu de travail souhaité :</label>
+              <input type="text" id="lieuTravailSouhaite" name="lieuTravailSouhaite" class="form-control">
+            </div>
+          
+            <div class="form-group">
+              <label for="typeContratSouhaite">Type de contrat souhaité :</label>
+              <select id="typeContratSouhaite" name="typeContratSouhaite[]" class="form-control" multiple>
+                <option value="cdi">CDI</option>
+                <option value="cdd">CDD</option>
+                <option value="stage">Stage</option>
+                <option value="alternance">Alternance</option>
+              </select>
+            </div>
+          
+            <div class="form-group">
+              <label for="salaireSouhaite">Salaire souhaité :</label>
+              <input type="text" id="salaireSouhaite" name="salaireSouhaite" class="form-control">
+            </div>
+          
+            <div class="form-group">
+              <label for="languesParlees">Langues parlées :</label>
+              <input type="text" id="languesParlees" name="languesParlees" class="form-control">
+            </div>
+          
+            <div class="form-group">
+              <label for="mobiliteGeographique">Mobilité géographique :</label>
+              <input type="text" id="mobiliteGeographique" name="mobiliteGeographique" class="form-control">
+            </div>          
         </div>
       </fieldset>
 
@@ -121,22 +364,94 @@
       <fieldset id="vehiculeFields" style="display: none;">
         <legend>Informations Véhicule</legend>
         <div class="form-group">
-          <label for="typeVehicule">Type de véhicule :</label>
-          <select id="typeVehicule" name="typeVehicule" class="form-control" onchange="toggleFormFieldsVehicule()" required>
+          <label for="saleOrlocation">Vente ou location ? :</label>
+          <select id="saleOrlocation" name="saleOrlocation" class="form-control" onchange="toggleFormFieldsVehicule()" required>
+            <option selected default >Selectionner une option</option>
             <option value="vente">Vente</option>
             <option value="location">Location</option>
           </select>
         </div>
+        <!-- selectionner le type de vehicule  -->
+        <div class="form-group" >
+          <label for="typeVehicule">Type de véhicule :</label>
+          <select id="typeVehicule" name="typeVehicule" class="form-control" style="display: none;">
+            <option selected default >Selectionner le type de vehicule </option>
 
-        <!-- Champs spécifiques pour la vente de voitures -->
-        <div id="venteVoitureFields" style="display: none;">
+            <option value="voiture">Voiture</option>
+            <option value="moto">Moto</option>
+          </select>
+        </div>
+        <!-- Champs spécifiques pour la location de voiture -->
+        <div id="locationVoitureFields" style="display: none;">
+          <legend>Informations Location de Voiture</legend>
           <div class="form-group">
-            <label for="typeVehiculeVoiture">Type de véhicule :</label>
-            <select id="typeVehiculeVoiture" name="typeVehiculeVoiture" class="form-control">
-              <option value="moto">Moto</option>
-              <option value="voiture">Voiture</option>
-            </select>
+            <label for="marqueVoiture">Marque de la voiture :</label>
+            <input type="text" id="marqueVoiture" name="marqueVoiture" class="form-control" required>
           </div>
+
+          <div class="form-group">
+            <label for="modeleVoiture">Modèle de la voiture :</label>
+            <input type="text" id="modeleVoiture" name="modeleVoiture" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="anneeModelVoiture">Année modèle :</label>
+            <input type="text" id="anneeModelVoiture" name="anneeModelVoiture" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="kilometrageVoiture">Kilométrage :</label>
+            <input type="text" id="kilometrageVoiture" name="kilometrageVoiture" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="prixLocation">Prix de location par jour :</label>
+            <input type="text" id="prixLocation" name="prixLocation" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="caution">Caution :</label>
+            <input type="text" id="caution" name="caution" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="periodeLocation">Période de location :</label>
+            <input type="text" id="periodeLocation" name="periodeLocation" class="form-control" required>
+          </div>
+
+        <div class="form-group">
+          <label for="carburantVoiture">Carburant :</label>
+          <select id="carburantVoiture" name="carburantVoiture" class="form-control">
+            <option value="essence">Essence</option>
+            <option value="diesel">Diesel</option>
+            <option value="hybride">Hybride</option>
+            <option value="electrique">Électrique</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="nombrePlaces">Nombre de places :</label>
+          <input type="number" id="nombrePlaces" name="nombrePlaces" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+          <label for="descriptionVoiture">Description :</label>
+          <textarea id="descriptionVoiture" name="descriptionVoiture" class="form-control" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="photosVoiture">Photos :</label>
+          <input type="file" id="photosVoiture" name="photosVoiture" class="form-control-file" multiple required>
+        </div>
+
+        <div class="form-group">
+          <label for="disponibiliteVoiture">Disponibilité :</label>
+          <input type="text" id="disponibiliteVoiture" name="disponibiliteVoiture" class="form-control" required>
+        </div>
+      </div>
+        <!-- Champs spécifiques pour la vente de voitures -->
+    
+      <div id="venteVoitureFields" style="display: none;">
 
           <div class="form-group">
             <label for="marque">Marque :</label>
@@ -162,6 +477,13 @@
             <label for="kilometrage">Kilométrage :</label>
             <input type="text" id="kilometrage" name="kilometrage" class="form-control" required>
           </div>
+             <div class="form-group">
+                <label for="etatVehicule">État du véhicule :</label>
+                <select id="etatVehicule" name="etatVehicule" class="form-control">
+                  <option value="neuf">Neuf</option>
+                  <option value="occasion">Occasion</option>
+                </select>
+           </div>
 
           <div class="form-group">
             <label for="carburant">Carburant :</label>
@@ -172,13 +494,109 @@
               <option value="hybride">Hybride</option>
             </select>
           </div>
-
           <!-- Champs spécifiques pour la vente de motos -->
-          <div id="venteMotoFields" style="display: none;">
-            <div class="form-group">
-              <label for="cylindre">Cylindrée :</label>
-              <input type="text" id="cylindre" name="cylindree" class="form-control">
+            <div id="venteMotoFields" style="display: none;">
+              <div class="form-group">
+                <label for="marqueMoto">Marque :</label>
+                <input type="text" id="marqueMoto" name="marqueMoto" class="form-control" required>
+              </div>
+
+              <div class="form-group">
+                <label for="modeleMoto">Modèle :</label>
+                <input type="text" id="modeleMoto" name="modeleMoto" class="form-control" required>
+              </div>
+
+              <div class="form-group">
+                <label for="anneeModelMoto">Année modèle :</label>
+                <input type="text" id="anneeModelMoto" name="model_yearMoto" class="form-control" required>
+              </div>
+
+              <div class="form-group">
+                <label for="kilometrageMoto">Kilométrage :</label>
+                <input type="text" id="kilometrageMoto" name="kilometrageMoto" class="form-control" required>
+              </div>
+
+              <div class="form-group">
+                <label for="prixMoto">Prix :</label>
+                <input type="text" id="prixMoto" name="prixMoto" class="form-control" required>
+              </div>
+
+              <div class="form-group">
+                <label for="cylindreMoto">Cylindrée :</label>
+                <input type="text" id="cylindreMoto" name="cylindreMoto" class="form-control" required>
+              </div>
+
+              <div class="form-group">
+                <label for="carburantMoto">Carburant :</label>
+                <select id="carburantMoto" name="carburantMoto" class="form-control">
+                  <option value="essence">Essence</option>
+                  <option value="electrique">Électrique</option>
+                  <option value="hybride">Hybride</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="etatMoto">État de la moto :</label>
+                <select id="etatMoto" name="etatMoto" class="form-control">
+                  <option value="neuf">Neuf</option>
+                  <option value="occasion">Occasion</option>
+                </select>
+              </div>
+
             </div>
+        </div>
+        <!-- champs pour la location de moto  -->
+        <div id="locationMotoFields" style="display: none;">
+          <div class="form-group">
+            <label for="marqueMotoLocation">Marque :</label>
+            <input type="text" id="marqueMotoLocation" name="marqueMotoLocation" class="form-control" required>
+          </div>
+        
+          <div class="form-group">
+            <label for="modeleMotoLocation">Modèle :</label>
+            <input type="text" id="modeleMotoLocation" name="modeleMotoLocation" class="form-control" required>
+          </div>
+        
+          <div class="form-group">
+            <label for="anneeModelMotoLocation">Année modèle :</label>
+            <input type="text" id="anneeModelMotoLocation" name="model_yearMotoLocation" class="form-control" required>
+          </div>
+        
+          <div class="form-group">
+            <label for="kilometrageMotoLocation">Kilométrage :</label>
+            <input type="text" id="kilometrageMotoLocation" name="kilometrageMotoLocation" class="form-control" required>
+          </div>
+        
+          <div class="form-group">
+            <label for="prixMotoLocation">Prix de location :</label>
+            <input type="text" id="prixMotoLocation" name="prixMotoLocation" class="form-control" required>
+          </div>
+        
+          <div class="form-group">
+            <label for="cautionMotoLocation">Caution :</label>
+            <input type="text" id="cautionMotoLocation" name="cautionMotoLocation" class="form-control" required>
+          </div>
+        
+          <div class="form-group">
+            <label for="periodeLocation">Période de location :</label>
+            <input type="text" id="periodeLocation" name="periodeLocation" class="form-control" required>
+          </div>
+        
+          <div class="form-group">
+            <label for="carburantMotoLocation">Carburant :</label>
+            <select id="carburantMotoLocation" name="carburantMotoLocation" class="form-control">
+              <option value="essence">Essence</option>
+              <option value="electrique">Électrique</option>
+              <option value="hybride">Hybride</option>
+            </select>
+          </div>
+        
+          <div class="form-group">
+            <label for="etatMotoLocation">État de la moto :</label>
+            <select id="etatMotoLocation" name="etatMotoLocation" class="form-control">
+              <option value="neuf">Neuf</option>
+              <option value="occasion">Occasion</option>
+            </select>
           </div>
         </div>
       </fieldset>
@@ -200,71 +618,5 @@
 
   <!-- Importer les fichiers JavaScript de Bootstrap -->
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script>
-    function toggleFormFieldsVehicule() {
-      const typeVehicule = document.getElementById("typeVehicule").value;
-      const venteVoitureFields = document.getElementById("venteVoitureFields");
-      const venteMotoFields = document.getElementById("venteMotoFields");
-
-      if (typeVehicule === "vente") {
-        venteVoitureFields.style.display = "block";
-        venteMotoFields.style.display = "none";
-      } else if (typeVehicule === "location") {
-        venteVoitureFields.style.display = "none";
-        venteMotoFields.style.display = "none";
-      } else if (typeVehicule === "moto") {
-        venteVoitureFields.style.display = "none";
-        venteMotoFields.style.display = "block";
-      }
-    
-    }
-
-    function toggleFormFieldsEmploi() {
-      const typeEmploi = document.getElementById("typeEmploi").value;
-      const offreFields = document.getElementById("offreFields");
-      const demandeFields = document.getElementById("demandeFields");
-
-      if (typeEmploi === "offre") {
-        offreFields.style.display = "block";
-        demandeFields.style.display = "none";
-      } else if (typeEmploi === "demande") {
-        offreFields.style.display = "none";
-        demandeFields.style.display = "block";
-      }
-    }
-
-    // Afficher/masquer la saisie de la surface de terrain selon le type d'annonce sélectionné
-    const typeAnnonceSelect = document.getElementById('typeAnnonce');
-    const surfaceTerrainDiv = document.getElementById('surfaceTerrainDiv');
-
-    typeAnnonceSelect.addEventListener('change', function() {
-      if (typeAnnonceSelect.value === 'vente') {
-        surfaceTerrainDiv.style.display = 'block';
-      } else {
-        surfaceTerrainDiv.style.display = 'none';
-      }
-    });
-
-    // Fonction pour afficher ou masquer les champs spécifiques selon la catégorie choisie
-    function toggleFormFields() {
-      const categorie = document.getElementById("categorie").value;
-      const immobilierFields = document.getElementById("immobilierFields");
-      const emploiFields = document.getElementById("emploiFields");
-      const vehiculeFields = document.getElementById("vehiculeFields");
-
-      if (categorie === "immobilier") {
-        immobilierFields.style.display = "block";
-        emploiFields.style.display = "none";
-        vehiculeFields.style.display = "none";
-      } else if (categorie === "emploi") {
-        immobilierFields.style.display = "none";
-        emploiFields.style.display = "block";
-        vehiculeFields.style.display = "none";
-      } else if (categorie === "vehicule") {
-        immobilierFields.style.display = "none";
-        emploiFields.style.display = "none";
-        vehiculeFields.style.display = "block";
-      }
-    }
-  </script>
+  
 

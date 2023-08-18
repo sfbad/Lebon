@@ -26,12 +26,15 @@ app.use(cookieSession({
       res.locals.authenticated = true;
       res.locals.name = req.session.name;
       res.locals.user = req.session.user;
+      res.locals.roleIsEntreprise = req.session.role === 'entreprise';
+      res.locals.roleIsDemandeur = req.session.role === 'demandeur';
     } else {
       res.locals.authenticated = false;
     }
     return next();
   });
   
+
   
   // Middleware pour vérifier l'authentification
   function is_authenticated(req, res, next) {
@@ -87,22 +90,32 @@ app.use(cookieSession({
         res.status(500).json({ success: false, message: 'Une erreur s\'est produite lors de la vérification de l\'utilisateur.' });
       });
   });
-  //route pour se connecter
+
+
+  
+  // route pour se connecter
   app.post('/login', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-    console.log(email, password);
-    const user = model.login(email, password);
     
-    if (user != -1) {
-      req.session.user = user.ID;
-      req.session.name = user.Nom;
-      console.log(req.session.user, req.session.name)
+    const userEntreprise = model.loginEntreprise(email, password);
+    const userDemandeur = model.loginDemandeur(email, password);
+  
+    if (userEntreprise !== -1) {
+      req.session.user = userEntreprise.ID;
+      req.session.name = userEntreprise.Nom;
+      req.session.role = 'entreprise';
+      res.redirect('/');
+    } else if (userDemandeur !== -1) {
+      req.session.user = userDemandeur.ID;
+      req.session.name = userDemandeur.Nom;
+      req.session.role = 'demandeur';
       res.redirect('/');
     } else {
-      res.render('sign_in');
+      res.render('sign_in')
     }
   });
+  
 
   //route pour se deconnecter
   app.get("/logout",(req,res)=>{
@@ -111,12 +124,16 @@ app.use(cookieSession({
   })
   
   //route de la page d'acceuil 
-  app.get('/', (req, res) => {
-    let annonces = model.Annonce.getAll();
-    let categoriesWithSubcategories = model.Categorie.getCategoriesWithSubcategories();
   
-    // Regrouper les sous-catégories sous leur catégorie respective
-    let categories = [];
+
+
+  app.get('/', async (req, res) => {
+    try {
+      const annonces =  model.Annonce.getAll();
+      const categoriesWithSubcategories = await model.Categorie.getCategoriesWithSubcategories();
+  
+      // Créer un objet de catégories avec leurs sous-catégories
+      let categories = [];
     categoriesWithSubcategories.forEach((item) => {
       let existingCategory = categories.find((cat) => cat.category === item.category);
       if (existingCategory) {
@@ -125,8 +142,15 @@ app.use(cookieSession({
         categories.push({ category: item.category, subcategories: [item.subcategory] });
       }
     });
-    res.render('home', { annonces, categories });
+      res.render('home', { annonces, categories });
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).send('Internal Server Error');
+    }
   });
+  
+  
+  
 //route qui mene vers / apres s'etre identifier 
   app.get('/home',is_authenticated,(req,res)=>{
     res.render('home', { name: req.session.name });
@@ -146,7 +170,6 @@ app.use(cookieSession({
         categories.push({ category: item.category, subcategories: [item.subcategory] });
       }
     });
-  
    res.render('compte',{ annonces, categories });
   });
 //route pour avoir le formulaire de connexion
@@ -158,8 +181,8 @@ app.use(cookieSession({
     res.render('signup');
   })
   //route pour avoir l'annonce d'identifiant id 
-  app.get('/annonces/annonce/:id',(req, res)=>{
-    const annonce = model.Annonce.get(req.params.id);
+  app.get('/annonces/annonce',(req, res)=>{
+    const annonce = model.Annonce.get(req.session.user);
     if(annonce){
           res.render('read_annonce',{annonce}) ;
 
@@ -167,8 +190,8 @@ app.use(cookieSession({
       res.status(404).send('annonce not found');
     }
   })
-  app.get('/entreprise/:id/read_my_annonces', (req, res) => {
-    const myann = model.Annonce.getAnEntrepriseAllAno(req.params.id);
+  app.get('/entreprise/read_my_annonces', (req, res) => {
+    const myann = model.Annonce.getAnEntrepriseAllAno(req.session.user);
 
     if (myann !== 0) {
     
@@ -178,42 +201,8 @@ app.use(cookieSession({
     }
   });
 
-  // Importez les dépendances nécessaires
 
-// Route pour la catégorie "Immobilier"
-app.get('/categories/immobilier', (req, res) => {
-  // Récupérez les annonces de la catégorie "Immobilier" depuis la base de données
-  const annonces = model.getAnnoncesByCategory('Immobilier');
-  res.render('annonces', { annonces });
-});
 
-// Route pour la catégorie "Emploi"
-app.get('/categories/emploi', (req, res) => {
-  // Récupérez les annonces de la catégorie "Emploi" depuis la base de données
-  const annonces = model.getAnnoncesByCategory('Emploi');
-  res.render('annonces', { annonces });
-});
-
-// Route pour la catégorie "Vehicule"
-app.get('/categories/vehicule', (req, res) => {
-  // Récupérez les annonces de la catégorie "Vehicule" depuis la base de données
-  const annonces = model.getAnnoncesByCategory('Vehicule');
-  res.render('annonces', { annonces });
-});
-
-// Route pour la catégorie "Maison"
-app.get('/categories/maison', (req, res) => {
-  // Récupérez les annonces de la catégorie "Maison" depuis la base de données
-  const annonces = model.getAnnoncesByCategory('Maison');
-  res.render('annonces', { annonces });
-});
-
-// Route pour la catégorie "Autres"
-app.get('/categories/autres', (req, res) => {
-  // Récupérez les annonces de la catégorie "Autres" depuis la base de données
-  const annonces = model.Categorie.getAnnoncesByCategory('Autres');
-  res.render('annonces', { annonces });
-});
 
   
 app.get('/categories/:category/:subcategory', (req, res) => {
@@ -269,9 +258,7 @@ app.get('/search', (req, res) => {
   });
 
   // Utiliser Mustache pour rendre la vue search avec les résultats de l'autocomplétion
-  const viewData = {
-    autocompleteResults: autocompleteResults
-  };
+
   const template = `
     <!DOCTYPE html>
     <html lang="en">
@@ -308,8 +295,8 @@ app.get('/annonces/:annonceId/demandes', (req, res) => {
 });
 
 // Route pour afficher toutes les demandes d'un client
-app.get('/voir_mes_demandes/:demandeurId', (req, res) => {
-  const demandes = model.Demande.get(1);
+app.get('/voir_mes_demandes/', (req, res) => {
+  const demandes = model.Demande.get(req.session.user);
 
   console.log(demandes)
   demandes.forEach(demande => {
@@ -399,50 +386,158 @@ app.post('/annonce/:annonceId/demandes/:demandeId/miseajour', (req, res) => {
 
   })
 
+  function createObjectFromRequest(req, fields) {
+    const obj = { id_user: req.session.user };
+    fields.forEach(field => {
+      obj[field] = req.body[field];
+    });
+    return obj;
+  }
+
 // Fonction qui facilite la création d'un objet
-function post_data_to_offer(req) {
-    return {
-        id_user: req.session.user,
-        titre: req.body.type,
-        salaire: req.body.salaire,
-        level: req.body.level,
-        description: req.body.description,
-        experience : req.body.experience ,
-        travailA :req.body.travailA ,
-        adresse : req.body.adresse
-    };
+function post_data_to_OfferEmploi(req) {
+  const EmploiFields = [
+    'titrePoste', 'descriptionPoste', 'entreprise', 'localisation', 'typeContrat',
+    'niveauExperience', 'niveauEtudes', 'competencesRequises', 'salaireAvantages',
+    'dateDebut', 'modalitesCandidature'
+  ];
+  return createObjectFromRequest(req, EmploiFields);
 }
 
-function post_data_to_Vehicule(req) {
-  return {
-      id_user: req.session.user,
-      titre: req.body.titre,
-      type: req.body.type,
-      marque: req.body.marque,
-      description: req.body.description,
-      model : req.body.model ,
-      model_year :req.body.model_year,
-      circulation : req.body.circulation,
-      kilometrage : req.body.kilometrage ,
-      carburant  : req.body.carburant ,
-      cylindree :req.body.cylindree 
-  };
+function post_data_to_DemandeEmploi(req) {
+  const DemandeEmploiFields = [
+    'typePosteRecherche', 'domaineActivite', 'niveauExperienceCandidat',
+    'niveauEtudesCandidat', 'competencesQualifications', 'disponibilite',
+    'lieuTravailSouhaite', 'typeContratSouhaite', 'salaireSouhaite',
+    'languesParlees', 'mobiliteGeographique'
+  ];
+  return createObjectFromRequest(req, DemandeEmploiFields);
+}
+
+function post_data_to_Immobilier(req) {
+  const fields = [
+    'titre', 
+    'typeAnnonce', 
+    'surfaceHabitable', 
+    'surfaceTerrain', 
+    'prix', 
+    'nbPieces',
+    'description',
+    'adresse',
+    'anneeConstruction',
+    'etage',
+    'ascenseur',
+    'balconTerrasse',
+    'nbSallesDeBains',
+    'nbChambres',
+    'typeChauffage',
+    'typeClimatisation',
+    'parkingGarage',
+    'etatBien',
+    'disponibilite'
+  ];
+    return createObjectFromRequest(req, fields);
+}
+function post_data_to_Voiture(req) {
+  const vehiculeFields = [
+    'typeVehicule', 'marque', 'modele', 'model_year', 'circulation', 'kilometrage', 'carburant',
+    'typeVehiculeVoiture', 'marqueMoto', 'modeleMoto', 'model_yearMoto', 'kilometrageMoto', 'prixMoto', 'cylindreMoto',
+    'carburantMoto', 'etatMoto'
+  ];
+    return createObjectFromRequest(req,vehiculeFields);
+}
+function post_data_to_Moto(req) {
+  const venteMotoFields = [
+    'marqueMoto', 'modeleMoto', 'model_yearMoto', 'kilometrageMoto', 'prixMoto', 'cylindreMoto',
+    'carburantMoto', 'etatMoto'
+  ];
+    return createObjectFromRequest(req,venteMotoFields);
+}
+function post_data_to_LocationMoto(req) {
+  const fields = ['marqueMotoLocation', 'modeleMotoLocation', 'model_yearMotoLocation', 'kilometrageMotoLocation',
+  'prixMotoLocation', 'cautionMotoLocation', 'periodeLocation', 'carburantMotoLocation', 'etatMotoLocation'
+];
+  
+    return createObjectFromRequest(req,fields);
+}
+
+
+
+function post_data_to_Maison(req) {
+  const fields = ['titre', 'type', 'marque', 'description', 'model', 'model_year', 'circulation', 'kilometrage', 'carburant', 'cylindree'];
+  return createObjectFromRequest(req, fields);
+}
+function post_data_to_LocationVoiture(req){
+  const vehiculeFields = [
+    'marqueVoiture', 'modeleVoiture', 'anneeModelVoiture', 'kilometrageVoiture', 'prixLocation', 'caution',
+    'periodeLocation', 'carburantVoiture', 'nombrePlaces', 'descriptionVoiture', 'photosVoiture', 'disponibiliteVoiture'
+  ];
+  
 }
 
 
 // Route pour la soumission du formulaire de dépôt d'annonce
+// Route pour la soumission du formulaire de dépôt d'annonce
 app.post('/deposer-annonce', (req, res) => {
-  // Récupérez les informations du formulaire
-  const titre = req.body.titre;
-  const description = req.body.description;
-  // Obtenez l'ID de l'entreprise à partir de la session ou de l'utilisateur connecté
-  const entrepriseId = 123; // Remplacez 123 par l'ID de l'entreprise réelle
-  // Enregistrez l'annonce dans la base de données avec l'ID de l'entreprise
-  // ...
+  const categorie = req.body.categorie;
+  const typeEmploi = req.body.typeEmploi; // Ajoutez ceci pour gérer le type d'emploi
 
-  // Redirigez l'utilisateur vers sa page personnelle après avoir déposé l'annonce
-  res.redirect(`/entreprise/${entrepriseId}`);
+  if (categorie === 'immobilier') {
+    const immoData = post_data_to_Immobilier(req);
+    const immoId = model.AnnonceImmo.insertImmobilierAnnonce(immoData);
+    // Insérez immoData dans votre base de données
+    // Utilisez immoId pour la suite des opérations si nécessaire
+  } else if (categorie === 'vehicule') {
+    const typeVehicule = req.body.typeVehicule;
+    if (typeVehicule === 'voiture') {
+      const voitureData = post_data_to_Voiture(req);
+      const voitureId = model.AnnonceVehicule.insertVehiculeAnnonce(voitureData);
+      // Insérez voitureData dans votre base de données
+      // Utilisez voitureId pour la suite des opérations si nécessaire
+    } else if (typeVehicule === 'moto') {
+      const motoData = post_data_to_Moto(req);
+      const motoId = model.AnnonceVehicule.insertVehiculeAnnonce(motoData);
+      // Insérez motoData dans votre base de données
+      // Utilisez motoId pour la suite des opérations si nécessaire
+    }
+  } else if (categorie === 'emploi') {
+    if (typeEmploi === 'offre') {
+      const emploiData = post_data_to_OfferEmploi(req);
+      const emploiId = model.AnnonceEmploi.insertEmploiAnnonce(emploiData);
+      // Insérez emploiData dans votre base de données
+      // Utilisez emploiId pour la suite des opérations si nécessaire
+    } else if (typeEmploi === 'demande') {
+      const demandeEmploiData = post_data_to_DemandeEmploi(req);
+      const demandeEmploiId = model.AnnonceEmploi.insertEmploiAnnonce(demandeEmploiData);
+      // Insérez demandeEmploiData dans votre base de données
+      // Utilisez demandeEmploiId pour la suite des opérations si nécessaire
+    }
+  }
+
+  // Effectuez d'autres opérations nécessaires avec les données
+  // Renvoyez une réponse appropriée au client
 });
+
+app.get('/annonces-emploi', async (req, res) => {
+  try {
+   
+    res.render('annonce_emploies');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Erreur serveur');
+  }
+});
+app.get('/offres_emploie', (req, res) => {
+  const offres = model.AnnonceEmploi.getOffres() // Récupérez les offres depuis la base de données
+  res.render('offres', { offres });
+});
+
+app.get('/demandes_emploie', (req, res) => {
+  const demandes = model.AnnonceEmploi.getDemandes(); // Récupérez les demandes depuis la base de données
+  res.render('annonce_emploies', { demandes });
+});
+
+
 
 
 

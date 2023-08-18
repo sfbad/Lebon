@@ -640,7 +640,7 @@ const Photo = {
 
 const Categorie ={
   addCategorie :(categorie)=>{
-    const query = 'INSERT INTO categories(name ) VALUES (? )' ;
+    const query = 'INSERT INTO categorie(name ) VALUES (? )' ;
     db.run(query, categorie, function (err) {
       if (err) {
         reject(err);
@@ -656,19 +656,19 @@ const Categorie ={
   },
   
   getAllSub: () => {
-    const query = `SELECT * FROM subcategories`;
+    const query = `SELECT * FROM sous_categories`;
     return db.prepare(query).all();
   } ,
 
   getCategoriesWithSubcategories: () => {
     const query = `
-      SELECT c.nom AS category, s.name AS subcategory
+      SELECT c.name AS category, s.name AS subcategory
       FROM categorie AS c
-      LEFT JOIN subcategories AS s ON c.nom = s.categorie_name
+      LEFT JOIN sous_categories AS s ON c.id = s.category_id
     `;
     return db.prepare(query).all();
-  
   }
+  
   ,
    getAnnoncesByCategory : (category) => {
     const query = 'SELECT * FROM annonces WHERE categorie = ?';
@@ -690,8 +690,19 @@ const Categorie ={
 }
 
 // Fonction de connexion
-const login = (email, password) => {
+const loginEntreprise = (email, password) => {
   const statement = db.prepare('select ID,Nom from entreprise where Mail = ? and Password  = ?  ');
+  const results = statement.get(email,password);
+
+  if (!results) {
+    return -1; // Utilisateur non trouvé // info non correct 
+  } 
+  return results
+};
+
+
+const loginDemandeur = (email, password) => {
+  const statement = db.prepare('select ID,Nom from demandeur where Mail = ? and Password  = ?  ');
   const results = statement.get(email,password);
 
   if (!results) {
@@ -707,6 +718,9 @@ function getAnnonceURL(idAnnonce) {
 
   return `http://example.com/annonces/${idAnnonce}`; // Exemple d'URL de la page de l'annonce
 }
+
+
+
 const Reponse = {
   Entreprise_details :(id_rep)=>{
     const query =' select id_entreprise from response where id = ?'
@@ -743,4 +757,349 @@ deleteAnswer: (id_dm) => {
 
 }
 
-module.exports = { Demandeur, Entreprise, Annonce, Demande, CV, Photo, login ,Categorie ,Reponse};
+
+
+const Immobiliere = {
+  ajouter: (data) => {
+    const insertStatement = db.prepare(`
+      INSERT INTO annonce_immobilier (
+        titre, date_creation, description, adresse, id_entreprise, id_photo, categorie_id, subcategorie_id,
+        typeAnnonce, surfaceHabitable, surfaceTerrain, prix, nbPieces, anneeConstruction, etage, ascenseur,
+        balconTerrasse, nbSallesDeBains, nbChambres, climatisation, parkingGarage, etatBien,
+        disponibilite, prix
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    const result = insertStatement.run(
+      data.titre, data.date_creation, data.description, data.adresse, data.id_entreprise, data.id_photo,
+      data.categorie_id, data.subcategorie_id, data.typeAnnonce, data.surfaceHabitable, data.surfaceTerrain,
+      data.prix, data.nbPieces, data.anneeConstruction, data.etage, data.ascenseur, data.balconTerrasse,
+      data.nbSallesDeBains, data.nbChambres, data.climatisation, data.parkingGarage, data.etatBien,
+      data.disponibilite, data.prix
+    );
+
+    return result.lastInsertRowid;
+  },
+
+  update: (id, data) => {
+    const updateStatement = db.prepare(`
+      UPDATE annonce_immobilier
+      SET titre = ?, description = ?, ...
+      WHERE id = ?
+    `);
+
+    const result = updateStatement.run(
+      data.titre, data.description, ... id
+    );
+
+    return result.changes;
+  },
+
+  delete: (id) => {
+    const deleteStatement = db.prepare(`
+      DELETE FROM annonce_immobilier WHERE id = ?
+    `);
+
+    const result = deleteStatement.run(id);
+    return result.changes;
+  },
+
+  getImmo: (souscategorie) => {
+    const selectStatement = db.prepare(`
+      SELECT * FROM annonce_immobilier WHERE subcategorie_id = ?
+    `);
+
+    const rows = selectStatement.all(souscategorie);
+
+    if (rows.length > 0) {
+      return rows;
+    } else {
+      return -1;
+    }
+  },
+
+  getAnnonce: (id) => {
+    const selectStatement = db.prepare(`
+      SELECT * FROM annonce_immobilier WHERE id = ?
+    `);
+
+    return selectStatement.get(id);
+  },
+
+  getwithCategorie: (souscategorie) => {
+    const selectStatement = db.prepare(`
+      SELECT * FROM annonce_immobilier WHERE subcategorie_id = ?
+    `);
+
+    return selectStatement.all(souscategorie);
+  },
+
+  getSub: () => {
+    const selectStatement = db.prepare(`
+    SELECT DISTINCT c.name AS category, s.name AS subcategory
+    FROM categorie c
+    LEFT JOIN sous_categories s ON c.ID = s.category_id
+    WHERE c.name = 'Immobilier';    `);
+
+    return selectStatement.all();
+  }
+};
+
+
+
+
+const Emploi = {
+  getAll: (type) => {
+    const statement = db.prepare(`
+      SELECT * FROM annonce_emploi WHERE typeEmploi = ?
+    `);
+    
+    const rows = statement.all(type);
+    
+    if (rows.length > 0) {
+      return rows;
+    } else {
+      return -1;
+    }
+  },
+
+  insertEmploiAnnonce: (data) => {
+    const insertStatement = db.prepare(`
+      INSERT INTO annonce_emploi (
+        titre, date_annonce, description, adresse, id_entreprise, photo, categorie_id, subcategorie_id,
+        typeEmploi, salaire, niveauEtude, experience, competences, avantages, dateDebut, modalitesCandidature,
+        PosteRecherchee, domaineActivite, niveauExperience, niveauEtudes, competences, disponibilite,
+        typeContrat, langues, lieux
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    insertStatement.run(
+      data.titre, data.date_annonce, data.description, data.adresse, data.id_entreprise, data.photo,
+      data.categorie_id, data.subcategorie_id, data.typeEmploi, data.salaire, data.niveauEtude,
+      data.experience, data.competences, data.avantages, data.dateDebut, data.modalitesCandidature,
+      data.PosteRecherchee, data.domaineActivite, data.niveauExperience, data.niveauEtudes, data.competences,
+      data.disponibilite, data.typeContrat, data.langues, data.lieux
+    );
+  },
+
+  updateAnnonceEmploi: (data) => {
+    const updateStatement = db.prepare(`
+      UPDATE annonce_emploi
+      SET titre = ?, description = ?, ...
+      WHERE id = ?
+    `);
+
+    updateStatement.run(
+      data.titre, data.description, ...  data.id
+    );
+  },
+
+  get: (typeEmploi) => {
+    const statement = db.prepare(`
+      SELECT * FROM annonce_emploi WHERE typeEmploi = ?
+    `);
+    
+    return statement.all(typeEmploi);
+  },
+
+  getTypesEmploi: () => {
+    const statement = db.prepare(`
+      SELECT DISTINCT typeContrat FROM annonce_emploi
+    `);
+    
+    return statement.all();
+  },
+
+  getSub: (categorieId) => {
+    const statement = db.prepare(`
+    SELECT DISTINCT c.name AS category, s.name AS subcategory
+    FROM categorie c
+    LEFT JOIN sous_categories s ON c.ID = s.category_id
+    WHERE c.name = 'Emplois';    `);
+    
+    return statement.all(categorieId);
+  }
+  ,
+  updateAnnonceEmploi: (data) => {
+    const updateStatement = db.prepare(`
+      UPDATE annonce_emploi
+      SET titre = ?, description = ?, adresse = ?, id_entreprise = ?, photo = ?,
+          categorie_id = ?, subcategorie_id = ?, typeEmploi = ?, salaire = ?, 
+          niveauEtude = ?, experience = ?, competences = ?, avantages = ?, dateDebut = ?, 
+          modalitesCandidature = ?, PosteRecherchee = ?, domaineActivite = ?, 
+          niveauExperience = ?, niveauEtudes = ?, competences = ?, disponibilite = ?, 
+          typeContrat = ?, langues = ?, lieux = ?
+      WHERE id = ?
+    `);
+  
+    updateStatement.run(
+      data.titre, data.description, data.adresse, data.id_entreprise, data.photo,
+      data.categorie_id, data.subcategorie_id, data.typeEmploi, data.salaire,
+      data.niveauEtude, data.experience, data.competences, data.avantages, data.dateDebut,
+      data.modalitesCandidature, data.PosteRecherchee, data.domaineActivite, data.niveauExperience,
+      data.niveauEtudes, data.competences, data.disponibilite, data.typeContrat, data.langues,
+      data.lieux, data.id
+    );
+  },
+  
+};
+
+
+
+const Vehicule = {
+  insertVehiculeAnnonce: (data) => {
+    const insertStatement = db.prepare(`
+      INSERT INTO annonce_vehicule (
+        titre, date_creation, description, adresse, id_entreprise, id_photo, categorie_id, subcategorie_id,
+        typeVehicule, marque, modele, model_year, circulation, kilometrage, carburant,
+        prix, cylindre, etat, disponibilite
+      )
+      VALUES (@titre, @date_creation, @description, @adresse, @id_entreprise, @id_photo, @categorie_id, @subcategorie_id,
+        @typeVehicule, @marque, @modele, @model_year, @circulation, @kilometrage, @carburant,
+        @prix, @cylindre, @etat, @disponibilite
+      )
+    `);
+
+    const result = insertStatement.run(data);
+    return result;
+  },
+
+  getAll: (subcategorie) => {
+    const query = db.prepare(`
+      SELECT * FROM annonce_vehicule WHERE subcategorie_id = @subcategorie
+    `);
+
+    const annonces = query.all({ subcategorie });
+    return annonces.length ? annonces : -1;
+  },
+
+  getTypesofVehicule: (subcategorie, typeVehicule) => {
+    const query = db.prepare(`
+      SELECT * FROM annonce_vehicule WHERE subcategorie_id = @subcategorie AND typeVehicule = @typeVehicule
+    `);
+
+    const annonces = query.all({ subcategorie, typeVehicule });
+    return annonces.length ? annonces : -1;
+  },
+
+  getSub: (categorie_id) => {
+    const query = db.prepare(`
+    SELECT DISTINCT c.name AS category, s.name AS subcategory
+    FROM categorie c
+    LEFT JOIN sous_categories s ON c.ID = s.category_id
+    WHERE c.name = 'Véhicules';    `);
+
+    const subcategories = query.all({ categorie_id });
+    return subcategories.length ? subcategories : -1;
+  },
+
+  updateVehicule: (id, data) => {
+    const updateStatement = db.prepare(`
+      UPDATE annonce_vehicule SET
+      titre = @titre,
+      date_creation = @date_creation,
+      description = @description,
+      adresse = @adresse,
+      id_entreprise = @id_entreprise,
+      id_photo = @id_photo,
+      categorie_id = @categorie_id,
+      subcategorie_id = @subcategorie_id,
+      typeVehicule = @typeVehicule,
+      marque = @marque,
+      modele = @modele,
+      model_year = @model_year,
+      circulation = @circulation,
+      kilometrage = @kilometrage,
+      carburant = @carburant,
+      prix = @prix,
+      cylindre = @cylindre,
+      etat = @etat,
+      disponibilite = @disponibilite
+      WHERE id = @id
+    `);
+
+    const result = updateStatement.run({ ...data, id });
+    return result;
+  },
+
+  deleteVehicule: (id) => {
+    const deleteStatement = db.prepare(`
+      DELETE FROM annonce_vehicule WHERE id = @id
+    `);
+
+    const result = deleteStatement.run({ id });
+    return result;
+  },
+};
+const Maison = {
+  ajouter: (data) => {
+    const insertStatement = db.prepare(`
+      INSERT INTO annonce_maison (
+        titre, description, prix, etat, id_photo, adresse, date_creation,
+        marque, modele, annee_fabrication, couleur, dimensions, disponibilite, prix_autre
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    const result = insertStatement.run(
+      data.titre, data.description, data.prix, data.etat, data.id_photo, data.adresse,
+      data.date_creation, data.marque, data.modele, data.annee_fabrication, data.couleur,
+      data.dimensions, data.disponibilite, data.prix_autre
+    );
+
+    return result.lastInsertRowid;
+  },
+
+  update: (data) => {
+    const updateStatement = db.prepare(`
+      UPDATE annonce_maison
+      SET titre = ?, description = ?, prix = ?, etat = ?, id_photo = ?,
+          adresse = ?, date_creation = ?, marque = ?, modele = ?,
+          annee_fabrication = ?, couleur = ?, dimensions = ?, disponibilite = ?, prix_autre = ?
+      WHERE id = ?
+    `);
+
+    updateStatement.run(
+      data.titre, data.description, data.prix, data.etat, data.id_photo, data.adresse,
+      data.date_creation, data.marque, data.modele, data.annee_fabrication, data.couleur,
+      data.dimensions, data.disponibilite, data.prix_autre, data.id
+    );
+  },
+
+  delete: (id) => {
+    const deleteStatement = db.prepare(`
+      DELETE FROM annonce_maison
+      WHERE id = ?
+    `);
+
+    deleteStatement.run(id);
+  },
+
+  getAll: () => {
+    const statement = db.prepare(`
+      SELECT * FROM annonce_maison
+    `);
+
+    return statement.all();
+  },
+
+  getSub: () => {
+    const statement = db.prepare(`
+    SELECT DISTINCT c.name AS category, s.name AS subcategory
+    FROM categorie c
+    LEFT JOIN sous_categories s ON c.ID = s.category_id
+    WHERE c.name = 'Maison';
+    `);
+
+    return statement.all();
+  }
+};
+
+
+
+
+
+
+module.exports = { Demandeur, Entreprise, Annonce, Demande, CV, Photo, Vehicule, Emploi,Immobiliere,Maison, loginEntreprise ,loginDemandeur,Categorie ,Reponse};
