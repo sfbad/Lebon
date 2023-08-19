@@ -42,8 +42,10 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown{{category}}">
               {{#subcategories}}
-              <li><a class="dropdown-item" href="/{{category}}/{{../category}}/{{.}}">{{.}}</a></li>
-              {{/subcategories}}
+                <li>
+                  <a href="/{{category}}/{{.}}">{{.}}</a>
+                </li>
+                {{/subcategories}}
             </ul>
           </li>
           {{/categories}}

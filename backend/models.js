@@ -850,9 +850,9 @@ const Immobiliere = {
 
 
 const Emploi = {
-  getAll: (type) => {
+  getAll: () => {
     const statement = db.prepare(`
-      SELECT * FROM annonce_emploi WHERE typeEmploi = ?
+      SELECT * FROM annonce_emploi
     `);
     
     const rows = statement.all(type);
@@ -896,15 +896,19 @@ const Emploi = {
     );
   },
 
-  get: (typeEmploi) => {
+  getBySubCname: (subcategoryId) => {
     const statement = db.prepare(`
-      SELECT * FROM annonce_emploi WHERE typeEmploi = ?
+      SELECT *
+      FROM annonce_emploi
+      WHERE subcategorie_id = ?
     `);
-    
-    return statement.all(typeEmploi);
-  },
+  
+    return statement.all(subcategoryId);
+  }
+  
+  ,
 
-  getTypesEmploi: () => {
+  getTypesContrat: () => {
     const statement = db.prepare(`
       SELECT DISTINCT typeContrat FROM annonce_emploi
     `);
@@ -1033,6 +1037,8 @@ const Vehicule = {
     return result;
   },
 };
+
+
 const Maison = {
   ajouter: (data) => {
     const insertStatement = db.prepare(`
@@ -1094,12 +1100,37 @@ const Maison = {
     `);
 
     return statement.all();
+  },
+  getTypesofMaison: (subcategory_id) => {
+    const query = db.prepare(`
+      SELECT * FROM annonce_maison WHERE subcategorie_id = ?
+    `);
+  
+    const annonces = query.all(subcategory_id);
+    return annonces.length ? annonces : -1;
   }
+  
 };
+getSubcategoryIdByName = (subcategoryName) => {
+  const statement = db.prepare(`
+    SELECT ID
+    FROM sous_categories
+    WHERE name = ?
+  `);
+
+  const result = statement.get(subcategoryName);
+
+  if (result) {
+    return result.ID;
+  } else {
+    return null; // Sous-catégorie non trouvée
+  }
+}
 
 
 
 
 
 
-module.exports = { Demandeur, Entreprise, Annonce, Demande, CV, Photo, Vehicule, Emploi,Immobiliere,Maison, loginEntreprise ,loginDemandeur,Categorie ,Reponse};
+
+module.exports = { Demandeur, Entreprise, Annonce, Demande, CV, Photo, Vehicule, Emploi,Immobiliere,Maison,getSubcategoryIdByName , loginEntreprise ,loginDemandeur,Categorie ,Reponse};

@@ -1,0 +1,22 @@
+<!-- subcategory_emplois.ejs -->
+<h1>Annonces de la sous-catégorie {{subcategory}} - Type: {{type}}</h1>
+<ul>
+  {{#annonces}}
+    <li>
+      <a href="/annonces/{{id}}">
+        <h3>{{titre}}</h3>
+        <p>{{description}}</p>
+        <!-- Affichez d'autres informations de l'annonce si nécessaire -->
+      </a>
+    </li>
+  {{/annonces}}
+</ul>
+
+<!-- Générez les liens vers les sous-catégories -->
+<ul>
+  {{#subcategories}}
+    <li>
+      <a href="/emplois/{{subcategory}}/{{type}}/{{.}}">{{.}}</a>
+    </li>
+  {{/subcategories}}
+</ul>

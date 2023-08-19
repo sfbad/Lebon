@@ -142,6 +142,7 @@ app.use(cookieSession({
         categories.push({ category: item.category, subcategories: [item.subcategory] });
       }
     });
+      console.log(categories)
       res.render('home', { annonces, categories });
     } catch (error) {
       console.error('Error:', error);
@@ -156,8 +157,11 @@ app.use(cookieSession({
     res.render('home', { name: req.session.name });
 
   });
+
+
+
   
-  //route pour voir les parametres du compte
+  //route pour voir les parametres du compte de l'utilisateur 
   app.get('/compte/user',(req,res)=>{
     let annonces = model.Annonce.getAll();
     let categoriesWithSubcategories = model.Categorie.getCategoriesWithSubcategories();
@@ -172,14 +176,21 @@ app.use(cookieSession({
     });
    res.render('compte',{ annonces, categories });
   });
+
+
+
 //route pour avoir le formulaire de connexion
   app.get('/auth/log',(req,res)=>{
     res.render('sign_in');
   });
+
+
   //route pour avoir le formulaire d'inscription
   app.get('/nouvel_utilsateur/inscription',(req,res)=>{
     res.render('signup');
   })
+
+  
   //route pour avoir l'annonce d'identifiant id 
   app.get('/annonces/annonce',(req, res)=>{
     const annonce = model.Annonce.get(req.session.user);
@@ -189,7 +200,8 @@ app.use(cookieSession({
     }else{
       res.status(404).send('annonce not found');
     }
-  })
+  });
+
   app.get('/entreprise/read_my_annonces', (req, res) => {
     const myann = model.Annonce.getAnEntrepriseAllAno(req.session.user);
 
@@ -219,10 +231,87 @@ app.get('/categories/:category/:subcategory', (req, res) => {
   res.render('category', { category, subcategory, annonces });
 });
 
+
+//route pour deposer une annonce
 app.get('/deposer-annonce',(req,res)=>{
   res.render('poster_annonce') ;
 }) ;
+
+//route pour obtenir les annonces d'emplois par type 
+app.get('/Emplois/:subcategory', async (req, res) => {
+  try {
+    const subcategory = req.params.subcategory;
+    const subcategory_id = model.getSubcategoryIdByName(subcategory);
+    console.log(subcategory ,subcategory_id)
+    
+    // Obtenir les annonces en fonction de la sous-catégorie 
+    const annonces =  model.Emploi.getBySubCname(subcategory_id);
+    // Récupérer les sous-catégories spécifiques à la catégorie "Emplois"
   
+    res.render('annon_emplois', {annonces });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('Internal Server Error ref code ');
+  }
+});
+
+//Pour obtenir la page des sous categories de la categorie Véhicules
+app.get('/Vehicules/:subcategory', async (req, res) => {
+  try {
+    const subcategory = req.params.subcategory;
+    const subcategory_id = model.getSubcategoryIdByName(subcategory);
+    
+    // Obtenez les annonces de la sous-catégorie et du type spécifiés
+    const annonces =  model.Vehicule.getTypesofVehicule(subcategory, type);
+    
+    // Obtenez les sous-catégories spécifiques à la catégorie "Véhicules"
+    const subcategories =  model.Vehicule.getSub();
+  
+    res.render('annonce_vehicules', { subcategory, type, annonces, subcategories });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.get('/Immobilier/:subcategory', async (req, res) => {
+  try {
+    const subcategory = req.params.subcategory;
+    const subcategory_id = model.getSubcategoryIdByName(subcategory);
+
+    // Obtenez les annonces de la sous-catégorie et du type spécifiés
+
+    // Obtenez les sous-catégories spécifiques à la catégorie "Immobilier"
+    const subcategories =  model.Immobilier.getSub();
+
+    res.render('annonce_immo', { subcategory, type, annonces, subcategories });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+//route pour les sous categories de Maison 
+
+app.get('/Maison/:subcategory', async (req, res) => {
+  try {
+    const subcategory = req.params.subcategory;
+    const subcategory_id = model.getSubcategoryIdByName(subcategory);
+
+    // Obtenez les annonces de la sous-catégorie et du type spécifiés
+    const annonces =  model.Maison.getTypesofMaison(subcategory);
+
+    // Obtenez les sous-catégories spécifiques à la catégorie "Immobilier"
+    const subcategories = await model.Maison.getSub();
+
+    res.render('annonce_maison', { subcategory, annonces, subcategories });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 
 
 app.get('/search', (req, res) => {
