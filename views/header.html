@@ -26,7 +26,7 @@
     <nav class="nav">
       <i class="uil uil-bars navOpenBtn"></i>
       <a href="/" class="logo">LeRezoSN</a>
-      <div class="vr"></div>
+      <div class="vr" id="vr1"></div>
       <ul class="nav-links">
         <i class="uil uil-times navCloseBtn"></i>
 
@@ -54,7 +54,6 @@
         
         {{ ^ authenticated}}
         <button class="btnCon"><a href="/auth/log">s'identifier</a></button>
-        <div class="vr"></div>
         {{/authenticated}}
 
         {{#authenticated}}
@@ -207,6 +206,9 @@ a {
   .nav .navCloseBtn {
     display: block;
     color: #de0a0a;
+  }
+  #vr1{
+    display: none;
   }
   .nav {
     padding: 15px 20px;
