@@ -1,15 +1,72 @@
-<!-- subcategory_emplois.ejs -->
+{{>header}}
+
+<div class="container">
+
+
 <h1>Annonces de la sous-catégorie {{subcategory}} - Type: {{type}}</h1>
 <ul>
-  {{#annonces}}
-    <li>
-      <a href="/annonces/{{id}}">
-        <h3>{{titre}}</h3>
-        <p>{{description}}</p>
-        <!-- Affichez d'autres informations de l'annonce si nécessaire -->
-      </a>
-    </li>
-  {{/annonces}}
+ 
+    <div class="row">
+      <div class="col-md-8">
+        <img src="#" alt="photo" style="height : 120px;">
+        </div>
+
+        <div class="col-md-4">
+          <div>
+            <h3>Entreprise</h3>
+            <button class="btn -btn-succes">postuler</button>
+            <a href="#">Voir le numero</a>
+          </div>
+        </div>
+    </div>
+ <div class="row">
+    <h3>titre</h3>
+    <div >
+      <hr>
+      <div id="criteres">
+      <p><strong>Criteres</strong></p>
+      <div class="row">
+        <div class="col-6 col-md-4">Surface habitable</div>
+        <div class="col-6 col-md-4">Surface terrain </div>
+        <div class="col-6 col-md-4">Année Construction </div>
+      </div>
+      <div class="row">
+        <div class="col-6 col-md-4"> nombre de pieces </div>
+        <div class="col-6 col-md-4">nombre d'etage </div>
+        <div class="col-6 col-md-4"> Balcon / Terasse </div>
+      </div>
+      <div class="row">
+        <div class="col-6 col-md-4">nombre de Salle de bain  </div>
+        <div class="col-6 col-md-4"> climatisation</div>
+        <div class="col-6 col-md-4"> Etat du Bien</div>
+
+      </div>
+      <div class="row">
+        <div class="col-6 col-md-4">Parking /Garage  </div>
+        <div class="col-6 col-md-4">Disponibilité </div>
+      </div>
+
+      </div>
+      <hr>
+      <div class="description">
+        <h2>Description</h2>
+      </div>
+      <div class="adresse">
+        <h2>Lieu  : </h2>
+        <div><p>Adresse </p></div>
+      </div>
+    </div>
+<hr>
+<div> 
+  <p>
+    <a href="#">Signaler l'annonce</a>
+  </p>
+</div>
+
+
+ </div>
+ 
+  
 </ul>
 
 <!-- Générez les liens vers les sous-catégories -->
@@ -20,3 +77,5 @@
     </li>
   {{/subcategories}}
 </ul>
+
+</div>

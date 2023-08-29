@@ -1,0 +1,170 @@
+
+
+<fieldset id="immobilierFields" style="display: none;">
+
+    <legend>Informations Immobilier</legend>
+    <form action="/deposer_annonce" method="POST">
+
+    <div class="container">
+        
+
+        <div class="form-group">
+            <p>Veuillez entrer un titre pour votre annonce</p>
+            <label for="titre">Titre :</label>
+            <input type="text" id="titre" name="titre" class="form-control" required>
+          </div>
+      <div class="row g-2">
+        <div class="col-6">
+          <!-- Surface habitable (en m²) -->
+
+          <div class="form-group">
+            <label for="surfaceHabitable">Surface habitable (m²) :</label>
+            <input type="number" name="surfaceHabitable" id="surfaceHabitable" class="form-control" required>
+          </div>
+              </div>
+        <div class="col-6">
+       <!-- Surface de terrain (en m²) -->
+          <div class="form-group">
+            <label for="surfaceTerrain">Surface de terrain (m²) :</label>
+            <input type="number" name="surfaceTerrain" id="surfaceTerrain" class="form-control">
+          </div>            </div>
+        <div class="col-6">
+          <!-- Prix -->
+          <div class="form-group">
+            <label for="prix">Prix :</label>
+            <input type="number" name="prix" id="prix" class="form-control" required>
+          </div>
+        </div>
+        <div class="col-6">
+          <!-- Nombre de pièces -->
+          <div class="form-group">
+            <label for="nbPieces">Nombre de pièces :</label>
+            <input type="number" name="nbPieces" id="nbPieces" class="form-control" required>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container">
+      <div class="row g-2">
+        <div class="col-6">
+          <!-- Adresse -->
+          <div class="form-group">
+            <label for="adresse">Adresse :</label>
+            <input type="text" name="adresse" id="adresse" class="form-control" required>
+          </div>            
+    </div>
+        <div class="col-6">
+           <!-- Année de construction -->
+            <div class="form-group">
+              <label for="anneeConstruction">Année de construction :</label>
+              <input type="number" name="anneeConstruction" id="anneeConstruction" class="form-control">
+            </div>
+        </div>
+        <div class="col-6">
+            <!-- Étage -->
+            <div class="form-group">
+              <label for="etage">Étage :</label>
+              <input type="number" name="etage" id="etage" class="form-control">
+            </div>
+        </div>
+        <div class="col-6">
+          <!-- Ascenseur -->
+          <div class="form-group">
+            <label for="ascenseur">Ascenseur :</label>
+            <select name="ascenseur" id="ascenseur" class="form-control">
+              <option value="oui">Oui</option>
+              <option value="non">Non</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row g-2">
+        <div class="col-6">
+            <!-- Balcon/Terrasse -->
+            <div class="form-group">
+              <label for="balconTerrasse">Balcon/Terrasse :</label>
+              <select name="balconTerrasse" id="balconTerrasse" class="form-control">
+                <option value="oui">Oui</option>
+                <option value="non">Non</option>
+              </select>
+            </div>
+        </div>
+        <div class="col-6">
+            <!-- Nombre de salles de bains -->
+            <div class="form-group">
+              <label for="nbSallesDeBains">Nombre de salles de bains :</label>
+              <input type="number" name="nbSallesDeBains" id="nbSallesDeBains" class="form-control">
+            </div>            
+        </div>
+        <div class="col-6">
+                <!-- Nombre de chambres -->
+          <div class="form-group">
+            <label for="nbChambres">Nombre de chambres :</label>
+            <input type="number" name="nbChambres" id="nbChambres" class="form-control">
+          </div>
+        </div>
+        <div class="col-6">
+           <!-- Type de chauffage -->
+          <div class="form-group">
+            <label for="typeChauffage">Type de chauffage :</label>
+            <input type="text" name="typeChauffage" id="typeChauffage" class="form-control">
+          </div>
+        </div>
+      </div>
+    </div>
+   
+
+   
+    <div class="row g-2">
+        <div class="col-6">
+              <!-- Type de climatisation -->
+          <div class="form-group">
+            <label for="typeClimatisation">Type de climatisation :</label>
+            <input type="text" name="typeClimatisation" id="typeClimatisation" class="form-control">
+          </div>
+      </div>
+      <div class="col-6">
+        <!-- Parking/Garage -->
+        <div class="form-group">
+          <label for="parkingGarage">Parking/Garage :</label>
+          <select name="parkingGarage" id="parkingGarage" class="form-control">
+            <option value="oui">Oui</option>
+            <option value="non">Non</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row g-2">
+      <div class="col-6">
+        <!-- État du bien -->
+        <div class="form-group">
+          <label for="etatBien">État du bien :</label>
+          <input type="text" name="etatBien" id="etatBien" class="form-control">
+        </div>
+            
+      </div>
+      <div class="col-6">
+        <!-- Disponibilité -->
+        <div class="form-group">
+          <label for="disponibilite">Disponibilité :</label>
+          <input type="date" name="disponibilite" id="disponibilite" class="form-control">
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="form-group">
+          <label for="photosVoiture">Photos :</label>
+          <input type="file" id="photos" name="photos" class="form-control-file" multiple required>
+        </div>
+      </div>
+  
+    </div>
+    <div style="display: block" style="margin: 12px;">
+        <button type="reset" class="btn btn-secondary mb-3">Réinitialiser</button>
+       <button type="submit" class="btn btn-primary mb-3">Soumettre l'annonce</button>
+    </div>
+    </form>
+    
+  </fieldset>

@@ -1,314 +1,8 @@
-// const mysql = require('mysql2');
-
-// const connection = mysql.createConnection({
-//   host: 'localhost',
-//   user: 'sidy',
-//   password: 'B@dji78sidyF',
-//   database: 'badji'
-// });
-// const getUserByEmail = (email) => {
-//   return new Promise((resolve, reject) => {
-//     const query = 'SELECT * FROM Users WHERE email = ?';
-//     const values = [email];
-
-//     connection.query(query, values, (err, results) => {
-//       if (err) {
-//         console.error(err);
-//         reject(err);
-//         return;
-//       }
-
-//       if (results.length > 0) {
-//         const user = results[0];
-//         resolve(user);
-//       } else {
-//         resolve(null); // Aucun utilisateur trouvé
-//       }
-//     });
-//   });
-// };
-// const login = (email, password) => {
-//   return new Promise((resolve, reject) => {
-//     const query = 'SELECT email, password FROM Users WHERE email = ? AND password = ?';
-//     const values = [email, password];
-  
-//     connection.query(query, values, (err, results) => {
-//       if (err) {
-//         console.error(err);
-//         reject(err);
-//         return;
-//       }
-      
-//       if (results.length > 0) {
-//         const user = results[0];
-//         resolve(user); // Les identifiants sont valides, renvoie l'objet utilisateur
-//       } else {
-//         resolve(-1); // Les identifiants sont invalides
-//       }
-//     });
-//   });
-// };
-
-
-// const Users = {
-
-// createUser :(username, email, password, roleName) => {
-//     return new Promise((resolve, reject) => {
-//         const query = `INSERT INTO Users (username, email, password)
-//             VALUES (?, ?, ?)`;
-//         const values = [username, email, password];
-
-//         connection.query(query, values, (err, results) => {
-//         if (err) {
-//         console.error(err);
-//         reject(err);
-//         return;
-//         }
-//         const roleQuery = `INSERT INTO UserRoles (user_id, role_id)
-//         VALUES (?, (SELECT role_id FROM Roles WHERE role_name = ?))`;
-//         const roleValues = [userId, roleName];
-
-//         connection.query(roleQuery, roleValues, (err, roleResults) => {
-//         if (err) {
-//         console.error(err);
-//         reject(err);
-//         return;
-//     }
-
-//     const isCreated = roleResults.affectedRows > 0;
-//     resolve(isCreated);});
-//         });
-//     })
-// },
-//   deleteUser : (userId)=>{
-//      return new Promise((resolve, reject) => {
-//     const query = `DELETE FROM Users WHERE user_id = ?`;
-//     const values = [userId];
-
-//     connection.query(query, values, (err, results) => {
-//       if (err) {
-//         console.error(err);
-//         reject(err);
-//         return;
-//       }
-
-//       // Vérifie si des lignes ont été affectées par la requête
-//       const isDeleted = results.affectedRows > 0;
-//       resolve(isDeleted);
-//     });
-//   });
-//   },
-//   updateUser :(userId)=> {
-//     return new Promise((resolve, reject) => {
-//     const query = `UPDATE Users SET name = ?, lastname = ?, tel = ?, email = ?, password = ? WHERE user_id = ?`;
-//     const values = [updatedUser.name, updatedUser.lastname, updatedUser.tel, updatedUser.email, updatedUser.password, userId];
-
-//     connection.query(query, values, (err, results) => {
-//       if (err) {
-//         console.error(err);
-//         reject(err);
-//         return;
-//       }
-
-//       // Vérifie si des lignes ont été affectées par la requête
-//       const isUpdated = results.affectedRows > 0;
-//       const status = isUpdated ? 1 : -1;
-//       resolve(status);
-//     });
-//   });
-//   },
-//   getUser : (userId)=>{
-//       return new Promise((resolve, reject) => {
-//     const query = `SELECT name, lastname, tel, email, password FROM Users WHERE user_id = ?`;
-//     const values = [userId];
-
-//     connection.query(query, values, (err, results) => {
-//       if (err) {
-//         console.error(err);
-//         reject(err);
-//         return;
-//       }
-//       resolve(results[0]); // Renvoie le premier utilisateur trouvé
-//     });
-//   });
-// }
-
-// }
-
-
-// const UserRole = {
-//     getUserRole : (userId) => {
-//         return new Promise((resolve, reject) => {
-//           const query = `SELECT Roles.role_name
-//                          FROM UserRoles
-//                          INNER JOIN Roles ON UserRoles.role_id = Roles.role_id
-//                          WHERE UserRoles.user_id = ?`;
-//           const values = [userId];
-      
-//           connection.query(query, values, (err, results) => {
-//             if (err) {
-//               console.error(err);
-//               reject(err);
-//               return;
-//             }
-      
-//             if (results.length > 0) {
-//               const roleName = results[0].role_name;
-//               resolve(roleName);
-//             } else {
-//               resolve(-1); // Aucun rôle trouvé pour l'utilisateur
-//             }
-//           });
-//         })
-//     },
-//     updateUserRole : (userId, roleName) => {
-//         return new Promise((resolve, reject) => {
-//           const query = `UPDATE UserRoles
-//                          INNER JOIN Roles ON UserRoles.role_id = Roles.role_id
-//                          SET Roles.role_name = ?
-//                          WHERE UserRoles.user_id = ?`;
-//           const values = [roleName, userId];
-      
-//           connection.query(query, values, (err, results) => {
-//             if (err) {
-//               console.error(err);
-//               reject(err);
-//               return;
-//             }
-      
-//             const isUpdated = results.affectedRows > 0;
-//             resolve(isUpdated);
-//           });
-//         });
-//     }
- 
-// }
-
-// const Services = {
-//   createService : (userId, serviceTitle, serviceDescription, dateStart) => {
-//     return new Promise((resolve, reject) => {
-//       const query = `INSERT INTO Services (user_id, service_title, service_description, date_start)
-//                      VALUES (?, ?, ?, ?)`;
-//       const values = [userId, serviceTitle, serviceDescription, dateStart];
-  
-//       connection.query(query, values, (err, results) => {
-//         if (err) {
-//           console.error(err);
-//           reject(err);
-//           return;
-//         }
-  
-//         const serviceId = results.insertId;
-//         if (serviceId) {
-//           resolve(serviceId);
-//         } else {
-//           resolve(-1); // Échec de la création du service
-//         }
-//       });
-//     });
-
-//   },
-//   deleteService :(serviceId) => {
-//     return new Promise((resolve, reject) => {
-//       const query = `DELETE FROM Services WHERE service_id = ?`;
-//       const values = [serviceId];
-  
-//       connection.query(query, values, (err, results) => {
-//         if (err) {
-//           console.error(err);
-//           reject(err);
-//           return;
-//         }
-  
-//         const isDeleted = results.affectedRows > 0;
-//         resolve(isDeleted);
-//       });
-//     });
-//   }
-//   ,
-//   updateService : (serviceId, serviceTitle, serviceDescription, dateStart) => {
-//     return new Promise((resolve, reject) => {
-//       const query = `UPDATE Services
-//                      SET service_title = ?, service_description = ?, date_start = ?
-//                      WHERE service_id = ?`;
-//       const values = [serviceTitle, serviceDescription, dateStart, serviceId];
-  
-//       connection.query(query, values, (err, results) => {
-//         if (err) {
-//           console.error(err);
-//           reject(err);
-//           return;
-//         }
-  
-//         const isUpdated = results.affectedRows > 0;
-//         resolve(isUpdated);
-//       });
-//     });
-//   }
-//   ,
-//   getService : (serviceId) => {
-//     return new Promise((resolve, reject) => {
-//       const query = `SELECT * FROM Services WHERE service_id = ?`;
-//       const values = [serviceId];
-  
-//       connection.query(query, values, (err, results) => {
-//         if (err) {
-//           console.error(err);
-//           reject(err);
-//           return;
-//         }
-  
-//         if (results.length > 0) {
-//           const service = results[0];
-//           resolve(service);
-//         } else {
-//           resolve(null); // Aucun service trouvé avec cet ID
-//         }
-//       });
-//     });
-//   },
-//   getAllServices : ()=>{
-//     return new Promise((resolve, reject) => {
-//       const query = `SELECT * FROM Services`;
-  
-//       connection.query(query, (err, results) => {
-//         if (err) {
-//           console.error(err);
-//           reject(err);
-//           return;
-//         }
-  
-//         if (results.length > 0) {
-//           resolve(results);
-//         } else {
-//           resolve([]); // Aucun service trouvé
-//         }
-//       });
-//     });
-//   },
-//   shareService : (serviceId, sharedWith) => {
-//     return new Promise((resolve, reject) => {
-//       const query = `INSERT INTO ShareService (service_id, shared_with) VALUES (?, ?)`;
-//       const values = [serviceId, sharedWith];
-  
-//       connection.query(query, values, (err, results) => {
-//         if (err) {
-//           console.error(err);
-//           reject(err);
-//           return;
-//         }
-  
-//         const isShared = results.affectedRows > 0;
-//         resolve(isShared);
-//       });
-//     });
-
-//   }
-    
-// }
 
 const Sqlite = require('better-sqlite3');
 let db = new Sqlite('database.sqlite');
+
+
 
 // Modèle "Demandeur"
 const Demandeur = {
@@ -593,31 +287,18 @@ const CV = {
 
 // Modèle "Photo"
 const Photo = {
-  ajouterPhotoDemandeur: (demandeurId, cheminFichier) => {
-    const query = 'INSERT INTO photo (chemin_fichier) VALUES (?)';
-    const values = [cheminFichier];
-
-    const photoStatement = db.prepare(query);
-    const photoResult = photoStatement.run(values);
-    const photoId = photoResult.lastInsertRowid;
-
-    const demandeInsertion = 'INSERT INTO demandeur_photo (demandeur_id, photo_id) VALUES (?, ?)';
-    const demandeValues = [demandeurId, photoId];
-
-    const demandeStatement = db.prepare(demandeInsertion);
-    const demandeResult = demandeStatement.run(demandeValues);
-
-    return photoResult.changes > 0 ? photoId : -1;
-  },
-
-  get: (photoId) => {
-    const query = 'SELECT * FROM photo WHERE photo_id = ?';
-    const statement = db.prepare(query);
-    const result = statement.get(photoId);
-
-    return result || -1;
-  },
-
+  
+   insertPhoto : (demandeurId, cheminFichier, callback) =>{
+    const query = 'INSERT INTO photos (demandeur_id, chemin_fichier) VALUES (?, ?)';
+    db.run(query, [demandeurId, cheminFichier], callback);
+  }
+  ,
+  // Fonction pour récupérer toutes les photos depuis la base de données
+ getAllPhotos : (callback) =>{
+    const query = 'SELECT * FROM photos';
+    db.all(query, callback);
+  }
+,
   delete: (photoId) => {
     const query = 'DELETE FROM photo WHERE photo_id = ?';
     const statement = db.prepare(query);
@@ -654,6 +335,10 @@ const Categorie ={
     const query = `SELECT * FROM categorie`;
     return db.prepare(query).all();
   },
+  getCat: () => {
+    const query = `SELECT Distinct name FROM categorie`;
+    return db.prepare(query).all();
+  } ,
   
   getAllSub: () => {
     const query = `SELECT * FROM sous_categories`;
@@ -779,7 +464,7 @@ const Immobiliere = {
       data.disponibilite, data.prix
     );
 
-    return result.lastInsertRowid;
+    return result.changes >0 ? result.lastInsertRowid : -1 ;
   },
 
   update: (id, data) => {
@@ -812,6 +497,19 @@ const Immobiliere = {
 
     const rows = selectStatement.all(souscategorie);
 
+    if (rows.length > 0) {
+      return rows;
+    } else {
+      return -1;
+    }
+  },
+  getAll: () => {
+    const statement = db.prepare(`
+      SELECT * FROM annonce_immobilier
+    `);
+    
+    const rows = statement.all();
+    
     if (rows.length > 0) {
       return rows;
     } else {
@@ -855,7 +553,7 @@ const Emploi = {
       SELECT * FROM annonce_emploi
     `);
     
-    const rows = statement.all(type);
+    const rows = statement.all();
     
     if (rows.length > 0) {
       return rows;
@@ -875,13 +573,14 @@ const Emploi = {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
-    insertStatement.run(
+    const inserted  = insertStatement.run(
       data.titre, data.date_annonce, data.description, data.adresse, data.id_entreprise, data.photo,
       data.categorie_id, data.subcategorie_id, data.typeEmploi, data.salaire, data.niveauEtude,
       data.experience, data.competences, data.avantages, data.dateDebut, data.modalitesCandidature,
       data.PosteRecherchee, data.domaineActivite, data.niveauExperience, data.niveauEtudes, data.competences,
       data.disponibilite, data.typeContrat, data.langues, data.lieux
     );
+    return inserted.changes > 0 ? inserted.lastInsertRowid : -1 ;
   },
 
   updateAnnonceEmploi: (data) => {
@@ -967,10 +666,10 @@ const Vehicule = {
     `);
 
     const result = insertStatement.run(data);
-    return result;
+    return result.changes>0 ? result.lastInsertRowid : -1;
   },
 
-  getAll: (subcategorie) => {
+  getAllBySub: (subcategorie) => {
     const query = db.prepare(`
       SELECT * FROM annonce_vehicule WHERE subcategorie_id = @subcategorie
     `);
@@ -978,16 +677,40 @@ const Vehicule = {
     const annonces = query.all({ subcategorie });
     return annonces.length ? annonces : -1;
   },
-
-  getTypesofVehicule: (subcategorie, typeVehicule) => {
+  getAll: () => {
     const query = db.prepare(`
-      SELECT * FROM annonce_vehicule WHERE subcategorie_id = @subcategorie AND typeVehicule = @typeVehicule
+      SELECT * FROM annonce_vehicule 
     `);
 
-    const annonces = query.all({ subcategorie, typeVehicule });
+    const rows =query.all();
+    
+    if (rows.length > 0) {
+      return rows;
+    } else {
+      return -1;
+    }
+  },
+  getTypesofVehiculeBysubcatId : (subcategorie_id, typeVehicule) => {
+    const query = db.prepare(`
+      SELECT * FROM annonce_vehicule WHERE subcategorie_id = @subcategorie_id AND typeVehicule = @typeVehicule
+    `);
+
+    const annonces = query.all({ subcategorie_id, typeVehicule });
     return annonces.length ? annonces : -1;
   },
+  getTypesofVehicule: () => {
+    const query = db.prepare(`
+      SELECT Distinct typeVehicule FROM annonce_vehicule
+    `);
+    const type = query.all();
 
+    return type ? type : -1 ;
+  },
+  getVehBySubcName : (subc) =>{
+    const query  = ' select * from annonce_vehicule where '
+
+  }
+ ,
   getSub: (categorie_id) => {
     const query = db.prepare(`
     SELECT DISTINCT c.name AS category, s.name AS subcategory
@@ -1055,7 +778,7 @@ const Maison = {
       data.dimensions, data.disponibilite, data.prix_autre
     );
 
-    return result.lastInsertRowid;
+    return result.changes > 0 ? result.lastInsertRowid : -1 ;
   },
 
   update: (data) => {
@@ -1088,7 +811,13 @@ const Maison = {
       SELECT * FROM annonce_maison
     `);
 
-    return statement.all();
+    const rows = statement.all();
+    
+    if (rows.length > 0) {
+      return rows;
+    } else {
+      return -1;
+    }
   },
 
   getSub: () => {

@@ -1,13 +1,48 @@
 const express = require('express');
-// const mysql = require('mysql2');
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const app = express();
 const  model = require('./models') ;
 var mustache = require('mustache-express');
+const multer = require('multer');
+const path = require('path');
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
+
 app.engine('html', mustache());
 app.set('view engine', 'html');
 app.set('views', './views');
+
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/images');
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const extension = path.extname(file.originalname);
+    cb(null, file.fieldname + '-' + uniqueSuffix + extension);
+  }
+});
+
+const upload = multer({ storage: storage });
+
+
+app.post('/upload', upload.array('photos', 3), (req, res) => {
+  const files = req.files;
+  const demandeurId = req.body.demandeurId;
+
+  files.forEach(file => {
+    const cheminFichier = '/images/' + file.filename;
+    model.insertPhoto(demandeurId, cheminFichier, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  });  
+
+  res.redirect('/');
+});
 
 
 // Configurez cookie-session
@@ -149,8 +184,7 @@ app.use(cookieSession({
       res.status(500).send('Internal Server Error');
     }
   });
-  
-  
+
   
 //route qui mene vers / apres s'etre identifier 
   app.get('/home',is_authenticated,(req,res)=>{
@@ -162,7 +196,7 @@ app.use(cookieSession({
 
   
   //route pour voir les parametres du compte de l'utilisateur 
-  app.get('/compte/user',(req,res)=>{
+  app.get('/compte/user',is_authenticated,(req,res)=>{
     let annonces = model.Annonce.getAll();
     let categoriesWithSubcategories = model.Categorie.getCategoriesWithSubcategories();
     let categories = [];
@@ -192,7 +226,7 @@ app.use(cookieSession({
 
   
   //route pour avoir l'annonce d'identifiant id 
-  app.get('/annonces/annonce',(req, res)=>{
+  app.get('/annonces/annonce',is_authenticated,(req, res)=>{
     const annonce = model.Annonce.get(req.session.user);
     if(annonce){
           res.render('read_annonce',{annonce}) ;
@@ -202,7 +236,7 @@ app.use(cookieSession({
     }
   });
 
-  app.get('/entreprise/read_my_annonces', (req, res) => {
+  app.get('/entreprise/read_my_annonces',is_authenticated, (req, res) => {
     const myann = model.Annonce.getAnEntrepriseAllAno(req.session.user);
 
     if (myann !== 0) {
@@ -213,30 +247,45 @@ app.use(cookieSession({
     }
   });
 
-
-
-
-  
-app.get('/categories/:category/:subcategory', (req, res) => {
-  const category = req.params.category;
-  const subcategory = req.params.subcategory;
-  
-  // Ici, vous pouvez charger les données de la catégorie et sous-catégorie spécifiées
-  // à partir de votre modèle, puis les passer à votre template pour les afficher.
-
-  // Exemple : Charger les annonces pour la catégorie et sous-catégorie spécifiées
-  const annonces = model.getAnnoncesByCategoryAndSubcategory(category, subcategory);
-
-  // Passez les données à votre template
-  res.render('category', { category, subcategory, annonces });
-});
-
-
 //route pour deposer une annonce
 app.get('/deposer-annonce',(req,res)=>{
-  res.render('poster_annonce') ;
+  let categories = model.Categorie.getCat() ;
+ 
+    res.render('poster_annonce',{categories}) ;
+
+    console.log(categories)
+ 
 }) ;
 
+//obtenir toutes les annonces de toutes les categories 
+app.get('/annonces/:categorie',(req, res)=>{
+  let categorie = req.params.categorie ;
+  let annonces = null ;
+  if(categorie=="Emplois") {
+    annonces = model.Emploi.getAll() ;
+    if(annonces ==-1) res.json('No datas')
+    res.render('all' ,{annonces});
+
+  } else if (categorie =="Immobilier"){
+
+    if(annonces ==-1) res.json('No datas')
+    annonces = model.Immobiliere.getAll();
+    res.render('all',{annonces})
+
+
+  } else if (categorie == "Vehicules"){
+
+    if(annonces ==-1) res.json('No datas')
+    annonces = model.Vehicule.getAll() ;
+    res.render('all',{annonces})
+
+  }else {
+    if(annonces ==-1) res.json('No datas');
+    annonces = model.Maison.getAll();
+    res.render('all',{annonces})
+  }
+
+})
 //route pour obtenir les annonces d'emplois par type 
 app.get('/Emplois/:subcategory', async (req, res) => {
   try {
@@ -247,6 +296,7 @@ app.get('/Emplois/:subcategory', async (req, res) => {
     // Obtenir les annonces en fonction de la sous-catégorie 
     const annonces =  model.Emploi.getBySubCname(subcategory_id);
     // Récupérer les sous-catégories spécifiques à la catégorie "Emplois"
+    console.log(annonces)
   
     res.render('annon_emplois', {annonces });
   } catch (error) {
@@ -262,13 +312,30 @@ app.get('/Vehicules/:subcategory', async (req, res) => {
     const subcategory_id = model.getSubcategoryIdByName(subcategory);
     
     // Obtenez les annonces de la sous-catégorie et du type spécifiés
-    const annonces =  model.Vehicule.getTypesofVehicule(subcategory, type);
+    const annonces =  model.Vehicule.getTypesofVehicule(subcategory);
     
     // Obtenez les sous-catégories spécifiques à la catégorie "Véhicules"
     const subcategories =  model.Vehicule.getSub();
   
-    res.render('annonce_vehicules', { subcategory, type, annonces, subcategories });
+    res.render('annonce_vehicule', { subcategory, annonces, subcategories });
   } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+app.get('/Vehicules/:subcategory/:typeofvehicule', async (req, res) => {
+  try {
+    const subcategory = req.params.subcategory;
+    const typevehicule  = req.params.typeofvehicule ;
+    const subcategory_id = model.getSubcategoryIdByName(subcategory);
+
+    
+    // Obtenez les annonces de la sous-catégorie et du type spécifiés
+    const Vehicules =  model.Vehicule.getTypesofVehiculeBysubcatId(subcategory_id ,typevehicule);
+        
+      res.render('annonce_vehicule',{Vehicules});
+    
+      } catch (error) {
     console.error('Error:', error);
     res.status(500).send('Internal Server Error');
   }
@@ -278,11 +345,20 @@ app.get('/Immobilier/:subcategory', async (req, res) => {
   try {
     const subcategory = req.params.subcategory;
     const subcategory_id = model.getSubcategoryIdByName(subcategory);
+    const subcategories =  model.Immobiliere.getSub();
+    res.render('annonce_immo', { subcategory, subcategories });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+app.get('/Immobilier/:subcategory/:type', async (req, res) => {
+  try {
+    const subcategory = req.params.subcategory;
+    const type  = req.params.type ;
+    const subcategory_id = model.getSubcategoryIdByName(subcategory);
 
-    // Obtenez les annonces de la sous-catégorie et du type spécifiés
-
-    // Obtenez les sous-catégories spécifiques à la catégorie "Immobilier"
-    const subcategories =  model.Immobilier.getSub();
+    const subcategories =  model.Immobiliere.getSub();
 
     res.render('annonce_immo', { subcategory, type, annonces, subcategories });
   } catch (error) {
@@ -290,7 +366,6 @@ app.get('/Immobilier/:subcategory', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
 //route pour les sous categories de Maison 
 
 app.get('/Maison/:subcategory', async (req, res) => {
@@ -457,9 +532,6 @@ app.post('/annonce/:annonceId/demandes/:demandeId/miseajour', (req, res) => {
 });
 
 
-
-
-
   app.post('/addCategory', async (req, res) => {
     const categorieName = req.body.name;
     try {
@@ -471,9 +543,7 @@ app.post('/annonce/:annonceId/demandes/:demandeId/miseajour', (req, res) => {
     }
   });
 
-  app.post('/deposer_annonce/offreD_emploie',(req,res)=>{
 
-  })
 
   function createObjectFromRequest(req, fields) {
     const obj = { id_user: req.session.user };
@@ -566,45 +636,10 @@ function post_data_to_LocationVoiture(req){
 
 
 // Route pour la soumission du formulaire de dépôt d'annonce
-// Route pour la soumission du formulaire de dépôt d'annonce
-app.post('/deposer-annonce', (req, res) => {
-  const categorie = req.body.categorie;
-  const typeEmploi = req.body.typeEmploi; // Ajoutez ceci pour gérer le type d'emploi
+app.post('/deposer_annonce/:categorie', (req, res) => {
+  const categorie = req.params.categorie ;
+  res.render(`form`+`${categorie}`);
 
-  if (categorie === 'immobilier') {
-    const immoData = post_data_to_Immobilier(req);
-    const immoId = model.AnnonceImmo.insertImmobilierAnnonce(immoData);
-    // Insérez immoData dans votre base de données
-    // Utilisez immoId pour la suite des opérations si nécessaire
-  } else if (categorie === 'vehicule') {
-    const typeVehicule = req.body.typeVehicule;
-    if (typeVehicule === 'voiture') {
-      const voitureData = post_data_to_Voiture(req);
-      const voitureId = model.AnnonceVehicule.insertVehiculeAnnonce(voitureData);
-      // Insérez voitureData dans votre base de données
-      // Utilisez voitureId pour la suite des opérations si nécessaire
-    } else if (typeVehicule === 'moto') {
-      const motoData = post_data_to_Moto(req);
-      const motoId = model.AnnonceVehicule.insertVehiculeAnnonce(motoData);
-      // Insérez motoData dans votre base de données
-      // Utilisez motoId pour la suite des opérations si nécessaire
-    }
-  } else if (categorie === 'emploi') {
-    if (typeEmploi === 'offre') {
-      const emploiData = post_data_to_OfferEmploi(req);
-      const emploiId = model.AnnonceEmploi.insertEmploiAnnonce(emploiData);
-      // Insérez emploiData dans votre base de données
-      // Utilisez emploiId pour la suite des opérations si nécessaire
-    } else if (typeEmploi === 'demande') {
-      const demandeEmploiData = post_data_to_DemandeEmploi(req);
-      const demandeEmploiId = model.AnnonceEmploi.insertEmploiAnnonce(demandeEmploiData);
-      // Insérez demandeEmploiData dans votre base de données
-      // Utilisez demandeEmploiId pour la suite des opérations si nécessaire
-    }
-  }
-
-  // Effectuez d'autres opérations nécessaires avec les données
-  // Renvoyez une réponse appropriée au client
 });
 
 app.get('/annonces-emploi', async (req, res) => {
@@ -617,7 +652,7 @@ app.get('/annonces-emploi', async (req, res) => {
   }
 });
 app.get('/offres_emploie', (req, res) => {
-  const offres = model.AnnonceEmploi.getOffres() // Récupérez les offres depuis la base de données
+  const offres = model.Emploi.getOffres() // Récupérez les offres depuis la base de données
   res.render('offres', { offres });
 });
 
@@ -627,22 +662,9 @@ app.get('/demandes_emploie', (req, res) => {
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
   const port = 3000;
 
   app.listen(port, () => {
     console.log(`Serveur Express démarré surlocalhost :${port}`);
-  });
+});
     

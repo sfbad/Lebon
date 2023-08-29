@@ -1,0 +1,371 @@
+
+<fieldset id="vehiculeFields" style="display: none;">
+
+    <legend>Informations Véhicule</legend>
+    <form action="/deposer_annonce" method="POST">
+    <div class="form-group">
+        <label for="saleOrlocation">Vente ou location ? :</label>
+        <select id="saleOrlocation" name="saleOrlocation" class="form-control" onchange="toggleFormFieldsVehicule()" required>
+            <option value="vente">Vente</option>
+            <option value="location">Location</option>
+        </select>
+    </div>
+    <!-- selectionner le type de vehicule  -->
+    <div class="form-group" >
+      <label for="typeVehicule">Type de véhicule :</label>
+      <select id="typeVehicule" name="typeVehicule" class="form-control" style="display: none;">
+        <option selected default >Selectionner le type de vehicule </option>
+
+        <option value="voiture">Voiture</option>
+        <option value="moto">Moto</option>
+      </select>
+    </div>
+    
+    <!-- Champs spécifiques pour la location de voiture -->
+    <div id="locationVoitureFields" style="display: none;">
+        <div class="container">
+            <div class="row g-2">
+                <legend>Informations Location de Voiture</legend>
+                <div class="form-group">
+                    <p>Veuillez entrer un titre pour votre annonce</p>
+                    <label for="titre">Titre :</label>
+                    <input type="text" id="titre" name="titre" class="form-control" required>
+                  </div>
+              <div class="col-6">
+                <div class="form-group">
+                  <label for="marqueVoiture">Marque de la voiture :</label>
+                  <input type="text" id="marqueVoiture" name="marqueVoiture" class="form-control" required>
+                </div>              
+            </div>
+              <div class="col-6">
+                <div class="form-group">
+                    <label for="modeleVoiture">Modèle de la voiture :</label>
+                    <input type="text" id="modeleVoiture" name="modeleVoiture" class="form-control" required>
+                  </div>              
+                </div>
+              <div class="col-6">
+                <div class="form-group">
+                    <label for="anneeModelVoiture">Année modèle :</label>
+                    <input type="text" id="anneeModelVoiture" name="anneeModelVoiture" class="form-control" required>
+                  </div>              
+                </div>
+              <div class="col-6">
+                <div class="form-group">
+                    <label for="kilometrageVoiture">Kilométrage :</label>
+                    <input type="text" id="kilometrageVoiture" name="kilometrageVoiture" class="form-control" required>
+                  </div>             
+                </div>
+            </div>
+            <div class="row g-2">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="prixLocation">Prix de location par jour :</label>
+                        <input type="text" id="prixLocation" name="prixLocation" class="form-control" required>
+                      </div>               
+                    </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="caution">Caution :</label>
+                        <input type="text" id="caution" name="caution" class="form-control" required>
+                      </div>                
+                    </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="periodeLocation">Période de location :</label>
+                        <input type="text" id="periodeLocation" name="periodeLocation" class="form-control" required>
+                      </div>                
+                    </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="carburantVoiture">Carburant :</label>
+                        <select id="carburantVoiture" name="carburantVoiture" class="form-control">
+                          <option value="essence">Essence</option>
+                          <option value="diesel">Diesel</option>
+                          <option value="hybride">Hybride</option>
+                          <option value="electrique">Électrique</option>
+                        </select>
+                      </div>                
+                    </div>
+              </div>
+              <div class="row g-2">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="nombrePlaces">Nombre de places :</label>
+                        <input type="number" id="nombrePlaces" name="nombrePlaces" class="form-control" required>
+                      </div>                
+                    </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="disponibiliteVoiture">Disponibilité :</label>
+                        <input type="text" id="disponibiliteVoiture" name="disponibiliteVoiture" class="form-control" required>
+                      </div>                
+                    </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="photosVoiture">Photos :</label>
+                        <input type="file" id="photos" name="photos" class="form-control-file" multiple required>
+                      </div>                
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="description">Description :</label>
+                <textarea id="description" name="description" class="form-control" rows="4" required></textarea>
+              </div>
+          </div>
+    </div> <!--Fin champs de location pour voiture -->
+  
+    <!-- Champs spécifiques pour la vente de voitures -->
+  <div id="venteVoitureFields" style="display: none;">
+    <div class="container">
+        <div class="form-group">
+            <p>Veuillez entrer un titre pour votre annonce</p>
+            <label for="titre">Titre :</label>
+            <input type="text" id="titre" name="titre" class="form-control" required>
+          </div>
+        <div class="row g-2">
+          <div class="col-6">
+            <div class="form-group">
+                <label for="marque">Marque :</label>
+                <input type="text" id="marque" name="marque" class="form-control" required>
+              </div>          
+            </div>
+          <div class="col-6">
+            <div class="form-group">
+                <label for="modele">Modèle :</label>
+                <input type="text" id="modele" name="modele" class="form-control" required>
+              </div>            
+            </div>
+          <div class="col-6">
+            <div class="form-group">
+                <label for="anneeModel">Année modèle :</label>
+                <input type="text" id="anneeModel" name="model_year" class="form-control" required>
+              </div>          
+            </div>
+          <div class="col-6">
+            <div class="form-group">
+                <label for="dateMiseEnCirculation">Date de première mise en circulation :</label>
+                <input type="date" id="dateMiseEnCirculation" name="circulation" class="form-control" required>
+              </div>          
+            </div>
+        </div>
+        <div class="row g-2">
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="kilometrage">Kilométrage :</label>
+                    <input type="text" id="kilometrage" name="kilometrage" class="form-control" required>
+                  </div>            
+                </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="etatVehicule">État du véhicule :</label>
+                    <select id="etatVehicule" name="etatVehicule" class="form-control">
+                      <option value="neuf">Neuf</option>
+                      <option value="occasion">Occasion</option>
+                    </select>
+               </div>            
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="carburant">Carburant :</label>
+                    <select id="carburant" name="carburant" class="form-control">
+                      <option value="diesel">Diesel</option>
+                      <option value="essence">Essence</option>
+                      <option value="electrique">Électrique</option>
+                      <option value="hybride">Hybride</option>
+                    </select>
+                  </div>           
+                 </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="photosVoiture">Photos :</label>
+                    <input type="file" id="photosVoiture" name="photosVoiture" class="form-control-file" multiple required>
+                  </div>           
+                </div>
+          </div>
+          <div class="form-group">
+            <label for="description">Description :</label>
+            <textarea id="description" name="description" class="form-control" rows="4" required></textarea>
+          </div>
+      </div>
+  </div>  <!--Fin champs de vente pour voiture -->
+
+
+      <!-- Champs spécifiques pour la vente de motos -->
+        <div id="venteMotoFields" style="display: none;">
+            <div class="container">
+                <div class="form-group">
+                    <p>Veuillez entrer un titre pour votre annonce</p>
+                    <label for="titre">Titre :</label>
+                    <input type="text" id="titre" name="titre" class="form-control" required>
+                  </div>
+                <div class="row g-2">
+                  <div class="col-6">
+                    <div class="form-group">
+                        <label for="marqueMoto">Marque :</label>
+                        <input type="text" id="marqueMoto" name="marqueMoto" class="form-control" required>
+                      </div>                  
+                    </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                        <label for="modeleMoto">Modèle :</label>
+                        <input type="text" id="modeleMoto" name="modeleMoto" class="form-control" required>
+                      </div>                  
+                    </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                        <label for="anneeModelMoto">Année modèle :</label>
+                        <input type="text" id="anneeModelMoto" name="model_yearMoto" class="form-control" required>
+                      </div>                  
+                    </div>
+                  <div class="col-6">
+
+                    <div class="form-group">
+                        <label for="kilometrageMoto">Kilométrage :</label>
+                        <input type="text" id="kilometrageMoto" name="kilometrageMoto" class="form-control" required>
+                      </div>                  
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="prixMoto">Prix :</label>
+                            <input type="text" id="prixMoto" name="prixMoto" class="form-control" required>
+                          </div>                    
+                        </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="cylindreMoto">Cylindrée :</label>
+                            <input type="text" id="cylindreMoto" name="cylindreMoto" class="form-control" required>
+                          </div>                    
+                        </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="carburantMoto">Carburant :</label>
+                            <select id="carburantMoto" name="carburantMoto" class="form-control">
+                              <option value="essence">Essence</option>
+                              <option value="electrique">Électrique</option>
+                              <option value="hybride">Hybride</option>
+                            </select>
+                          </div>                    
+                        </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="etatMoto">État de la moto :</label>
+                            <select id="etatMoto" name="etatMoto" class="form-control">
+                              <option value="neuf">Neuf</option>
+                              <option value="occasion">Occasion</option>
+                            </select>
+                          </div>                    
+                        </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="photosVoiture">Photos :</label>
+                            <input type="file" id="photosVoiture" name="photosVoiture" class="form-control-file" multiple required>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="description">Description :</label>
+                    <textarea id="description" name="description" class="form-control" rows="4" required></textarea>
+                  </div>
+              </div>
+        </div> <!--Fin champs de vente pour moto -->
+    
+    
+    <!-- champs pour la location de moto  -->
+    <div id="locationMotoFields" style="display: none;">
+        <div class="container">
+            <div class="form-group">
+                <p>Veuillez entrer un titre pour votre annonce</p>
+                <label for="titre">Titre :</label>
+                <input type="text" id="titre" name="titre" class="form-control" required>
+            </div>
+            <div class="row g-2">
+              <div class="col-6">
+                <div class="form-group">
+                    <label for="marqueMotoLocation">Marque :</label>
+                    <input type="text" id="marqueMotoLocation" name="marqueMotoLocation" class="form-control" required>
+                  </div>              
+                </div>
+              <div class="col-6">
+                <div class="form-group">
+                    <label for="modeleMotoLocation">Modèle :</label>
+                    <input type="text" id="modeleMotoLocation" name="modeleMotoLocation" class="form-control" required>
+                  </div>              
+                </div>
+              <div class="col-6">
+                <div class="form-group">
+                    <label for="anneeModelMotoLocation">Année modèle :</label>
+                    <input type="text" id="anneeModelMotoLocation" name="model_yearMotoLocation" class="form-control" required>
+                  </div>              
+                </div>
+              <div class="col-6">
+                <div class="form-group">
+                    <label for="kilometrageMotoLocation">Kilométrage :</label>
+                    <input type="text" id="kilometrageMotoLocation" name="kilometrageMotoLocation" class="form-control" required>
+                  </div>              
+                </div>
+            </div>
+            <div class="row g-2">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="prixMotoLocation">Prix de location :</label>
+                        <input type="text" id="prixMotoLocation" name="prixMotoLocation" class="form-control" required>
+                      </div>                
+                    </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="cautionMotoLocation">Caution :</label>
+                        <input type="text" id="cautionMotoLocation" name="cautionMotoLocation" class="form-control" required>
+                      </div>                
+                    </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="periodeLocation">Période de location :</label>
+                        <input type="text" id="periodeLocation" name="periodeLocation" class="form-control" required>
+                      </div>                
+                    </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="carburantMotoLocation">Carburant :</label>
+                        <select id="carburantMotoLocation" name="carburantMotoLocation" class="form-control">
+                          <option value="essence">Essence</option>
+                          <option value="electrique">Électrique</option>
+                          <option value="hybride">Hybride</option>
+                        </select>
+                      </div>               
+                    </div>
+              </div>
+              <div class="row gx-5">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="etatMotoLocation">État de la moto :</label>
+                        <select id="etatMotoLocation" name="etatMotoLocation" class="form-control">
+                          <option value="neuf">Neuf</option>
+                          <option value="occasion">Occasion</option>
+                        </select>
+                      </div>               
+                    </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="photosVoiture">Photos :</label>
+                        <input type="file" id="photosVoiture" name="photosVoiture" class="form-control-file" multiple required>
+                      </div>                
+                    </div>
+              </div>
+              <div class="form-group">
+                <label for="description">Description :</label>
+                <textarea id="description" name="description" class="form-control" rows="4" required></textarea>
+              </div>
+         </div>
+    </div><!--Fin champs de location pour moto -->
+
+
+    <div style="display: block" style="margin: 12px;">
+        <button type="reset" class="btn btn-secondary mb-3">Réinitialiser</button>
+       <button type="submit" class="btn btn-primary mb-3">Soumettre l'annonce</button>
+    </div>
+    
+    </form>
+  </fieldset>

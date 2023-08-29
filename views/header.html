@@ -20,6 +20,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css" />
+    <script src="https://unpkg.com/tippy.js@6.3.6/dist/tippy-bundle.umd.min.js"></script>
+
   </head>
   <body>
 
@@ -42,9 +44,29 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown{{category}}">
               {{#subcategories}}
-                <li>
-                  <a href="/{{category}}/{{.}}">{{.}}</a>
-                </li>
+              <div class="row" style="width : 333px;">
+        
+                <div class="col-md-6">
+                  
+                  <i class="bi bi-house"></i>
+                  <a href="/annonces/{{category}}">
+                      {{category}}
+                    <div class="vr"></div>
+
+                  </a>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="col-md-3">
+                    <li>
+                      <a href="/{{category}}/{{.}}">{{.}}</a>
+                    </li>
+
+                  </div>
+                </div>
+               </div>
+      
+               
                 {{/subcategories}}
             </ul>
           </li>
