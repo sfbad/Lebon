@@ -1,156 +1,210 @@
 
 
+{{>header}}
 
 
-<fieldset id="emploiFields" style="display: none;">
+<fieldset id="emploiFields" style="display: none ;">
 
-    
+  <legend>Informations Emploi</legend>
+  <!-- Sélecteur pour choisir le type d'emploi (offre ou demande) -->
 
-    <legend>Informations Emploi</legend>
-    <!-- Sélecteur pour choisir le type d'emploi (offre ou demande) -->
-    <div class="form-group">
-      <label for="typeEmploi">Type d'emploi :</label>
-      <select id="typeEmploi" name="typeEmploi" class="form-control" onchange="toggleFormFieldsEmploi()" required>
-        <option value="offre">Offre d'emploi</option>
-        <option value="demande">Demande d'emploi</option>
-      </select>
-    </div>
 
-    <!-- Champs spécifiques pour l'offre d'emploi -->
-    <div id="offreFields" style="display: none;">
-        <div class="form-group">
-            <p>Veuillez entrer un titre pour votre annonce</p>
-            <label for="titre">Titre :</label>
-            <input type="text" id="titre" name="titre" class="form-control" required>
-          </div>
-
-      <div class="form-group">
-        <label for="salaire">Salaire :</label>
-        <input type="text" id="salaireOffre" name="salaire" class="form-control" required>
-      </div>
-    
-      <div class="form-group">
-        <label for="niveauEtude">Niveau d'étude requis :</label>
-        <input type="text" id="niveauEtude" name="niveauEtude" class="form-control">
-      </div>
-    
-      <div class="form-group">
-        <label for="experience">Niveau d'expérience requis :</label>
-        <input type="text" id="experience" name="experience" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="typeContratSouhaite">Type de contrat  :</label>
-        <select id="typeContratSouhaite" name="typeContratSouhaite[]" class="form-control" multiple>
-          <option value="cdi">CDI</option>
-          <option value="cdd">CDD</option>
-          <option value="stage">Stage</option>
-          <option value="alternance">Alternance</option>
-        </select>
-      </div>
-    
-      <div class="form-group">
-        <label for="competences">Compétences requises :</label>
-        <input type="text" id="competences" name="competences" class="form-control">
-      </div>
-    
-      <div class="form-group">
-        <label for="salaire">Salaire :</label>
-        <input type="text" id="salaire" name="salaire" class="form-control" required>
-      </div>
-    
-      <div class="form-group">
-        <label for="avantages">Avantages :</label>
-        <textarea id="avantages" name="avantages" class="form-control" rows="3"></textarea>
-      </div>
-    
-      <div class="form-group">
-        <label for="dateDebut">Date de début :</label>
-        <input type="date" id="dateDebut" name="dateDebut" class="form-control" required>
-      </div>
-    
-      <div class="form-group">
-        <label for="modalitesCandidature">Modalités de candidature :</label>
-        <textarea id="modalitesCandidature" name="modalitesCandidature" class="form-control" rows="3" required></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="photosVoiture">Photos :</label>
-        <input type="file" id="photos" name="photos" class="form-control-file" multiple required>
-      </div>
-
-    </div>
-    
-  
-    <!-- Champs spécifiques pour la demande d'emploi -->
-    <div id="demandeFields" style="display: none;">
-        <div class="form-group">
-            <p>Veuillez entrer un titre pour votre annonce</p>
-            <label for="titre">Titre :</label>
-            <input type="text" id="titre" name="titre" class="form-control" required>
-          </div>
-        <div class="form-group">
-          <label for="typePosteRecherche">Type de poste recherché :</label>
-          <input type="text" id="typePosteRecherche" name="typePosteRecherche" class="form-control">
-        </div>
+  <p>Selectionner ce qui vous convient </p>
       
-        <div class="form-group">
-          <label for="domaineActivite">Domaine d'activité :</label>
-          <input type="text" id="domaineActivite" name="domaineActivite" class="form-control">
+    {{#subcategories}}      
+      <div class="p-3 mb-2 bg-danger text-white rounded-pill shadow-lg p-3 mb-5 bg-body rounded">
+           <a href="#" class="emploi-type" data-bs-toggle="modal" data-type="modal-{{.}}" data-bs-target="#modal-{{.}}">{{.}}</a>
+      </div>
+     
+        <!-- Modal -->
+        <div class="modal fade" id="modal-{{.}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Annonce d'emploi</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+            
+              <div class="modal-body">
+               
+                <form id="annonceForm" action="" method="POST">
+                  <div id="offreFields" style="display: none;">
+                        <div class="form-group">
+                            <p>Veuillez entrer un titre pour votre annonce d'offre</p>
+                            <label for="titre">Titre :</label>
+                            <input type="text" id="titre" name="titre" class="form-control">
+                          </div>
+              
+                    
+                      <div class="form-group">
+                        <label for="niveauEtude">Niveau d'étude requis :</label>
+                        <input type="text" id="niveauEtude" name="niveauEtude" class="form-control">
+                      </div>
+                    
+                      <div class="form-group">
+                        <label for="experience">Niveau d'expérience requis :</label>
+                        <input type="text" id="experience" name="experience" class="form-control">
+                      </div>
+                      <div class="form-group">
+                        <label for="typeContratSouhaite">Type de contrat  :</label>
+                        <select id="typeContratSouhaite" name="typeContratSouhaite[]" class="form-control" multiple>
+                          <option value="cdi">CDI</option>
+                          <option value="cdd">CDD</option>
+                          <option value="stage">Stage</option>
+                          <option value="alternance">Alternance</option>
+                        </select>
+                      </div>
+                    
+                      <div class="form-group">
+                        <label for="competences">Compétences requises :</label>
+                        <input type="text" id="competences" name="competences" class="form-control">
+                      </div>
+                    
+                      <div class="form-group">
+                        <label for="salaire">Salaire :</label>
+                        <input type="text" id="salaire" name="salaire" class="form-control">
+                      </div>
+                    
+                      <div class="form-group">
+                        <label for="avantages">Avantages :</label>
+                        <textarea id="avantages" name="avantages" class="form-control" rows="3"></textarea>
+                      </div>
+                    
+                      <div class="form-group">
+                        <label for="dateDebut">Date de début :</label>
+                        <input type="date" id="dateDebut" name="dateDebut" class="form-control">
+                      </div>
+                    
+                      <div class="form-group">
+                        <label for="modalitesCandidature">Modalités de candidature :</label>
+                        <textarea id="modalitesCandidature" name="modalitesCandidature" class="form-control" rows="3" ></textarea>
+                      </div>
+                
+                      <div class="form-group">
+                        <label for="photosVoiture">Photos :</label>
+                        <input type="file" id="photos" name="photos" class="form-control-file" multiple >
+                      </div>
+                
+                      </div>
+                      <!-- Champs spécifiques pour la demande d'emploi -->
+                      <div id="demandeFields" style="display: none;">
+                        <div class="form-group">
+                            <p>Veuillez entrer un titre pour votre annonce</p>
+                            <label for="titre">Titre :</label>
+                            <input type="text" id="titre" name="titre" class="form-control" >
+                          </div>
+                        <div class="form-group">
+                          <label for="typePosteRecherche">Type de poste recherché :</label>
+                          <input type="text" id="typePosteRecherche" name="typePosteRecherche" class="form-control">
+                        </div>
+                      
+                        <div class="form-group">
+                          <label for="domaineActivite">Domaine d'activité :</label>
+                          <input type="text" id="domaineActivite" name="domaineActivite" class="form-control">
+                        </div>
+                      
+                        <div class="form-group">
+                          <label for="niveauExperience">Niveau d'expérience :</label>
+                          <input type="text" id="niveauExperience" name="niveauExperience" class="form-control">
+                        </div>
+                      
+                        <div class="form-group">
+                          <label for="niveauEtudes">Niveau d'études :</label>
+                          <input type="text" id="niveauEtudes" name="niveauEtudes" class="form-control">
+                        </div>
+                      
+                        <div class="form-group">
+                          <label for="competencesQualifications">Compétences et qualifications :</label>
+                          <input type="text" id="competencesQualifications" name="competencesQualifications" class="form-control">
+                        </div>
+                      
+                        <div class="form-group">
+                          <label for="disponibilite">Disponibilité :</label>
+                          <input type="text" id="disponibilite" name="disponibilite" class="form-control">
+                        </div>
+                      
+                        <div class="form-group">
+                          <label for="lieuTravailSouhaite">Lieu de travail souhaité :</label>
+                          <input type="text" id="lieuTravailSouhaite" name="lieuTravailSouhaite" class="form-control">
+                        </div>
+                      
+                        <div class="form-group">
+                          <label for="typeContratSouhaite">Type de contrat souhaité :</label>
+                          <select id="typeContratSouhaite" name="typeContratSouhaite[]" class="form-control" multiple>
+                            <option value="cdi">CDI</option>
+                            <option value="cdd">CDD</option>
+                            <option value="stage">Stage</option>
+                            <option value="alternance">Alternance</option>
+                          </select>
+                        </div>
+                      
+                        <div class="form-group">
+                          <label for="salaireSouhaite">Salaire souhaité :</label>
+                          <input type="text" id="salaireSouhaite" name="salaireSouhaite" class="form-control">
+                        </div>
+                      
+                        <div class="form-group">
+                          <label for="languesParlees">Langues parlées :</label>
+                          <input type="text" id="languesParlees" name="languesParlees" class="form-control">
+                        </div>
+                      
+                        <div class="form-group">
+                          <label for="mobiliteGeographique">Mobilité géographique :</label>
+                          <input type="text" id="mobiliteGeographique" name="mobiliteGeographique" class="form-control">
+                        </div>  
+                        
+                        <div class="form-group">
+                          <label for="photosVoiture">Photos :</label>
+                          <input type="file" id="photos" name="photos" class="form-control-file" multiple>
+                        </div>
+                      </div>
+                </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-primary">deposer</button>
+                        </div>
+                      </form>
+                  
+                </div>
+            </div>
         </div>
-      
-        <div class="form-group">
-          <label for="niveauExperience">Niveau d'expérience :</label>
-          <input type="text" id="niveauExperience" name="niveauExperience" class="form-control">
-        </div>
-      
-        <div class="form-group">
-          <label for="niveauEtudes">Niveau d'études :</label>
-          <input type="text" id="niveauEtudes" name="niveauEtudes" class="form-control">
-        </div>
-      
-        <div class="form-group">
-          <label for="competencesQualifications">Compétences et qualifications :</label>
-          <input type="text" id="competencesQualifications" name="competencesQualifications" class="form-control">
-        </div>
-      
-        <div class="form-group">
-          <label for="disponibilite">Disponibilité :</label>
-          <input type="text" id="disponibilite" name="disponibilite" class="form-control">
-        </div>
-      
-        <div class="form-group">
-          <label for="lieuTravailSouhaite">Lieu de travail souhaité :</label>
-          <input type="text" id="lieuTravailSouhaite" name="lieuTravailSouhaite" class="form-control">
-        </div>
-      
-        <div class="form-group">
-          <label for="typeContratSouhaite">Type de contrat souhaité :</label>
-          <select id="typeContratSouhaite" name="typeContratSouhaite[]" class="form-control" multiple>
-            <option value="cdi">CDI</option>
-            <option value="cdd">CDD</option>
-            <option value="stage">Stage</option>
-            <option value="alternance">Alternance</option>
-          </select>
-        </div>
-      
-        <div class="form-group">
-          <label for="salaireSouhaite">Salaire souhaité :</label>
-          <input type="text" id="salaireSouhaite" name="salaireSouhaite" class="form-control">
-        </div>
-      
-        <div class="form-group">
-          <label for="languesParlees">Langues parlées :</label>
-          <input type="text" id="languesParlees" name="languesParlees" class="form-control">
-        </div>
-      
-        <div class="form-group">
-          <label for="mobiliteGeographique">Mobilité géographique :</label>
-          <input type="text" id="mobiliteGeographique" name="mobiliteGeographique" class="form-control">
-        </div>  
-        
-        <div class="form-group">
-          <label for="photosVoiture">Photos :</label>
-          <input type="file" id="photos" name="photos" class="form-control-file" multiple required>
-        </div>
-    </div>
+        {{/subcategories}}
   </fieldset>
+
+  <script>
+    // Sélectionner les liens de type d'emploi
+    const emploiTypeLinks = document.querySelectorAll(".emploi-type");
+
+    // Gérer le clic sur les liens de type d'emploi
+    emploiTypeLinks.forEach(link => {
+        link.addEventListener("click", function(event) {
+            event.preventDefault();
+
+            // Récupérer les valeurs de la catégorie et de la sous-catégorie
+            const categorie = "Emplois"; // Remplacez par la catégorie correspondante
+            const subc = this.getAttribute("data-type"); // Sous-catégorie
+
+            // Cacher tous les champs spécifiques
+            document.getElementById("offreFields").style.display = "none";
+            document.getElementById("demandeFields").style.display = "none";
+
+            // Afficher les champs spécifiques en fonction du type sélectionné
+            
+            const emploiType = subc.split("-")[1]; // Utiliser la sous-catégorie pour déterminer le type
+
+            if (emploiType === "Offres") {
+              console.log(emploiType)
+                document.getElementById("offreFields").style.display = "block";
+            } else if (emploiType === "Demandes") {
+                document.getElementById("demandeFields").style.display = "block";
+            }
+
+            // Mettre à jour l'action du formulaire avec les valeurs de la catégorie et de la sous-catégorie
+            const form = document.getElementById("annonceForm");
+            form.action = `/deposer_annonce/${categorie}/${subc}`;
+        });
+    });
+</script>
+
+
+

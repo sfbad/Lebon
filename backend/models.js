@@ -1,6 +1,6 @@
 
-const Sqlite = require('better-sqlite3');
-let db = new Sqlite('database.sqlite');
+var Sqlite = require('better-sqlite3');
+var db = new Sqlite('database.sqlite');
 
 
 

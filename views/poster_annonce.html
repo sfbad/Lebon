@@ -1,97 +1,5 @@
 {{>header}}
-<script>
 
-  function toggleFormFieldsVehicule() {
-    const saleOrlocation = document.getElementById("saleOrlocation").value;
-    const typeVehicule = document.getElementById("typeVehicule");
-    
-    const venteVoitureFields = document.getElementById("venteVoitureFields");
-    const venteMotoFields = document.getElementById("venteMotoFields");
-    const locationMotoFields = document.getElementById("locationMotoFields");
-    const locationVoitureFields = document.getElementById("locationVoitureFields");
-  
-    // Masquer tous les champs spécifiques
-    venteVoitureFields.style.display = "none";
-    venteMotoFields.style.display = "none";
-    locationMotoFields.style.display = "none";
-    locationVoitureFields.style.display = "none";
-  
-    if (saleOrlocation === "vente") {
-      typeVehicule.style.display = "block";
-  
-      if (typeVehicule.value === "voiture") {
-        venteVoitureFields.style.display = "block";
-      } else if (typeVehicule.value === "moto") {
-
-        venteMotoFields.style.display = "block";
-      }
-  
-    } else if (saleOrlocation === "location") {
-
-      typeVehicule.style.display = "block";
-      if (typeVehicule.value === "voiture") {
-        locationVoitureFields.style.display = "block";
-
-      } else if (typeVehicule.value === "moto") {
-        locationMotoFields.style.display = "block";
-
-      }
-    }
-  }
-  
-
-
-
-
-
-function toggleFormFieldsEmploi() {
-  const typeEmploi = document.getElementById("typeEmploi").value;
-  const offreFields = document.getElementById("offreFields");
-  const demandeFields = document.getElementById("demandeFields");
-
-  if (typeEmploi === "offre") {
-    offreFields.style.display = "block";
-    demandeFields.style.display = "none";
-  } else if (typeEmploi === "demande") {
-    offreFields.style.display = "none";
-    demandeFields.style.display = "block";
-  }
-}
-
-// Afficher/masquer la saisie de la surface de terrain selon le type d'annonce sélectionné
-//const typeAnnonceSelect = document.getElementById('typeAnnonce');
-//const surfaceTerrainDiv = document.getElementById('surfaceTerrainDiv');
-
-//typeAnnonceSelect.addEventListener('change', function() {
-//  if (typeAnnonceSelect.value === 'vente') {
-  //  surfaceTerrainDiv.style.display = 'block';
-  //} else {
-  //  surfaceTerrainDiv.style.display = 'none';
-  //}
-//});
-
-// Fonction pour afficher ou masquer les champs spécifiques selon la catégorie choisie
-function toggleFormFields() {
-  const categorie = document.getElementById("categorie").value;
-  const immobilierFields = document.getElementById("immobilierFields");
-  const emploiFields = document.getElementById("emploiFields");
-  const vehiculeFields = document.getElementById("vehiculeFields");
-
-  if (categorie === "immobilier") {
-    immobilierFields.style.display = "block";
-    emploiFields.style.display = "none";
-    vehiculeFields.style.display = "none";
-  } else if (categorie === "emploi") {
-    immobilierFields.style.display = "none";
-    emploiFields.style.display = "block";
-    vehiculeFields.style.display = "none";
-  } else if (categorie === "vehicule") {
-    immobilierFields.style.display = "none";
-    emploiFields.style.display = "none";
-    vehiculeFields.style.display = "block";
-  }
-}
-</script>
 <style>
   .cat {
    
@@ -105,7 +13,18 @@ function toggleFormFields() {
   .inner{
     max-width : auto;
   }
- 
+ /* Appliquer une transition aux sous-catégories */
+.subcategories {
+  max-height : 0; /* Masquer les sous-catégories par défaut */
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+
+/* Afficher les sous-catégories lorsqu'elles sont actives */
+a.active .subcategories {
+  max-height : 500px; /* Ajustez la valeur en fonction de vos besoins */
+}
+
 
 </style>
   <div class="container">
@@ -115,16 +34,6 @@ function toggleFormFields() {
       <div class="cat">
         {{#categories}}
         <div class="inner">
-            <!-- <div class="p-3 mb-2 bg-primary text-white rounded-pill">
-            <a href="">IMMO</a>
-            </div>
-           
-          <div class="p-3 mb-2 bg-secondary text-white rounded-pill">
-            <a href="">Emploi</a>
-          </div>
-          <div class="p-3 mb-2 bg-success text-white rounded-pill">
-            <a href="">Vehi</a>
-          </div> -->
           <div class="p-3 mb-2 bg-danger text-white rounded-pill shadow-lg p-3 mb-5 bg-body rounded">
             <a href="/deposer_annonce/{{name}}">{{name}}
             </a>
