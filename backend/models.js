@@ -324,6 +324,7 @@ const Categorie ={
     const query = 'INSERT INTO categorie(name ) VALUES (? )' ;
     db.run(query, categorie, function (err) {
       if (err) {
+        // eslint-disable-next-line no-undef
         reject(err);
       } else {
         resolve(this.lastID);

@@ -542,7 +542,7 @@ app.post('/annonce/:annonceId/demandes/:demandeId/miseajour', (req, res) => {
   const idann = req.params.annonceId;
   const demandeId = req.params.demandeId;
   const nouveauStatut = req.body.statut;
-  const setstate = model.Demande.setState(demandeId, nouveauStatut);
+   model.Demande.setState(demandeId, nouveauStatut);
   res.redirect(`/annonces/${idann}/demandes`);
 });
 
@@ -560,91 +560,91 @@ app.post('/addCategory', async (req, res) => {
 
 
 
-function createObjectFromRequest(req, fields) {
-  const obj = { id_user: req.session.user };
-  fields.forEach(field => {
-    obj[field] = req.body[field];
-  });
-  return obj;
-}
+// function createObjectFromRequest(req, fields) {
+//   const obj = { id_user: req.session.user };
+//   fields.forEach(field => {
+//     obj[field] = req.body[field];
+//   });
+//   return obj;
+// }
 
-// Fonction qui facilite la création d'un objet
-function post_data_to_OfferEmploi(req) {
-  const EmploiFields = [
-    'titrePoste', 'descriptionPoste', 'entreprise', 'localisation', 'typeContrat',
-    'niveauExperience', 'niveauEtudes', 'competencesRequises', 'salaireAvantages',
-    'dateDebut', 'modalitesCandidature'
-  ];
-  return createObjectFromRequest(req, EmploiFields);
-}
+// // Fonction qui facilite la création d'un objet
+// function post_data_to_OfferEmploi(req) {
+//   const EmploiFields = [
+//     'titrePoste', 'descriptionPoste', 'entreprise', 'localisation', 'typeContrat',
+//     'niveauExperience', 'niveauEtudes', 'competencesRequises', 'salaireAvantages',
+//     'dateDebut', 'modalitesCandidature'
+//   ];
+//   return createObjectFromRequest(req, EmploiFields);
+// }
 
-function post_data_to_DemandeEmploi(req) {
-  const DemandeEmploiFields = [
-    'typePosteRecherche', 'domaineActivite', 'niveauExperienceCandidat',
-    'niveauEtudesCandidat', 'competencesQualifications', 'disponibilite',
-    'lieuTravailSouhaite', 'typeContratSouhaite', 'salaireSouhaite',
-    'languesParlees', 'mobiliteGeographique'
-  ];
-  return createObjectFromRequest(req, DemandeEmploiFields);
-}
+// function post_data_to_DemandeEmploi(req) {
+//   const DemandeEmploiFields = [
+//     'typePosteRecherche', 'domaineActivite', 'niveauExperienceCandidat',
+//     'niveauEtudesCandidat', 'competencesQualifications', 'disponibilite',
+//     'lieuTravailSouhaite', 'typeContratSouhaite', 'salaireSouhaite',
+//     'languesParlees', 'mobiliteGeographique'
+//   ];
+//   return createObjectFromRequest(req, DemandeEmploiFields);
+// }
 
-function post_data_to_Immobilier(req) {
-  const fields = [
-    'titre',
-    'typeAnnonce',
-    'surfaceHabitable',
-    'surfaceTerrain',
-    'prix',
-    'nbPieces',
-    'description',
-    'adresse',
-    'anneeConstruction',
-    'etage',
-    'ascenseur',
-    'balconTerrasse',
-    'nbSallesDeBains',
-    'nbChambres',
-    'typeChauffage',
-    'typeClimatisation',
-    'parkingGarage',
-    'etatBien',
-    'disponibilite'
-  ];
-  return createObjectFromRequest(req, fields);
-}
-function post_data_to_Voiture(req) {
-  const vehiculeFields = [
-    'typeVehicule', 'marque', 'modele', 'model_year', 'circulation', 'kilometrage', 'carburant',
-    'typeVehiculeVoiture', 'marqueMoto', 'modeleMoto', 'model_yearMoto', 'kilometrageMoto', 'prixMoto', 'cylindreMoto',
-    'carburantMoto', 'etatMoto'
-  ];
-  return createObjectFromRequest(req, vehiculeFields);
-}
-function post_data_to_Moto(req) {
-  const venteMotoFields = [
-    'marqueMoto', 'modeleMoto', 'model_yearMoto', 'kilometrageMoto', 'prixMoto', 'cylindreMoto',
-    'carburantMoto', 'etatMoto'
-  ];
-  return createObjectFromRequest(req, venteMotoFields);
-}
-function post_data_to_LocationMoto(req) {
-  const fields = ['marqueMotoLocation', 'modeleMotoLocation', 'model_yearMotoLocation', 'kilometrageMotoLocation',
-    'prixMotoLocation', 'cautionMotoLocation', 'periodeLocation', 'carburantMotoLocation', 'etatMotoLocation'
-  ];
+// function post_data_to_Immobilier(req) {
+//   const fields = [
+//     'titre',
+//     'typeAnnonce',
+//     'surfaceHabitable',
+//     'surfaceTerrain',
+//     'prix',
+//     'nbPieces',
+//     'description',
+//     'adresse',
+//     'anneeConstruction',
+//     'etage',
+//     'ascenseur',
+//     'balconTerrasse',
+//     'nbSallesDeBains',
+//     'nbChambres',
+//     'typeChauffage',
+//     'typeClimatisation',
+//     'parkingGarage',
+//     'etatBien',
+//     'disponibilite'
+//   ];
+//   return createObjectFromRequest(req, fields);
+// }
+// function post_data_to_Voiture(req) {
+//   const vehiculeFields = [
+//     'typeVehicule', 'marque', 'modele', 'model_year', 'circulation', 'kilometrage', 'carburant',
+//     'typeVehiculeVoiture', 'marqueMoto', 'modeleMoto', 'model_yearMoto', 'kilometrageMoto', 'prixMoto', 'cylindreMoto',
+//     'carburantMoto', 'etatMoto'
+//   ];
+//   return createObjectFromRequest(req, vehiculeFields);
+// }
+// function post_data_to_Moto(req) {
+//   const venteMotoFields = [
+//     'marqueMoto', 'modeleMoto', 'model_yearMoto', 'kilometrageMoto', 'prixMoto', 'cylindreMoto',
+//     'carburantMoto', 'etatMoto'
+//   ];
+//   return createObjectFromRequest(req, venteMotoFields);
+// }
+// function post_data_to_LocationMoto(req) {
+//   const fields = ['marqueMotoLocation', 'modeleMotoLocation', 'model_yearMotoLocation', 'kilometrageMotoLocation',
+//     'prixMotoLocation', 'cautionMotoLocation', 'periodeLocation', 'carburantMotoLocation', 'etatMotoLocation'
+//   ];
 
-  return createObjectFromRequest(req, fields);
-}
-function post_data_to_Maison(req) {
-  const fields = ['titre', 'type', 'marque', 'description', 'model', 'model_year', 'circulation', 'kilometrage', 'carburant', 'cylindree'];
-  return createObjectFromRequest(req, fields);
-}
-function post_data_to_LocationVoiture(req) {
-  const vehiculeFields = [
-    'marqueVoiture', 'modeleVoiture', 'anneeModelVoiture', 'kilometrageVoiture', 'prixLocation', 'caution',
-    'periodeLocation', 'carburantVoiture', 'nombrePlaces', 'descriptionVoiture', 'photosVoiture', 'disponibiliteVoiture'
-  ];
+//   return createObjectFromRequest(req, fields);
+// }
+// function post_data_to_Maison(req) {
+//   const fields = ['titre', 'type', 'marque', 'description', 'model', 'model_year', 'circulation', 'kilometrage', 'carburant', 'cylindree'];
+//   return createObjectFromRequest(req, fields);
+// }
+// function post_data_to_LocationVoiture(req) {
+//   const vehiculeFields = [
+//     'marqueVoiture', 'modeleVoiture', 'anneeModelVoiture', 'kilometrageVoiture', 'prixLocation', 'caution',
+//     'periodeLocation', 'carburantVoiture', 'nombrePlaces', 'descriptionVoiture', 'photosVoiture', 'disponibiliteVoiture'
+//   ];
 
-}
+//}
 
 
 

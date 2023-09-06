@@ -3,7 +3,6 @@
 {{>header}}
 
 
-<fieldset id="emploiFields" style="display: none ;">
 
   <legend>Informations Emploi</legend>
   <!-- Sélecteur pour choisir le type d'emploi (offre ou demande) -->
@@ -15,6 +14,7 @@
       <div class="p-3 mb-2 bg-danger text-white rounded-pill shadow-lg p-3 mb-5 bg-body rounded">
            <a href="#" class="emploi-type" data-bs-toggle="modal" data-type="modal-{{.}}" data-bs-target="#modal-{{.}}">{{.}}</a>
       </div>
+      {{/subcategories}}
      
         <!-- Modal -->
         <div class="modal fade" id="modal-{{.}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -28,7 +28,7 @@
               <div class="modal-body">
                
                 <form id="annonceForm" action="" method="POST">
-                  <div id="offreFields" style="display: none;">
+                  <div id="offresFields" style="display: none;">
                         <div class="form-group">
                             <p>Veuillez entrer un titre pour votre annonce d'offre</p>
                             <label for="titre">Titre :</label>
@@ -169,7 +169,6 @@
             </div>
         </div>
         {{/subcategories}}
-  </fieldset>
 
   <script>
     // Sélectionner les liens de type d'emploi
@@ -185,7 +184,7 @@
             const subc = this.getAttribute("data-type"); // Sous-catégorie
 
             // Cacher tous les champs spécifiques
-            document.getElementById("offreFields").style.display = "none";
+            document.getElementById("offresFields").style.display = "none";
             document.getElementById("demandeFields").style.display = "none";
 
             // Afficher les champs spécifiques en fonction du type sélectionné
@@ -194,7 +193,7 @@
 
             if (emploiType === "Offres") {
               console.log(emploiType)
-                document.getElementById("offreFields").style.display = "block";
+                document.getElementById("offresFields").style.display = "block";
             } else if (emploiType === "Demandes") {
                 document.getElementById("demandeFields").style.display = "block";
             }
