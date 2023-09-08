@@ -8,6 +8,11 @@ var multer = require('multer');
 var path = require('path');
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
+app.use('./views', (req, res, next) => {
+  res.type('text/javascript');
+  next();
+})
+app.use('./views', express.static('./views'));
 
 app.engine('html', mustache());
 app.set('view engine', 'html');
@@ -256,7 +261,8 @@ app.get('/deposer-annonce', (req, res) => {
 app.get('/deposer_annonce/:categorie',(req,res)=>{
   const categorie = req.params.categorie;
 
-    const html =`form`+categorie ;
+    const html =`form`+ categorie ;
+    console.log( categorie, html)
     const categoriesWithSubcategories = model.Categorie.getCategoriesWithSubcategories();
 
     // Filtrer les sous-catégories pour la catégorie spécifique

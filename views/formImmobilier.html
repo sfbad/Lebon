@@ -1,764 +1,856 @@
+{{>header}}
 
-{{> header}}
+<div style="margin-top : 10px; margin-right : 15% ;">
+    <p>
+        Bienvenue dans la page de depot d'annonce immobiliere <br>
+        Veuillez selectionner le type d'annonce que vous souhaiter et remplissez le formulaire qui vous est demandé.
 
-    <legend>Informations Immobilier</legend>
-    <form action="/deposer_annonce" method="POST">
-   
-      {{#subcategories}}      
-      <div class="p-3 mb-2 bg-danger text-white rounded-pill shadow-lg p-3 mb-5 bg-body rounded">
-        <a href="#" class="emploi-type" data-bs-toggle="modal" data-type="modal-{{.}}" data-bs-target="#modal-{{.}}">{{.}}</a>
-      </div>
-     
+    </p>
 
-    
-
-
-
-    <div class="modal fade" id="modal-{{.}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div>
-          <label for="typeAnnonce">Type de Propriété :</label>
-          <select id="typeAnnonce" name="typeAnnonce" onchange="showPropertyType()">
-              <option value="Maison">Maison /  villa </option>
-              <option value="Appart">Appartement</option>
-              <option value="Studio">Studio</option selected>
-              <option value="Terrain">Terrain</option>
-              <option value="Autres">Autres</option>
-          </select>
-      </div>      
-    </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
-      </div>
-    </div>
-  </div>
 </div>
-{{/subcategories}}
-       
-        <div id="LocationSection">
-          <form>
-            <div class="container">
-                
-                <div id="divMaison" style="display: none;">
 
-                      <div class="row g-2">
-                        <div class="col-6">            
-                          <div class="form-group">
-                            <label for="shower">Nombre de salles de bains
-                              :</label>
-                            <input type="number" name="shower" id="surfaceHabitable" class="form-control" required>
-                          </div>
-                              </div>
-                        <div class="col-6">
-                          <div class="form-group">
-                            <label for="surfaceTerrain">Superficie totale (en m²)
-                            </label>
-                            <input type="number" name="surfaceTerrain" id="surfaceTerrain" class="form-control">
-                          </div>            </div>
-                        <div class="col-6">
-                          <div class="form-group">
-                            <label for="beds">Nombre de chambres</label>
-                            <input type="number" name="beds" class="form-control" >
-                          </div>
-                        </div>
-                        <div class="col-6">
-                          <div class="form-group">
-                            <label for="etages">Nombre d'étages</label>
-                            <input type="number" name="etages" id="nbPieces" class="form-control" required>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row g-2" >
-                        <div class="col-6">
-                          <div class="form-group">
-                            <label for="years">Année Construction</label>
-                            <input type="number" name="year" id="year" class="form-control" required>
-                          </div>
-                        </div>
-                        <div class="col-6">
-                          <div class="form-group">
-                            <label for="price">Prix de location mensuel (hors charge)</label>
-                            <input type="number" name="price" id="price" class="form-control" required>
-                          </div>
-                        </div>
-                        <div class="col-6">
-                          <div class="form-group">
-                            <label for="etages">Disponibilité </label>
-                            <input type="number" name="etages" id="nbPieces" class="form-control" required>
-                          </div>
-                        </div>
-                        <div class="col-6">
-                          <div class="form-group">
-                            <label for="caution">Caution </label>
-                            <input type="number" name="caution" id="caution" class="form-control" required>
-                          </div>
-                        </div>
-                        <div class="col-6">
-                          <div class="form-group">
-                            <label for="equipement">Meublée / non Meublée ? </label>
-                            <select name="equipement" id="equipement" class="form-control">
-                              <option value="oui">Meublée</option>
-                              <option value="non">Non Meublée </option>
-                            </select>
-                          </div>
-                        </div>
-                        <div class="col-6">
-                          <div class="form-group">
-                            <label for="description">Description detaillée </label>
-                            <textarea name="description" id="description" class="form-control" required>
-                          </div>
-                        </div>
-                        <div class="col-6">
-                          <div class="form-group">
-                            <label for="photos">Telecharger des photos  </label>
-                            <input type="file" name="photos" id="photos" class="form-control" required>
-                          </div>
-                        </div>
-                        <div class="col-6">
-                          <div class="form-group">
-                            <label for="parkingGarage">Parking/Garage :</label>
-                            <select name="parkingGarage" id="parkingGarage" class="form-control">
-                              <option value="oui">Oui</option>
-                              <option value="non">Non</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                </div>
-               
-                <div id="divAppart" >
-                  <div class="row g-2">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="superficie">Superficie totale (en m²)</label>
-                            <input type="text" class="form-control" id="superficie">
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="chambres">Nombre de chambres</label>
-                            <input type="text" class="form-control" id="chambres">
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="sdb">Nombre de salles de bains</label>
-                            <input type="text" class="form-control" id="sdb">
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="etage">Étage où se trouve l'appartement</label>
-                            <input type="text" class="form-control" id="etage">
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="anneeConstruction">Année de construction de l'immeuble (si connue)</label>
-                            <input type="text" class="form-control" id="anneeConstruction">
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="description">Description détaillée de l'appartement</label>
-                            <textarea class="form-control" id="description" rows="4"></textarea>
-                        </div>
-                    </div>
-    
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="cuisineEquipee">Cuisine équipée (oui/non)</label>
-                            <select class="form-control" id="cuisineEquipee">
-                                <option value="oui">Oui</option>
-                                <option value="non">Non</option>
-                            </select>
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="meuble">Meublé ou non-meublé (si applicable)</label>
-                            <select class="form-control" id="meuble">
-                                <option value="meuble">Meublé</option>
-                                <option value="non-meuble">Non-meublé</option>
-                            </select>
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="balconTerrasse">Balcon ou terrasse (oui/non)</label>
-                            <select class="form-control" id="balconTerrasse">
-                                <option value="oui">Oui</option>
-                                <option value="non">Non</option>
-                            </select>
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="adresse">Adresse complète de l'immeuble</label>
-                            <input type="text" class="form-control" id="adresse">
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="loyerMensuel">Loyer mensuel</label>
-                            <input type="text" class="form-control" id="loyerMensuel">
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="caution">Caution</label>
-                            <input type="text" class="form-control" id="caution">
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="ascenseur">Ascenseur (oui/non)</label>
-                            <select class="form-control" id="ascenseur">
-                                <option value="oui">Oui</option>
-                                <option value="non">Non</option>
-                            </select>
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="parking">Parking (oui/non)</label>
-                            <select class="form-control" id="parking">
-                                <option value="oui">Oui</option>
-                                <option value="non">Non</option>
-                            </select>
-                        </div>
-    
-                        <div class="form-group">
-                            <label for="photos">Possibilité de télécharger des photos de l'appartement</label>
-                            <input type="file" class="form-control" id="photos" multiple>
-                        </div>
-                    </div>
-                  </div>
-                </div>
-                
-        
-      
-                <div id="divStudio" style="display: none;">
-                  <form>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="superficie">Superficie totale (en m²)</label>
-                                <input type="text" class="form-control" id="superficie">
-                            </div>
-        
-                            <div class="form-group">
-                                <label for="pieces">Nombre de pièces (s'il y a plus d'une pièce)</label>
-                                <input type="text" class="form-control" id="pieces">
-                            </div>
-        
-                            <div class="form-group">
-                                <label for="etage">Étage où se trouve le studio</label>
-                                <input type="text" class="form-control" id="etage">
-                            </div>
-        
-                            <div class="form-group">
-                                <label for="anneeConstruction">Année de construction de l'immeuble (si connue)</label>
-                                <input type="text" class="form-control" id="anneeConstruction">
-                            </div>
-        
-                            <div class="form-group">
-                                <label for="description">Description détaillée du studio</label>
-                                <textarea class="form-control" id="description" rows="4"></textarea>
-                            </div>
-                        </div>
-        
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="kitchenette">Kitchenette ou cuisine équipée (oui/non)</label>
-                                <select class="form-control" id="kitchenette">
-                                    <option value="oui">Oui</option>
-                                    <option value="non">Non</option>
-                                </select>
-                            </div>
-        
-                            <div class="form-group">
-                                <label for="meuble">Meublé ou non-meublé (si applicable)</label>
-                                <select class="form-control" id="meuble">
-                                    <option value="meuble">Meublé</option>
-                                    <option value="non-meuble">Non-meublé</option>
-                                </select>
-                            </div>
-        
-                            <div class="form-group">
-                                <label for="salleBains">Salle de bains privative (oui/non)</label>
-                                <select class="form-control" id="salleBains">
-                                    <option value="oui">Oui</option>
-                                    <option value="non">Non</option>
-                                </select>
-                            </div>
-        
-                            <div class="form-group">
-                                <label for="balconTerrasse">Balcon ou terrasse (oui/non)</label>
-                                <select class="form-control" id="balconTerrasse">
-                                    <option value="oui">Oui</option>
-                                    <option value="non">Non</option>
-                                </select>
-                            </div>
-        
-                            <div class="form-group">
-                                <label for="adresse">Adresse complète de l'immeuble</label>
-                                <input type="text" class="form-control" id="adresse">
-                            </div>
-        
-                            <div class="form-group">
-                                <label for="loyerMensuel">Loyer mensuel</label>
-                                <input type="text" class="form-control" id="loyerMensuel">
-                            </div>
-        
-                            <div class="form-group">
-                                <label for="caution">Caution requise</label>
-                                <input type="text" class="form-control" id="caution">
-                            </div>
-        
-                            <div class="form-group">
-                                <label for="dateDisponibilite">Date de disponibilité</label>
-                                <input type="date" class="form-control" id="dateDisponibilite">
-                            </div>
-        
-                            <div class="form-group">
-                                <label for="ascenseur">Ascenseur (oui/non)</label>
-                                <select class="form-control" id="ascenseur">
-                                    <option value="oui">Oui</option>
-                                    <option value="non">Non</option>
-                                </select>
-                            </div>
-        
-                            <div class="form-group">
-                                <label for="parking">Parking (oui/non)</label>
-                                <select class="form-control" id="parking">
-                                    <option value="oui">Oui</option>
-                                    <option value="non">Non</option>
-                                </select>
-                            </div>
-        
-                            <div class="form-group">
-                                <label for="photos"> télécharger des photos du studio</label>
-                                <input type="file" class="form-control" id="photos" multiple>
-                            </div>
-                        </div>
-                    </div>
-        
-                    <button type="submit" class="btn btn-primary">Enregistrer</button>
-                </form>
-            </div>
-        
-
-                
-                <div id="divTerrain" style="display: none;">
-                      <div class="container mt-5">
-                          <h1>Formulaire de Location de Terrain</h1>
-                          <form>
-                              <div class="row">
-                                  <div class="col-md-6">
-                                      <div class="form-group">
-                                          <label for="superficie">Superficie totale (en m² ou en acres)</label>
-                                          <input type="text" class="form-control" id="superficie">
-                                      </div>
-
-                                      <div class="form-group">
-                                          <label for="typeTerrain">Type de terrain</label>
-                                          <input type="text" class="form-control" id="typeTerrain">
-                                      </div>
-
-                                      <div class="form-group">
-                                          <label for="description">Description détaillée du terrain</label>
-                                          <textarea class="form-control" id="description" rows="4"></textarea>
-                                      </div>
-                                  </div>
-
-                                  <div class="col-md-6">
-                                      <div class="form-group">
-                                          <label for="adresse">Adresse complète du terrain</label>
-                                          <input type="text" class="form-control" id="adresse">
-                                      </div>
-
-                                      <div class="form-group">
-                                          <label for="codePostal">Code postal</label>
-                                          <input type="text" class="form-control" id="codePostal">
-                                      </div>
-
-                                      <div class="form-group">
-                                          <label for="ville">Ville</label>
-                                          <input type="text" class="form-control" id="ville">
-                                      </div>
-
-                                      <div class="form-group">
-                                          <label for="quartier">Quartier (le cas échéant)</label>
-                                          <input type="text" class="form-control" id="quartier">
-                                      </div>
-
-                                      <div class="form-group">
-                                          <label for="coordonneesGPS">Coordonnées GPS (si disponibles)</label>
-                                          <input type="text" class="form-control" id="coordonneesGPS">
-                                      </div>
-                                  </div>
-                              </div>
-
-                              <div class="row">
-                                  <div class="col-md-6">
-                                      <div class="form-group">
-                                          <label for="loyerMensuel">Loyer mensuel</label>
-                                          <input type="text" class="form-control" id="loyerMensuel">
-                                      </div>
-
-                                      <div class="form-group">
-                                          <label for="charges">Charges mensuelles (le cas échéant)</label>
-                                          <input type="text" class="form-control" id="charges">
-                                      </div>
-
-                                      <div class="form-group">
-                                          <label for="caution">Caution requise (le cas échéant)</label>
-                                          <input type="text" class="form-control" id="caution">
-                                      </div>
-
-                                      <div class="form-group">
-                                          <label for="dureeLocation">Durée minimale de la location (en mois)</label>
-                                          <input type="text" class="form-control" id="dureeLocation">
-                                      </div>
-
-                                      <div class="form-group">
-                                          <label for="dateDisponibilite">Date de disponibilité ou délai de préavis</label>
-                                          <input type="date" class="form-control" id="dateDisponibilite">
-                                      </div>
-                                  </div>
-
-                                  <div class="col-md-6">
-                                      <div class="form-group">
-                                          <label for="cloture">Clôture (oui/non)</label>
-                                          <select class="form-control" id="cloture">
-                                              <option value="oui">Oui</option>
-                                              <option value="non">Non</option>
-                                          </select>
-                                      </div>
-
-                                      <div class="form-group">
-                                          <label for="accesEau">Accès à l'eau (oui/non)</label>
-                                          <select class="form-control" id="accesEau">
-                                              <option value="oui">Oui</option>
-                                              <option value="non">Non</option>
-                                          </select>
-                                      </div>
-
-                                      <div class="form-group">
-                                          <label for="accesElectricite">Accès à l'électricité (oui/non)</label>
-                                          <select class="form-control" id="accesElectricite">
-                                              <option value="oui">Oui</option>
-                                              <option value="non">Non</option>
-                                          </select>
-                                      </div>
-
-                                      <div class="form-group">
-                                          <label for="zonage">Zonage</label>
-                                          <input type="text" class="form-control" id="zonage">
-                                      </div>
-
-                                      <div class="form-group">
-                                          <label for="photos">Possibilité de télécharger des photos du terrain</label>
-                                          <input type="file" class="form-control" id="photos" multiple>
-                                      </div>
-                                  </div>
-                              </div>
-
-                              <div class="row">
-                                  <div class="col-md-6">
-                                      <div class="form-group">
-                                          <label for="nomProprietaire">Nom du propriétaire ou de l'agence</label>
-                                          <input type="text" class="form-control" id="nomProprietaire">
-                                      </div>
-                                  </div>
-
-                                  <div class="col-md-6">
-                                      <div class="form-group">
-                                          <label for="telProprietaire">Numéro de téléphone</label>
-                                          <input type="text" class="form-control" id="telProprietaire">
-                                      </div>
-
-                                      <div class="form-group">
-                                          <label for="emailProprietaire">Adresse e-mail de contact</label>
-                                          <input type="email" class="form-control" id="emailProprietaire">
-                                      </div>
-                                  </div>
-                              </div>
-
-                              <button type="submit" class="btn btn-primary">Enregistrer</button>
-                          </form>
-                      </div>
-                </div>
-                <div id ="divAutres" style="display: none;">
-                      <div class="container mt-5">
-                          <form>
-                              <div class="row">
-                                  <div class="col-md-6">
-                                      <div class="form-group">
-                                          <label for="typePropriete">Type de propriété</label>
-                                          <input type="text" class="form-control" id="typePropriete">
-                                      </div>
-                  
-                                      <div class="form-group">
-                                          <label for="superficie">Superficie totale (en m² ou en acres)</label>
-                                          <input type="text" class="form-control" id="superficie">
-                                      </div>
-                  
-                                      <div class="form-group">
-                                          <label for="description">Description détaillée de la propriété</label>
-                                          <textarea class="form-control" id="description" rows="4"></textarea>
-                                      </div>
-                                  </div>
-                  
-                                  <div class="col-md-6">
-                                      <div class="form-group">
-                                          <label for="adresse">Adresse complète de la propriété</label>
-                                          <input type="text" class="form-control" id="adresse">
-                                      </div>
-                  
-                                      <div class="form-group">
-                                          <label for="codePostal">Code postal</label>
-                                          <input type="text" class="form-control" id="codePostal">
-                                      </div>
-                  
-                                      <div class="form-group">
-                                          <label for="ville">Ville</label>
-                                          <input type="text" class="form-control" id="ville">
-                                      </div>
-                  
-                                      <div class="form-group">
-                                          <label for="quartier">Quartier (le cas échéant)</label>
-                                          <input type="text" class="form-control" id="quartier">
-                                      </div>
-                                  </div>
-                              </div>
-                  
-                              <div class="row">
-                                  <div class="col-md-6">
-                                      <div class="form-group">
-                                          <label for="loyerMensuel">Loyer mensuel</label>
-                                          <input type="text" class="form-control" id="loyerMensuel">
-                                      </div>
-                  
-                                      <div class="form-group">
-                                          <label for="charges">Charges mensuelles (le cas échéant)</label>
-                                          <input type="text" class="form-control" id="charges">
-                                      </div>
-                  
-                                      <div class="form-group">
-                                          <label for="caution">Caution requise (le cas échéant)</label>
-                                          <input type="text" class="form-control" id="caution">
-                                      </div>
-                  
-                                      <div class="form-group">
-                                          <label for="dureeLocation">Durée minimale de la location (en mois)</label>
-                                          <input type="text" class="form-control" id="dureeLocation">
-                                      </div>
-                  
-                                      <div class="form-group">
-                                          <label for="dateDisponibilite">Date de disponibilité ou délai de préavis</label>
-                                          <input type="date" class="form-control" id="dateDisponibilite">
-                                      </div>
-                                  </div>
-                  
-                                  <div class="col-md-6">
-                                      <div class="form-group">
-                                          <label for="equipements">Équipements inclus (par exemple, étagères, climatisation)</label>
-                                          <textarea class="form-control" id="equipements" rows="4"></textarea>
-                                      </div>
-                  
-                                      <div class="form-group">
-                                          <label for="photos">Possibilité de télécharger des photos de la propriété</label>
-                                          <input type="file" class="form-control" id="photos" multiple>
-                                      </div>
-                                  </div>
-                              </div>
-                  
-                              <div class="row">
-                                  <div class="col-md-6">
-                                      <div class="form-group">
-                                          <label for="nomProprietaire">Nom du propriétaire ou de l'agence</label>
-                                          <input type="text" class="form-control" id="nomProprietaire">
-                                      </div>
-                                  </div>
-                  
-                                  <div class="col-md-6">
-                                      <div class="form-group">
-                                          <label for="telProprietaire">Numéro de téléphone</label>
-                                          <input type="text" class="form-control" id="telProprietaire">
-                                      </div>
-                  
-                                      <div class="form-group">
-                                          <label for="emailProprietaire">Adresse e-mail de contact</label>
-                                          <input type="email" class="form-control" id="emailProprietaire">
-                                      </div>
-                                  </div>
-                              </div>
-                  
-                              <button type="submit" class="btn btn-primary">Enregistrer</button>
-                          </form>
-                      </div>
-                
-                </div>
-                
-            </div> 
-          </form>
+   
+      {{#subcategories}} 
+      <div class="row">
+        <div class="col-md-2">
+            <div class="p-3 mb-2 bg-danger text-white rounded-pill shadow-lg p-3 mb-5 bg-body rounded">
+                <a href="#collapse{{.}}" id="" class="immoSubc" data-bs-toggle="modal" data-bs-target="#Modal-{{.}}"data-type="Subcategorie-{{.}}" aria-expanded="false" aria-controls="collapse{{.}}">{{.}}</a>
+              </div>
         </div>
+      </div>
 
-
-        <div id="colocationSection">
-            <form action="">
-                <div class="container">
-                    <div class="row g-3">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="Titre"> Dans quel endroit se situe la colocation</label>
-                                    <select id="place" name="place" >
-                                        <option value="Maison">Maison</option>
-                                        <option value="Appart">Appartement</option>
-                                        <option value="Studio">immeuble</option selected>
-                                    </select>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="">surface Habitable</label>
-                                <input type="surface" name="surface" id="surface">
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label>Nombre de piece </label>
-                                <input type="number" name="pieces" id="">
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for=""> Exterieur</label>
-                                <select name="exterieur" id="exterieur">
-                                    <option >Cochez si y'a un balcon ou une terrasse </option>
-                                    <option value="balcon">Balcon</option>
-                                    <option value="terasse">Terrasse</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="ascenseur">Ascenseur </label>
-                                <select name="ascenseur" id="ascenceur">
-                                    <option value="oui">OUI</option>
-                                    <option value="non">NON</option>
-                                </select>
-                            </div>
-                        </div>
+<!-- Modal COloc -->
+<div class="modal fade" id="Modal-Colocation" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">ModalColoc</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <section id="ColocationSection" style="display: none;">
+                <h2>Coloc</h2>
+                <form id="annonceForm" action="" method="POST">
+                    <div class="container">
                         <div class="row g-3">
                             <div class="col-6">
                                 <div class="form-group">
-                                    <select name="fumeur" id="">
-                                        <option value="OUI">OUI</option>
-                                        <option value="NON">NON</option>
-                                        <option value="neutre">Peut importe </option>
+                                    <label for="Titre"> Dans quel endroit se situe la colocation</label>
+                                        <select id="place" name="place" >
+                                            <option value="Maison">Maison</option>
+                                            <option value="Appart">Appartement</option>
+                                            <option value="Studio">immeuble</option selected>
+                                        </select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="">surface Habitable</label>
+                                    <input type="surface" name="surface" id="surface">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>Nombre de piece </label>
+                                    <input type="number" name="pieces" id="">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for=""> Exterieur</label>
+                                    <select name="exterieur" id="exterieur">
+                                        <option >Cochez si y'a un balcon ou une terrasse </option>
+                                        <option value="balcon">Balcon</option>
+                                        <option value="terasse">Terrasse</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="genre">Il s'agit d'une de colocation (d'homme / femmes )</label>
-                                    <select name="genre" id="genre">
-                                        <option value="Hommes">Homme</option>
-                                        <option value="Femmes">Femmes</option>
-                                        <option value="zen">peux importe</option>
+                                    <label for="ascenseur">Ascenseur </label>
+                                    <select name="ascenseur" id="ascenceur">
+                                        <option value="oui">OUI</option>
+                                        <option value="non">NON</option>
                                     </select>
                                 </div>
                             </div>
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <select name="fumeur" id="">
+                                            <option value="OUI">OUI</option>
+                                            <option value="NON">NON</option>
+                                            <option value="neutre">Peut importe </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="genre">Il s'agit d'une de colocation (d'homme / femmes )</label>
+                                        <select name="genre" id="genre">
+                                            <option value="Hommes">Homme</option>
+                                            <option value="Femmes">Femmes</option>
+                                            <option value="zen">peux importe</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="from-group">
+                                        <label for="situation">Celibataire , en couple ou marié ?</label>
+                                        <select name="situation" id="situation">
+                                            <option value="marie">Marié</option>
+                                            <option value="celibataire">Celibataire</option>
+                                            <option value="EnCouple">En couple </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="animaux">Vous acceptez des animaux dans la colocation ?</label>
+                                        <select name="animaux" id="animaux">
+                                            <option value="Oui">OUI</option>
+                                            <option value="Non">NON</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="adresse"> Où se trouve la colocation ? </label>
+                                        <input type="text" name="adresse" id="adresse">
+                                    </div>
+                                </div>
+                            </div>
+        
                             <div class="col-6">
-                                <div class="from-group">
-                                    <label for="situation">Celibataire , en couple ou marié ?</label>
-                                    <select name="situation" id="situation">
-                                        <option value="marie">Marié</option>
-                                        <option value="celibataire">Celibataire</option>
-                                        <option value="EnCouple">En couple </option>
+                                <div class="form-group">
+                                    <label for="price">Prix du loyer mensuel hors charge </label>
+                                    <input type="number" name="price" id="price">
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="etat">Etat du bien</label>
+                                    <select name="etat" id="">
+                                        <option value="meuble"> Meublé</option>
+                                        <option value="nonMeuble"> Non Meublé</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="animaux">Vous acceptez des animaux dans la colocation ?</label>
-                                    <select name="animaux" id="animaux">
-                                        <option value="Oui">OUI</option>
-                                        <option value="Non">NON</option>
-                                    </select>
+                                    <label for="description">Description detaillée </label>
+                                    <textarea name="description" id="description" cols="30" rows="10"></textarea>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
-                                    <label for="adresse"> Où se trouve la colocation ? </label>
-                                    <input type="text" name="adresse" id="adresse">
+                                    <label for="photos">Ajouter des photos </label>
+                                    <input type="file" name="photos" id="photos" >
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="price">Prix du loyer mensuel hors charge </label>
-                                <input type="number" name="price" id="price">
-                            </div>
-                        </div>
-                    </div> 
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="etat">Etat du bien</label>
-                                <select name="etat" id="">
-                                    <option value="meuble"> Meublé</option>
-                                    <option value="nonMeuble"> Non Meublé</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="description">Description detaillée </label>
-                                <textarea name="description" id="description" cols="30" rows="10"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="photos">Ajouter des photos </label>
-                                <input type="file" name="photos" id="photos" >
-                            </div>
-                        </div>
-                    </div>                     
-                </div>
-                <button type="button">annuler</button>
-                <button type="submit">Deposer</button>
-            </form>
+                        </div>                     
+                    </div>
+                    <button type="button">annuler</button>
+                    <button type="submit">Deposer</button>
+                </form>
+            </section>        
         </div>
-
-
-        <div id="venteSection">
-            <label for="typeVente">Type de Propriété :</label>
-          <select id="typeVente" name="typeVente">
-              <option value="Maison">Maison /Villa </option>
-              <option value="Appart">Appartement</option>
-              <option value="Terrain">Terrain</option>
-              <option value="Autres">Autres</option>
-
-          </select>
-            <div id="venteMaison"></div>
-            <div id="venteTerrain"></div>
-            <div id="venteAppart"></div>
-            <div id="venteAutres"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
         </div>
-    
-    <script>
-      function showPropertyType() {
-          // Récupérer la valeur sélectionnée dans le menu déroulant
-          var selectedPropertyType = document.getElementById("typeAnnonce").value;
+      </div>
+    </div>
+  </div>        
+       
+   
+<!-- Modal Location -->
+<div class="modal fade" id="Modal-Location" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal Location</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <section id="LocationSection" style="display: none;">
+                <form id="annonceForm" action="" method="POST">
+                    <div id="selectField">
+                        <label for="typeAnnonce">Type de Propriété :</label>
+                        <select id="typeAnnonce" name="typeAnnonce" onchange="showPropertyTypes()">
+                            <option value="Maison">Maison / villa</option>
+                            <option value="Appart">Appartement</option>
+                            <option value="Studio">Studio</option>
+                            <option value="Terrain">Terrain</option>
+                            <option value="Autres">Autres</option>
+                        </select>
+                    </div>
+                      <div id="divMaison" style="display: none;">
+            
+                            <div class="row g-2">
+                              <div class="col-6">            
+                                <div class="form-group">
+                                  <label for="shower">Nombre de salles de bains
+                                    :</label>
+                                  <input type="number" name="shower" id="surfaceHabitable" class="form-control" required>
+                                </div>
+                                    </div>
+                              <div class="col-6">
+                                <div class="form-group">
+                                  <label for="surfaceTerrain">Superficie totale (en m²)
+                                  </label>
+                                  <input type="number" name="surfaceTerrain" id="surfaceTerrain" class="form-control">
+                                </div>            </div>
+                              <div class="col-6">
+                                <div class="form-group">
+                                  <label for="beds">Nombre de chambres</label>
+                                  <input type="number" name="beds" class="form-control" >
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <div class="form-group">
+                                  <label for="etages">Nombre d'étages</label>
+                                  <input type="number" name="etages" id="nbPieces" class="form-control" required>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row g-2" >
+                              <div class="col-6">
+                                <div class="form-group">
+                                  <label for="years">Année Construction</label>
+                                  <input type="number" name="year" id="year" class="form-control" required>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <div class="form-group">
+                                  <label for="price">Prix de location mensuel (hors charge)</label>
+                                  <input type="number" name="price" id="price" class="form-control" required>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <div class="form-group">
+                                  <label for="etages">Disponibilité </label>
+                                  <input type="number" name="etages" id="nbPieces" class="form-control" required>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <div class="form-group">
+                                  <label for="caution">Caution </label>
+                                  <input type="number" name="caution" id="caution" class="form-control" required>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <div class="form-group">
+                                  <label for="equipement">Meublée / non Meublée ? </label>
+                                  <select name="equipement" id="equipement" class="form-control">
+                                    <option value="oui">Meublée</option>
+                                    <option value="non">Non Meublée </option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <div class="form-group">
+                                  <label for="description">Description detaillée </label>
+                                  <textarea name="description" id="description" class="form-control" required>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <div class="form-group">
+                                  <label for="photos">Telecharger des photos  </label>
+                                  <input type="file" name="photos" id="photos" class="form-control" required>
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <div class="form-group">
+                                  <label for="parkingGarage">Parking/Garage :</label>
+                                  <select name="parkingGarage" id="parkingGarage" class="form-control">
+                                    <option value="oui">Oui</option>
+                                    <option value="non">Non</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                      </div>
+                     
+                      <div id="divAppart" style="display: none;">
+                        <div class="row g-2">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label for="superficie">Superficie totale (en m²)</label>
+                                  <input type="text" class="form-control" id="superficie">
+                              </div>
+            
+                              <div class="form-group">
+                                  <label for="chambres">Nombre de chambres</label>
+                                  <input type="text" class="form-control" id="chambres">
+                              </div>
+            
+                              <div class="form-group">
+                                  <label for="sdb">Nombre de salles de bains</label>
+                                  <input type="text" class="form-control" id="sdb">
+                              </div>
+            
+                              <div class="form-group">
+                                  <label for="etage">Étage où se trouve l'appartement</label>
+                                  <input type="text" class="form-control" id="etage">
+                              </div>
+            
+                              <div class="form-group">
+                                  <label for="anneeConstruction">Année de construction de l'immeuble (si connue)</label>
+                                  <input type="text" class="form-control" id="anneeConstruction">
+                              </div>
+            
+                              <div class="form-group">
+                                  <label for="description">Description détaillée de l'appartement</label>
+                                  <textarea class="form-control" id="description" rows="4"></textarea>
+                              </div>
+                          </div>
+            
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label for="cuisineEquipee">Cuisine équipée (oui/non)</label>
+                                  <select class="form-control" id="cuisineEquipee">
+                                      <option value="oui">Oui</option>
+                                      <option value="non">Non</option>
+                                  </select>
+                              </div>
+            
+                              <div class="form-group">
+                                  <label for="meuble">Meublé ou non-meublé (si applicable)</label>
+                                  <select class="form-control" id="meuble">
+                                      <option value="meuble">Meublé</option>
+                                      <option value="non-meuble">Non-meublé</option>
+                                  </select>
+                              </div>
+            
+                              <div class="form-group">
+                                  <label for="balconTerrasse">Balcon ou terrasse (oui/non)</label>
+                                  <select class="form-control" id="balconTerrasse">
+                                      <option value="oui">Oui</option>
+                                      <option value="non">Non</option>
+                                  </select>
+                              </div>
+            
+                              <div class="form-group">
+                                  <label for="adresse">Adresse complète de l'immeuble</label>
+                                  <input type="text" class="form-control" id="adresse">
+                              </div>
+            
+                              <div class="form-group">
+                                  <label for="loyerMensuel">Loyer mensuel</label>
+                                  <input type="text" class="form-control" id="loyerMensuel">
+                              </div>
+            
+                              <div class="form-group">
+                                  <label for="caution">Caution</label>
+                                  <input type="text" class="form-control" id="caution">
+                              </div>
+            
+                              <div class="form-group">
+                                  <label for="ascenseur">Ascenseur (oui/non)</label>
+                                  <select class="form-control" id="ascenseur">
+                                      <option value="oui">Oui</option>
+                                      <option value="non">Non</option>
+                                  </select>
+                              </div>
+              
+                              <div class="form-group">
+                                  <label for="parking">Parking (oui/non)</label>
+                                  <select class="form-control" id="parking">
+                                      <option value="oui">Oui</option>
+                                      <option value="non">Non</option>
+                                  </select>
+                              </div>
+            
+                              <div class="form-group">
+                                  <label for="photos">Possibilité de télécharger des photos de l'appartement</label>
+                                  <input type="file" class="form-control" id="photos" multiple>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+            
+                      <div id="divStudio" style="display: none;">
+                        <form>
+                          <div class="row">
+                              <div class="col-md-6">
+                                  <div class="form-group">
+                                      <label for="superficie">Superficie totale (en m²)</label>
+                                      <input type="text" class="form-control" id="superficie">
+                                  </div>
+              
+                                  <div class="form-group">
+                                      <label for="pieces">Nombre de pièces (s'il y a plus d'une pièce)</label>
+                                      <input type="text" class="form-control" id="pieces">
+                                  </div>
+              
+                                  <div class="form-group">
+                                      <label for="etage">Étage où se trouve le studio</label>
+                                      <input type="text" class="form-control" id="etage">
+                                  </div>
+              
+                                  <div class="form-group">
+                                      <label for="anneeConstruction">Année de construction de l'immeuble (si connue)</label>
+                                      <input type="text" class="form-control" id="anneeConstruction">
+                                  </div>
+              
+                                  <div class="form-group">
+                                      <label for="description">Description détaillée du studio</label>
+                                      <textarea class="form-control" id="description" rows="4"></textarea>
+                                  </div>
+                              </div>
+              
+                              <div class="col-md-6">
+                                  <div class="form-group">
+                                      <label for="kitchenette">Kitchenette ou cuisine équipée (oui/non)</label>
+                                      <select class="form-control" id="kitchenette">
+                                          <option value="oui">Oui</option>
+                                          <option value="non">Non</option>
+                                      </select>
+                                  </div>
+              
+                                  <div class="form-group">
+                                      <label for="meuble">Meublé ou non-meublé (si applicable)</label>
+                                      <select class="form-control" id="meuble">
+                                          <option value="meuble">Meublé</option>
+                                          <option value="non-meuble">Non-meublé</option>
+                                      </select>
+                                  </div>
+              
+                                  <div class="form-group">
+                                      <label for="salleBains">Salle de bains privative (oui/non)</label>
+                                      <select class="form-control" id="salleBains">
+                                          <option value="oui">Oui</option>
+                                          <option value="non">Non</option>
+                                      </select>
+                                  </div>
+              
+                                  <div class="form-group">
+                                      <label for="balconTerrasse">Balcon ou terrasse (oui/non)</label>
+                                      <select class="form-control" id="balconTerrasse">
+                                          <option value="oui">Oui</option>
+                                          <option value="non">Non</option>
+                                      </select>
+                                  </div>
+              
+                                  <div class="form-group">
+                                      <label for="adresse">Adresse complète de l'immeuble</label>
+                                      <input type="text" class="form-control" id="adresse">
+                                  </div>
+              
+                                  <div class="form-group">
+                                      <label for="loyerMensuel">Loyer mensuel</label>
+                                      <input type="text" class="form-control" id="loyerMensuel">
+                                  </div>
+              
+                                  <div class="form-group">
+                                      <label for="caution">Caution requise</label>
+                                      <input type="text" class="form-control" id="caution">
+                                  </div>
+              
+                                  <div class="form-group">
+                                      <label for="dateDisponibilite">Date de disponibilité</label>
+                                      <input type="date" class="form-control" id="dateDisponibilite">
+                                  </div>
+              
+                                  <div class="form-group">
+                                      <label for="ascenseur">Ascenseur (oui/non)</label>
+                                      <select class="form-control" id="ascenseur">
+                                          <option value="oui">Oui</option>
+                                          <option value="non">Non</option>
+                                      </select>
+                                  </div>
+              
+                                  <div class="form-group">
+                                      <label for="parking">Parking (oui/non)</label>
+                                      <select class="form-control" id="parking">
+                                          <option value="oui">Oui</option>
+                                          <option value="non">Non</option>
+                                      </select>
+                                  </div>
+              
+                                  <div class="form-group">
+                                      <label for="photos"> télécharger des photos du studio</label>
+                                      <input type="file" class="form-control" id="photos" multiple>
+                                  </div>
+                              </div>
+                          </div>
+              
+                          <button type="submit" class="btn btn-primary">Enregistrer</button>
+                      </form>
+                      </div>
+                    
+                      <div id="divTerrain" style="display: none;">
+                            <div class="container mt-5">
+                                <h1>Formulaire de Location de Terrain</h1>
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="superficie">Superficie totale (en m² ou en acres)</label>
+                                                <input type="text" class="form-control" id="superficie">
+                                            </div>
+            
+                                            <div class="form-group">
+                                                <label for="typeTerrain">Type de terrain</label>
+                                                <input type="text" class="form-control" id="typeTerrain">
+                                            </div>
+            
+                                            <div class="form-group">
+                                                <label for="description">Description détaillée du terrain</label>
+                                                <textarea class="form-control" id="description" rows="4"></textarea>
+                                            </div>
+                                        </div>
+            
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="adresse">Adresse complète du terrain</label>
+                                                <input type="text" class="form-control" id="adresse">
+                                            </div>
+            
+                                            <div class="form-group">
+                                                <label for="codePostal">Code postal</label>
+                                                <input type="text" class="form-control" id="codePostal">
+                                            </div>
+            
+                                            <div class="form-group">
+                                                <label for="ville">Ville</label>
+                                                <input type="text" class="form-control" id="ville">
+                                            </div>
+            
+                                            <div class="form-group">
+                                                <label for="quartier">Quartier (le cas échéant)</label>
+                                                <input type="text" class="form-control" id="quartier">
+                                            </div>
+            
+                                            <div class="form-group">
+                                                <label for="coordonneesGPS">Coordonnées GPS (si disponibles)</label>
+                                                <input type="text" class="form-control" id="coordonneesGPS">
+                                            </div>
+                                        </div>
+                                    </div>
+            
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="loyerMensuel">Loyer mensuel</label>
+                                                <input type="text" class="form-control" id="loyerMensuel">
+                                            </div>
+            
+                                            <div class="form-group">
+                                                <label for="charges">Charges mensuelles (le cas échéant)</label>
+                                                <input type="text" class="form-control" id="charges">
+                                            </div>
+            
+                                            <div class="form-group">
+                                                <label for="caution">Caution requise (le cas échéant)</label>
+                                                <input type="text" class="form-control" id="caution">
+                                            </div>
+            
+                                            <div class="form-group">
+                                                <label for="dureeLocation">Durée minimale de la location (en mois)</label>
+                                                <input type="text" class="form-control" id="dureeLocation">
+                                            </div>
+            
+                                            <div class="form-group">
+                                                <label for="dateDisponibilite">Date de disponibilité ou délai de préavis</label>
+                                                <input type="date" class="form-control" id="dateDisponibilite">
+                                            </div>
+                                        </div>
+            
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="cloture">Clôture (oui/non)</label>
+                                                <select class="form-control" id="cloture">
+                                                    <option value="oui">Oui</option>
+                                                    <option value="non">Non</option>
+                                                </select>
+                                            </div>
+            
+                                            <div class="form-group">
+                                                <label for="accesEau">Accès à l'eau (oui/non)</label>
+                                                <select class="form-control" id="accesEau">
+                                                    <option value="oui">Oui</option>
+                                                    <option value="non">Non</option>
+                                                </select>
+                                            </div>
+            
+                                            <div class="form-group">
+                                                <label for="accesElectricite">Accès à l'électricité (oui/non)</label>
+                                                <select class="form-control" id="accesElectricite">
+                                                    <option value="oui">Oui</option>
+                                                    <option value="non">Non</option>
+                                                </select>
+                                            </div>
+            
+                                            <div class="form-group">
+                                                <label for="zonage">Zonage</label>
+                                                <input type="text" class="form-control" id="zonage">
+                                            </div>
+            
+                                            <div class="form-group">
+                                                <label for="photos">Possibilité de télécharger des photos du terrain</label>
+                                                <input type="file" class="form-control" id="photos" multiple>
+                                            </div>
+                                        </div>
+                                    </div>
+            
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="nomProprietaire">Nom du propriétaire ou de l'agence</label>
+                                                <input type="text" class="form-control" id="nomProprietaire">
+                                            </div>
+                                        </div>
+            
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="telProprietaire">Numéro de téléphone</label>
+                                                <input type="text" class="form-control" id="telProprietaire">
+                                            </div>
+            
+                                            <div class="form-group">
+                                                <label for="emailProprietaire">Adresse e-mail de contact</label>
+                                                <input type="email" class="form-control" id="emailProprietaire">
+                                            </div>
+                                        </div>
+                                    </div>
+            
+                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                </form>
+                            </div>
+                      </div>
+                      <div id ="divAutres" style="display: none;">
+                            <div class="container mt-5">
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="typePropriete">Type de propriété</label>
+                                                <input type="text" class="form-control" id="typePropriete">
+                                            </div>
+                        
+                                            <div class="form-group">
+                                                <label for="superficie">Superficie totale (en m² ou en acres)</label>
+                                                <input type="text" class="form-control" id="superficie">
+                                            </div>
+                        
+                                            <div class="form-group">
+                                                <label for="description">Description détaillée de la propriété</label>
+                                                <textarea class="form-control" id="description" rows="4"></textarea>
+                                            </div>
+                                        </div>
+                        
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="adresse">Adresse complète de la propriété</label>
+                                                <input type="text" class="form-control" id="adresse">
+                                            </div>
+                        
+                                            <div class="form-group">
+                                                <label for="codePostal">Code postal</label>
+                                                <input type="text" class="form-control" id="codePostal">
+                                            </div>
+                        
+                                            <div class="form-group">
+                                                <label for="ville">Ville</label>
+                                                <input type="text" class="form-control" id="ville">
+                                            </div>
+                        
+                                            <div class="form-group">
+                                                <label for="quartier">Quartier (le cas échéant)</label>
+                                                <input type="text" class="form-control" id="quartier">
+                                            </div>
+                                        </div>
+                                    </div>
+                        
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="loyerMensuel">Loyer mensuel</label>
+                                                <input type="text" class="form-control" id="loyerMensuel">
+                                            </div>
+                        
+                                            <div class="form-group">
+                                                <label for="charges">Charges mensuelles (le cas échéant)</label>
+                                                <input type="text" class="form-control" id="charges">
+                                            </div>
+                        
+                                            <div class="form-group">
+                                                <label for="caution">Caution requise (le cas échéant)</label>
+                                                <input type="text" class="form-control" id="caution">
+                                            </div>
+                        
+                                            <div class="form-group">
+                                                <label for="dureeLocation">Durée minimale de la location (en mois)</label>
+                                                <input type="text" class="form-control" id="dureeLocation">
+                                            </div>
+                        
+                                            <div class="form-group">
+                                                <label for="dateDisponibilite">Date de disponibilité ou délai de préavis</label>
+                                                <input type="date" class="form-control" id="dateDisponibilite">
+                                            </div>
+                                        </div>
+                        
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="equipements">Équipements inclus (par exemple, étagères, climatisation)</label>
+                                                <textarea class="form-control" id="equipements" rows="4"></textarea>
+                                            </div>
+                        
+                                            <div class="form-group">
+                                                <label for="photos">Possibilité de télécharger des photos de la propriété</label>
+                                                <input type="file" class="form-control" id="photos" multiple>
+                                            </div>
+                                        </div>
+                                    </div>
+                        
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="nomProprietaire">Nom du propriétaire ou de l'agence</label>
+                                                <input type="text" class="form-control" id="nomProprietaire">
+                                            </div>
+                                        </div>
+                        
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="telProprietaire">Numéro de téléphone</label>
+                                                <input type="text" class="form-control" id="telProprietaire">
+                                            </div>
+                        
+                                            <div class="form-group">
+                                                <label for="emailProprietaire">Adresse e-mail de contact</label>
+                                                <input type="email" class="form-control" id="emailProprietaire">
+                                            </div>
+                                        </div>
+                                    </div>
+                        
+                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                </form>
+                            </div>
+                      
+                      </div> 
+                </form>
+            </section> 
+      
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-          // Cacher toutes les div de propriété
-          var allPropertyDivs = document.querySelectorAll('[id^="div"]');
-          for (var i = 0; i < allPropertyDivs.length; i++) {
-              allPropertyDivs[i].style.display = "none";
-          }
+  <!-- Modal -->
+<div class="modal fade" id="Modal-Vente" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal Vente</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <section id="VenteSection" style="display: none;">
+                <h2>Vente section</h2>
+                <form id="annonceForm" action="" method="POST">
+                    <label for="typeVente">Type de Propriété :</label>
+                <!-- Selection du type de proprieté -->
+                    <select id="typeVente" name="typeVente">
+                        <option value="Maison">Maison /Villa </option>
+                        <option value="Appart">Appartement</option>
+                        <option value="Terrain">Terrain</option>
+                        <option value="Autres">Autres</option>
+                    </select>
+                    <!-- Divs vers les options selectionnées ci dessus -->
+                    <div id="venteMaison"></div>
+                    <div id="venteTerrain"></div>
+                    <div id="venteAppart"></div>
+                    <div id="venteAutres"></div>
+                </form>
+        </section>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+      
+      </div>
+      {{/subcategories}}
+      
+            
+        
+ <style>
+    body {
+        margin: 10px;
+        margin-top : 20px ;
+    }
+ </style>
+ <script>
+     // JavaScript personnalisé pour gérer l'affichage/masquage des liens Bootstrap
+     $(document).ready(function () {
+        $("a[href='#collapseExample']").click(function () {
+            $("#collapseExample").collapse("toggle");
+        });
+    });
+    // Sélectionnez toutes les div avec la classe "p-3"
+const ImmoSubcategories = document.querySelectorAll(".immoSubc");
+ImmoSubcategories.forEach(link => {
+    link.addEventListener("click", function(event) {
+        event.preventDefault();
 
-          // Afficher la div correspondante à la propriété sélectionnée
-          var selectedPropertyDiv = document.getElementById("div" + selectedPropertyType);
-          selectedPropertyDiv.style.display = "block";
-      }
-  </script>
+        // Récupérer les valeurs de la catégorie et de la sous-catégorie
+        const categorie = "Immobilier"; // Remplacez par la catégorie correspondante
+        const subc = this.getAttribute("data-type"); // Sous-catégorie
+
+        // Cacher tous les champs spécifiques
+        document.getElementById("ColocationSection").style.display = "none";
+        document.getElementById("LocationSection").style.display = "none";
+        document.getElementById("VenteSection").style.display = "none";
+
+        // Afficher les champs spécifiques en fonction du type sélectionné
+        const selectedSubc = subc.split("-")[1]; // Utiliser la sous-catégorie pour déterminer le type
+
+        if (selectedSubc === "Location") {
+            console.log(selectedSubc);
+            document.getElementById("LocationSection").style.display = "block";
+        } else if (selectedSubc === "Colocation") {
+            console.log(selectedSubc);
+            document.getElementById("ColocationSection").style.display = "block";
+        } else {
+            console.log(selectedSubc);
+            document.getElementById("VenteSection").style.display = "block";
+        }
+
+        // Mettre à jour l'action du formulaire avec les valeurs de la catégorie et de la sous-catégorie
+        const form = document.getElementById("annonceForm");
+        form.action = `/deposer_annonce/${categorie}/${subc}`;
+    });
+
+});
+function showPropertyTypes() {
+    // Récupérer la valeur sélectionnée dans le menu déroulant
+    var selectedValue = document.getElementById("typeAnnonce").value;
+
+    // Cacher toutes les div
+    var divs = document.querySelectorAll("div[id^='div']");
+    divs.forEach(function (div) {
+        div.style.display = "none";
+    });
+
+    // Afficher la div correspondante en fonction de la sélection
+    var selectedDiv = document.getElementById("div" + selectedValue);
+    if (selectedDiv) {
+        selectedDiv.style.display = "block";
+    }
+}
+
+
+ </script>
